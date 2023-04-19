@@ -4,7 +4,14 @@ namespace Esp.Core.NetworkNs
 {
     public class Network : INetwork
     {
-        public List<Population> GetPopulations()
+        private readonly List<IPopulation> _populations;
+
+        public Network(List<IPopulation> populations)
+        {
+            _populations = populations;
+        }
+
+        public List<IPopulation> GetPopulations()
         {
             throw new NotImplementedException();
         }

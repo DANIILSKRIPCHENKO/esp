@@ -1,6 +1,6 @@
 ﻿namespace Esp.Core.NeuronNs
 {
-    internal interface INeuron
+    public interface INeuron
     {
         public Guid GetId();
 
