@@ -1,4 +1,4 @@
-﻿namespace esp
+﻿namespace Esp.Host
 {
     internal class Program
     {
