@@ -4,9 +4,9 @@
     {
         private readonly Guid _id = Guid.NewGuid();
 
-        private readonly int _trials = 0;
+        private int _trials = 0;
 
-        private readonly double _fitness = 0;
+        private double _fitness = 0;
 
         public Neuron()
         {
@@ -19,5 +19,11 @@
             _trials == 0
             ? _fitness
             : _fitness / _trials;
+
+        public void AddFitness(double fit)
+        {
+            _fitness += fit;
+            _trials++;
+        }
     }
 }
