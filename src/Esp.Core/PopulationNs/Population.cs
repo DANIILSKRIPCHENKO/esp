@@ -1,4 +1,5 @@
-﻿using Esp.Core.NeuronNs;
+﻿using Esp.Core.Extensions;
+using Esp.Core.NeuronNs;
 
 namespace Esp.Core.PopulationNs
 {
@@ -14,5 +15,7 @@ namespace Esp.Core.PopulationNs
         }
 
         public Guid GetId() => _id;
+
+        public INeuron GetRandomNeuron() => _neurons.FirstRandom();
     }
 }

@@ -1,6 +1,6 @@
 ﻿namespace Esp.Core.NetworkNs
 {
-    public class Network : INetwork
+    public class SimpleRecurrentNetwork : INetwork
     {
         private readonly Guid _id = Guid.NewGuid();
 
