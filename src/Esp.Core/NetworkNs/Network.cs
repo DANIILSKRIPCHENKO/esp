@@ -1,19 +1,9 @@
-﻿using Esp.Core.PopulationNs;
-
-namespace Esp.Core.NetworkNs
+﻿namespace Esp.Core.NetworkNs
 {
     public class Network : INetwork
     {
-        private readonly List<IPopulation> _populations;
+        private readonly Guid _id = Guid.NewGuid();
 
-        public Network(List<IPopulation> populations)
-        {
-            _populations = populations;
-        }
-
-        public List<IPopulation> GetPopulations()
-        {
-            throw new NotImplementedException();
-        }
+        public Guid GetId() => _id;
     }
 }

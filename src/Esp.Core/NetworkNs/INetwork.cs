@@ -1,9 +1,10 @@
-﻿using Esp.Core.PopulationNs;
+﻿using Esp.Core.Common;
+using Esp.Core.PopulationNs;
 
 namespace Esp.Core.NetworkNs
 {
-    public interface INetwork
+    public interface INetwork : IId
     {
-        public List<IPopulation> GetPopulations();
+        
     }
 }

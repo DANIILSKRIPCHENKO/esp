@@ -1,6 +1,8 @@
-﻿namespace Esp.Core.PopulationNs
+﻿using Esp.Core.Common;
+
+namespace Esp.Core.PopulationNs
 {
-    public interface IPopulation
+    public interface IPopulation : IId
     {
 
     }
