@@ -1,4 +1,6 @@
-﻿using Esp.Core.NeuronNs;
+﻿using Esp.Core.Activation;
+using Esp.Core.InputFunction;
+using Esp.Core.NeuronNs;
 using Esp.Core.PopulationNs;
 
 namespace Esp.Core.Builder
@@ -28,7 +30,7 @@ namespace Esp.Core.Builder
 
             for (int i = 0; i < numberOfNeurons; i++)
             {
-                neurons.Add(new Neuron());
+                neurons.Add(new Neuron(new SigmoidActivationFunction(0.7), new WeightedSumFunction()));
             }
 
             return neurons;
