@@ -6,7 +6,7 @@ namespace Esp.Core.SynapseNs
     {
         private readonly INeuron _toNeuron;
         private readonly double _weight = 1;
-        private readonly double _output;
+        private double _output;
 
         public double Weight { get => _weight; }
 
@@ -17,5 +17,10 @@ namespace Esp.Core.SynapseNs
         }
 
         public double GetOutput() => _output;
+
+        public void SetOutput(double valueToSet)
+        {
+            _output = valueToSet;
+        }
     }
 }

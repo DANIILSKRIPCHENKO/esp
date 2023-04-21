@@ -4,6 +4,6 @@ namespace Esp.Core.EspNS
 {
     public interface IEsp : IId
     {
-
+        public void Evaluate();
     }
 }

@@ -16,5 +16,7 @@ namespace Esp.Core.NeuronNs
         public double GetFitness();
 
         public void AddFitness(double fit);
+
+        void PushValueOnInput(double inputValue);
     }
 }

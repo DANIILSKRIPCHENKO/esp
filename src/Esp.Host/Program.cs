@@ -1,4 +1,5 @@
 ﻿using Esp.Core.Builder;
+using Esp.Core.Executor;
 
 namespace Esp.Host
 {
@@ -6,9 +7,9 @@ namespace Esp.Host
     {
         static void Main(string[] args)
         {
-            var esp = EspBuilder.Build(5, 15);
+            var espExecutor = new EspExecutor();
 
-            esp.Run();
+            espExecutor.Execute();
         }
     }
 }

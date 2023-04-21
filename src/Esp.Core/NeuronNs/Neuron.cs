@@ -9,19 +9,28 @@ namespace Esp.Core.NeuronNs
         private readonly Guid _id = Guid.NewGuid();
         private readonly IActivationFunction _activationFunction;
         private readonly IInputFunction _inputFunction;
+        private List<ISynapse> _inputs = new List<ISynapse>();
+        private List<ISynapse> _outputs = new List<ISynapse>();
         private int _trials = 0;
         private double _fitness = 0;
 
-        public IEnumerable<ISynapse> Inputs { get; set; }
-        public IEnumerable<ISynapse> Outputs { get; set; }
+
+        public IEnumerable<ISynapse> Inputs
+        {
+            get => _inputs;
+            set { _inputs = value.ToList(); }
+        }
+
+        public IEnumerable<ISynapse> Outputs
+        {
+            get => _outputs;
+            set { _outputs = value.ToList(); }
+        }
 
         public Neuron(IActivationFunction activationFunction, IInputFunction inputFunction)
         {
             _activationFunction = activationFunction;
             _inputFunction = inputFunction;
-
-            Inputs = new List<ISynapse>();
-            Outputs = new List<ISynapse>();
         }
 
         public Guid GetId() => _id;
@@ -40,13 +49,23 @@ namespace Esp.Core.NeuronNs
         public void AddInputNeuron(INeuron inputNeuron)
         {
             var synapse = new Synapse(inputNeuron, this);
-            Inputs.Append(synapse);
-            inputNeuron.Outputs.Append(synapse);
+            _inputs.Add(synapse);
+            inputNeuron.Outputs.ToList().Add(synapse);
         }
 
         public double CalculateOutput()
         {
             throw new NotImplementedException();
+        }
+
+        public void PushValueOnInput(double inputValue)
+        {
+            var inputSynapse = _inputs.First() as InputSynapse;
+
+            if (inputSynapse == null)
+                throw new ArgumentNullException();
+
+            inputSynapse!.SetOutput(inputValue);
         }
     }
 }

@@ -1,5 +1,4 @@
-﻿using Esp.Core.ActivationFunction;
-using Esp.Core.NeuronNs;
+﻿using Esp.Core.NeuralLayerNs;
 
 namespace Esp.Core.NetworkNs
 {
@@ -7,21 +6,19 @@ namespace Esp.Core.NetworkNs
     {
         private readonly Guid _id = Guid.NewGuid();
 
-        private readonly IActivationFunction _activationFunction;
+        private readonly List<NeuralLayer> _layers = new List<NeuralLayer>();
 
         private readonly int _geneSize;
-        
-        public SimpleRecurrentNetwork(
-            IEnumerable<INeuron> inputNeurons,
-            IEnumerable<INeuron> hiddenNeurons,
-            IEnumerable<INeuron> outputNeurons,
-            IActivationFunction activationFunction)
-        {
-            _geneSize = inputNeurons.Count() 
-                + hiddenNeurons.Count() 
-                + outputNeurons.Count();
+        private double[][] _expectedResult;
 
-            _activationFunction = activationFunction;
+        public SimpleRecurrentNetwork(
+            NeuralLayer inputLayer,
+            NeuralLayer hiddenLayer,
+            NeuralLayer outputLayer)
+        {
+            AddLayer(inputLayer);
+            AddLayer(hiddenLayer);
+            AddLayer(outputLayer);
         }
 
         public Guid GetId() => _id;
@@ -29,6 +26,32 @@ namespace Esp.Core.NetworkNs
         public IEnumerable<double> GetOutput()
         {
             throw new NotImplementedException();
+        }
+
+        public void PushExpectedValues(double[][] expectedOutputs)
+        {
+            _expectedResult = expectedOutputs;
+        }
+
+        public void PushInputValues(double[] inputs)
+        {
+            var neurons = _layers.First().Neurons.ToList();
+
+            foreach(var neuron in neurons)
+            {
+                neuron.PushValueOnInput(inputs[neurons.IndexOf(neuron)]);
+            }
+        }
+
+        private void AddLayer(NeuralLayer newLayer)
+        {
+            if (_layers.Any())
+            {
+                var lastLayer = _layers.Last();
+                newLayer.ConnectLayers(lastLayer);
+            }
+
+            _layers.Add(newLayer);
         }
     }
 }
