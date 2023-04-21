@@ -2,7 +2,7 @@
 {
     public interface ISynapse
     {
-        public double Weight { get; set; }
+        public double Weight { get;}
 
         public double GetOutput();
     }
