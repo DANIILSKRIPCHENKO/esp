@@ -1,6 +1,6 @@
 ﻿using Esp.Core.NeuronNs;
 
-namespace Esp.Core.Synapse
+namespace Esp.Core.SynapseNs
 {
     public class Synapse : ISynapse
     {
@@ -8,7 +8,7 @@ namespace Esp.Core.Synapse
         private readonly INeuron _toNeuron;
         private readonly double _weight;
 
-        public double Weight { get => _weight;}
+        public double Weight { get => _weight; }
 
         public Synapse(INeuron fromNeuron, INeuron toNeuron, double weight)
         {
@@ -16,6 +16,12 @@ namespace Esp.Core.Synapse
             _toNeuron = toNeuron;
 
             _weight = weight;
+        }
+
+        public Synapse(INeuron fromNeuron, INeuron toNeuron)
+        {
+            _fromNeuron = fromNeuron;
+            _toNeuron = toNeuron;
         }
 
         public double GetOutput()

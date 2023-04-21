@@ -1,6 +1,6 @@
 ﻿using Esp.Core.NeuronNs;
 
-namespace Esp.Core.Synapse
+namespace Esp.Core.SynapseNs
 {
     public class InputSynapse : ISynapse
     {

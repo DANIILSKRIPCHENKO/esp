@@ -1,4 +1,4 @@
-﻿namespace Esp.Core.Activation
+﻿namespace Esp.Core.ActivationFunction
 {
     public interface IActivationFunction
     {

@@ -1,5 +1,5 @@
 ﻿using Esp.Core.Common;
-using Esp.Core.Synapse;
+using Esp.Core.SynapseNs;
 
 namespace Esp.Core.NeuronNs
 {
@@ -8,6 +8,8 @@ namespace Esp.Core.NeuronNs
         public IEnumerable<ISynapse> Inputs { get; set; }
 
         public IEnumerable<ISynapse> Outputs { get; set; }
+
+        public void AddInputNeuron(INeuron inputNeuron);
 
         public double CalculateOutput();
 

@@ -1,6 +1,6 @@
-﻿using Esp.Core.Activation;
+﻿using Esp.Core.ActivationFunction;
 using Esp.Core.InputFunction;
-using Esp.Core.Synapse;
+using Esp.Core.SynapseNs;
 
 namespace Esp.Core.NeuronNs
 {
@@ -35,6 +35,13 @@ namespace Esp.Core.NeuronNs
         {
             _fitness += fit;
             _trials++;
+        }
+
+        public void AddInputNeuron(INeuron inputNeuron)
+        {
+            var synapse = new Synapse(inputNeuron, this);
+            Inputs.Append(synapse);
+            inputNeuron.Outputs.Append(synapse);
         }
 
         public double CalculateOutput()

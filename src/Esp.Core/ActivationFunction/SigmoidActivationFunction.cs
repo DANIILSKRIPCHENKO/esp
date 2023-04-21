@@ -1,4 +1,4 @@
-﻿namespace Esp.Core.Activation
+﻿namespace Esp.Core.ActivationFunction
 {
     public class SigmoidActivationFunction : IActivationFunction
     {
@@ -11,7 +11,7 @@
 
         public double CalculateOutput(double input)
         {
-            return (1 / (1 + Math.Exp(-input * _coeficient)));
+            return 1 / (1 + Math.Exp(-input * _coeficient));
         }
     }
 }

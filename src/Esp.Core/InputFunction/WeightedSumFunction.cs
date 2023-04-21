@@ -1,4 +1,4 @@
-﻿using Esp.Core.Synapse;
+﻿using Esp.Core.SynapseNs;
 
 namespace Esp.Core.InputFunction
 {

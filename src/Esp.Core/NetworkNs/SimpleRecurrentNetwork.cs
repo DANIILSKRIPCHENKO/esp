@@ -1,4 +1,4 @@
-﻿using Esp.Core.Activation;
+﻿using Esp.Core.ActivationFunction;
 using Esp.Core.NeuronNs;
 
 namespace Esp.Core.NetworkNs

@@ -1,8 +1,8 @@
-﻿namespace Esp.Core.Synapse
+﻿namespace Esp.Core.SynapseNs
 {
     public interface ISynapse
     {
-        public double Weight { get;}
+        public double Weight { get; }
 
         public double GetOutput();
     }

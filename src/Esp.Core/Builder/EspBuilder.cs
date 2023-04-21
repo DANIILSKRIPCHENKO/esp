@@ -1,4 +1,5 @@
-﻿using Esp.Core.Activation;
+﻿
+using Esp.Core.ActivationFunction;
 using Esp.Core.InputFunction;
 using Esp.Core.NeuronNs;
 using Esp.Core.PopulationNs;

@@ -17,7 +17,6 @@ namespace Esp.Core.EspNS
         public void Run()
         {
             var randomNeurons = _populations.Select(x => x.GetRandomNeuron());
-
         }
     }
 }
