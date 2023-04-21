@@ -1,5 +1,6 @@
 ﻿
 using Esp.Core.ActivationFunction;
+using Esp.Core.Extensions;
 using Esp.Core.InputFunction;
 using Esp.Core.NeuronNs;
 using Esp.Core.PopulationNs;
@@ -20,7 +21,7 @@ namespace Esp.Core.Builder
             var populations = BuildInitialPopulations(
                 numberOfPopulations, 
                 numberOfNeuronsInPopulation,
-                neurons);
+                neurons.Cast<INeuron>().ToList());
 
             return new EspNS.Esp(populations
                 .Cast<IPopulation>()
@@ -42,17 +43,20 @@ namespace Esp.Core.Builder
         private static List<Population> BuildInitialPopulations(
             int numberOfPopulations, 
             int numberOfNeuronsInPopulation,
-            IList<Neuron> neurons)
+            IList<INeuron> neurons)
         {
             var populations = new List<Population>();
 
+            var usedNeurons = new List<INeuron>();
+
             for (int i = 0; i < numberOfPopulations; i++)
             {
-                var population = new Population(neurons
-                    .OrderBy(x => Guid.NewGuid())
-                    .Take(numberOfNeuronsInPopulation)
-                    .Cast<INeuron>()
-                    .ToList());
+                var randomNeurons = neurons
+                    .TakeRandomNotIn(usedNeurons, numberOfNeuronsInPopulation).Cast<INeuron>()
+                    .ToList();
+
+                var population = new Population(randomNeurons);
+                usedNeurons.AddRange(randomNeurons);
 
                 populations.Add(population);
             }
