@@ -2,7 +2,7 @@
 
 namespace Esp.Core.SynapseNs
 {
-    public class InputSynapse : ISynapse
+    public class InputSynapse : ISynapse, IInputSunapse
     {
         private readonly INeuron _toNeuron;
         private readonly double _weight = 1;

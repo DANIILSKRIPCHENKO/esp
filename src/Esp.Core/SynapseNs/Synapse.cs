@@ -24,9 +24,6 @@ namespace Esp.Core.SynapseNs
             _toNeuron = toNeuron;
         }
 
-        public double GetOutput()
-        {
-            throw new NotImplementedException();
-        }
+        public double GetOutput() => _fromNeuron.CalculateOutput();
     }
 }

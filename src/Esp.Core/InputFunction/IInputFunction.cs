@@ -4,6 +4,6 @@ namespace Esp.Core.InputFunction
 {
     public interface IInputFunction
     {
-        public double CalculateInput(IEnumerable<ISynapse> inputs);
+        public double CalculateInput(IList<ISynapse> inputs);
     }
 }

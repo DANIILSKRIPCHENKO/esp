@@ -4,11 +4,11 @@ namespace Esp.Core.NeuralLayerNs
 {
     public class NeuralLayer
     {
-        private readonly IEnumerable<INeuron> _neurons;
+        private readonly IList<INeuron> _neurons;
 
-        public IEnumerable<INeuron> Neurons { get => _neurons; }
+        public IList<INeuron> Neurons { get => _neurons; }
 
-        public NeuralLayer(IEnumerable<INeuron> neurons)
+        public NeuralLayer(IList<INeuron> neurons)
         {
             _neurons = neurons;
         }

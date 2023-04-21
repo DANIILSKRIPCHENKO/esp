@@ -5,9 +5,9 @@ namespace Esp.Core.NeuronNs
 {
     public interface INeuron : IId
     {
-        public IEnumerable<ISynapse> Inputs { get; set; }
+        public IList<ISynapse> Inputs { get; set; }
 
-        public IEnumerable<ISynapse> Outputs { get; set; }
+        public IList<ISynapse> Outputs { get; set; }
 
         public void AddInputNeuron(INeuron inputNeuron);
 
@@ -17,6 +17,8 @@ namespace Esp.Core.NeuronNs
 
         public void AddFitness(double fit);
 
-        void PushValueOnInput(double inputValue);
+        public void PushValueOnInput(double inputValue);
+
+        public void AddInputSynapse(double inputValue);
     }
 }

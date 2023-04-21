@@ -16,16 +16,25 @@ namespace Esp.Core.NetworkNs
             NeuralLayer hiddenLayer,
             NeuralLayer outputLayer)
         {
-            AddLayer(inputLayer);
+            AddFirstLayer(inputLayer);
             AddLayer(hiddenLayer);
             AddLayer(outputLayer);
         }
 
         public Guid GetId() => _id;
 
-        public IEnumerable<double> GetOutput()
+        public IList<double> GetOutput()
         {
-            throw new NotImplementedException();
+            var result = new List<double>();
+
+            var outputLayerNeurons = _layers.Last().Neurons;
+
+            foreach(var neuron in outputLayerNeurons)
+            {
+                result.Add(neuron.CalculateOutput());
+            }
+
+            return result;
         }
 
         public void PushExpectedValues(double[][] expectedOutputs)
@@ -35,12 +44,21 @@ namespace Esp.Core.NetworkNs
 
         public void PushInputValues(double[] inputs)
         {
-            var neurons = _layers.First().Neurons.ToList();
+            var neurons = _layers.First().Neurons;
 
-            foreach(var neuron in neurons)
+            foreach(var neuron in neurons.Select((neuron, i) => (neuron, i)))
             {
-                neuron.PushValueOnInput(inputs[neurons.IndexOf(neuron)]);
+                neuron.neuron.PushValueOnInput(inputs[neuron.i]);
             }
+        }
+
+        private void AddFirstLayer(NeuralLayer newLayer)
+        {
+            newLayer.Neurons
+                .ToList()
+                .ForEach(x => x.AddInputSynapse(0));
+
+            _layers.Add(newLayer);
         }
 
         private void AddLayer(NeuralLayer newLayer)

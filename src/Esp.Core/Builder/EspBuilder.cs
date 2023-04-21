@@ -22,10 +22,12 @@ namespace Esp.Core.Builder
                 numberOfNeuronsInPopulation,
                 neurons);
 
-            return new EspNS.Esp(populations);
+            return new EspNS.Esp(populations
+                .Cast<IPopulation>()
+                .ToList());
         }
 
-        private static IEnumerable<Neuron> BuildInitialNeurons(int numberOfNeurons)
+        private static IList<Neuron> BuildInitialNeurons(int numberOfNeurons)
         {
             var neurons = new List<Neuron>();
 
@@ -37,10 +39,10 @@ namespace Esp.Core.Builder
             return neurons;
         }
 
-        private static IEnumerable<Population> BuildInitialPopulations(
+        private static List<Population> BuildInitialPopulations(
             int numberOfPopulations, 
             int numberOfNeuronsInPopulation,
-            IEnumerable<Neuron> neurons)
+            IList<Neuron> neurons)
         {
             var populations = new List<Population>();
 
@@ -48,7 +50,9 @@ namespace Esp.Core.Builder
             {
                 var population = new Population(neurons
                     .OrderBy(x => Guid.NewGuid())
-                    .Take(numberOfNeuronsInPopulation));
+                    .Take(numberOfNeuronsInPopulation)
+                    .Cast<INeuron>()
+                    .ToList());
 
                 populations.Add(population);
             }

@@ -15,13 +15,13 @@ namespace Esp.Core.NeuronNs
         private double _fitness = 0;
 
 
-        public IEnumerable<ISynapse> Inputs
+        public IList<ISynapse> Inputs
         {
             get => _inputs;
             set { _inputs = value.ToList(); }
         }
 
-        public IEnumerable<ISynapse> Outputs
+        public IList<ISynapse> Outputs
         {
             get => _outputs;
             set { _outputs = value.ToList(); }
@@ -55,17 +55,27 @@ namespace Esp.Core.NeuronNs
 
         public double CalculateOutput()
         {
-            throw new NotImplementedException();
-        }
+            var input = _inputFunction.CalculateInput(_inputs);
 
+            var output = _activationFunction.CalculateOutput(input);
+
+            return output;
+        }
+            
         public void PushValueOnInput(double inputValue)
         {
-            var inputSynapse = _inputs.First() as InputSynapse;
+            var inputSynapse = _inputs.First() as IInputSunapse;
 
             if (inputSynapse == null)
                 throw new ArgumentNullException();
 
             inputSynapse!.SetOutput(inputValue);
+        }
+
+        public void AddInputSynapse(double inputValue)
+        {
+            var inputSynapse = new InputSynapse(this, inputValue);
+            _inputs.Add(inputSynapse);
         }
     }
 }
