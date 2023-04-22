@@ -9,5 +9,7 @@ namespace Esp.Core.NeuralLayerNs
         public void ConnectOutput(IOutputLayer outputLayer);
 
         public IList<IHiddenNeuron> HiddenNeurons { get; }
+
+        public void ResetConnections();
     }
 }

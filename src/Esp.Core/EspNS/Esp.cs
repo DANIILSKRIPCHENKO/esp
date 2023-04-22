@@ -49,8 +49,9 @@ namespace Esp.Core.EspNS
                 network.PushInputValues(new List<double> { 1054, 54, 234, 763, 21 });
 
                 network.ApplyFitness();
-            }
 
+                network.ResetConnection();
+            }
         }
 
         private void CheckUniqueness(IEnumerable<IId> idCollection)

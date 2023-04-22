@@ -4,7 +4,7 @@ namespace Esp.Core.NeuralLayerNs
 {
     public class InputLayer : IInputLayer
     {
-        private readonly IList<IInputNeuron> _inputNeurons;
+        private IList<IInputNeuron> _inputNeurons;
 
         public InputLayer(IList<IInputNeuron> inputNeurons)
         {
@@ -12,5 +12,14 @@ namespace Esp.Core.NeuralLayerNs
         }
 
         public IList<IInputNeuron> InputNeurons => _inputNeurons;
+
+        public void ResetConnections()
+        {
+            foreach(var neuron in _inputNeurons)
+            {
+                neuron.Outputs.Clear();
+            }
+
+        }
     }
 }

@@ -5,5 +5,7 @@ namespace Esp.Core.NeuralLayerNs
     public interface IInputLayer
     {
         public IList<IInputNeuron> InputNeurons { get; }
+
+        public void ResetConnections();
     }
 }

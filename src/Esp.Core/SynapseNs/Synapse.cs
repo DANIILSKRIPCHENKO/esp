@@ -8,14 +8,16 @@ namespace Esp.Core.SynapseNs
         private readonly INeuronBase _toNeuron;
         private readonly double _weight;
 
-        public double Weight { get => _weight; }
-
-        public Synapse(INeuronBase fromNeuron, INeuronBase toNeuron)
+        public Synapse(
+            INeuronBase fromNeuron, 
+            INeuronBase toNeuron,
+            double weight)
         {
             _fromNeuron = fromNeuron;
             _toNeuron = toNeuron;
+            _weight = weight;
         }
 
-        public double GetOutput() => _fromNeuron.CalculateOutput();
+        public double GetOutput() => _weight * _fromNeuron.CalculateOutput();
     }
 }

@@ -5,5 +5,7 @@ namespace Esp.Core.NeuralLayerNs
     public interface IOutputLayer
     {
         public IList<IOutputNeuron> OutputNeurons { get; }
+
+        public void ResetConnections();
     }
 }

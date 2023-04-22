@@ -58,5 +58,13 @@
 
             return filteredCollection[index];
         }
+
+        public static int NextIndex<T>(this IList<T> collection) where T : class
+        {
+            if (!collection.Any())
+                return 0;
+
+            return collection.IndexOf(collection.Last()) + 1;
+        }
     }
 }

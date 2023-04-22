@@ -17,5 +17,7 @@ namespace Esp.Core.NeuronNs
         public void AddFitness(double fit);
 
         public int Trials { get; }
+
+        public void ResetConnection();
     }
 }

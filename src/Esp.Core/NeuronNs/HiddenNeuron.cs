@@ -1,4 +1,6 @@
 ﻿using Esp.Core.ActivationFunction;
+using Esp.Core.Extensions;
+using Esp.Core.GenotypeNs;
 using Esp.Core.InputFunction;
 using Esp.Core.SynapseNs;
 
@@ -9,8 +11,10 @@ namespace Esp.Core.NeuronNs
         private readonly Guid _id = Guid.NewGuid();
         private readonly IActivationFunction _activationFunction;
         private readonly IInputFunction _inputFunction;
-        private List<ISynapse> _inputs = new List<ISynapse>();
-        private List<ISynapse> _outputs = new List<ISynapse>();
+        private readonly IGenotype _genotype;
+
+        private List<ISynapse> _inputs = new();
+        private List<ISynapse> _outputs = new();
         private int _trials = 0;
         private double _fitness = 0;
 
@@ -31,10 +35,12 @@ namespace Esp.Core.NeuronNs
 
         public HiddenNeuron(
             IActivationFunction activationFunction, 
-            IInputFunction inputFunction)
+            IInputFunction inputFunction,
+            IGenotype genotype)
         {
             _activationFunction = activationFunction;
             _inputFunction = inputFunction;
+            _genotype = genotype;
         }
 
         public Guid GetId() => _id;
@@ -61,16 +67,34 @@ namespace Esp.Core.NeuronNs
 
         public void AddOutputNeuron(IOutputNeuron outputNeuron)
         {
-            var synapse = new Synapse(this, outputNeuron);
+            var index = _outputs.NextIndex();
+
+            var synapse = new Synapse(
+                this, 
+                outputNeuron, 
+                _genotype.OutputWeights[index]);
+
             _outputs.Add(synapse);
             outputNeuron.Inputs.Add(synapse);
         }
 
         public void AddInputNeuron(IInputNeuron inputNeuron)
-        {
-            var synapse = new Synapse(inputNeuron, this);
+        {  
+            var index = _inputs.NextIndex();
+
+            var synapse = new Synapse(
+                inputNeuron, 
+                this, 
+                _genotype.InputWeights[index]);
+            
             _inputs.Add(synapse);
             inputNeuron.Outputs.Add(synapse);
+        }
+
+        public void ResetConnection()
+        {
+            _inputs.Clear();
+            _outputs.Clear();
         }
     }
 }

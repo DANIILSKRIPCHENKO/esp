@@ -77,6 +77,8 @@ namespace Esp.Core.NetworkNs
 
             hiddenLayer.ConnectInput(_inputLayer);
             hiddenLayer.ConnectOutput(_outputLayer);
+
+            _hiddenLayers.Add(hiddenLayer);
         }
 
         // TODO: infinite when error is 0
@@ -92,6 +94,13 @@ namespace Esp.Core.NetworkNs
                 .Sum();
 
             return 1 / error;
+        }
+
+        public void ResetConnection()
+        {
+            _hiddenLayers.Single().ResetConnections();
+            _inputLayer.ResetConnections();
+            _outputLayer.ResetConnections();
         }
     }
 }

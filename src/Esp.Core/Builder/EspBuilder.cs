@@ -1,6 +1,7 @@
 ﻿
 using Esp.Core.ActivationFunction;
 using Esp.Core.Extensions;
+using Esp.Core.GenotypeNs;
 using Esp.Core.InputFunction;
 using Esp.Core.NeuronNs;
 using Esp.Core.PopulationNs;
@@ -16,7 +17,8 @@ namespace Esp.Core.Builder
             var numberOfPopulations = numberOfHiddenNeurons;
 
             var initialNumerOfNeurons = numberOfNeuronsInPopulation * numberOfPopulations;
-            var neurons = BuildInitialNeurons(initialNumerOfNeurons);
+            
+            var neurons = BuildInitialNeurons(initialNumerOfNeurons, numberOfHiddenNeurons);
 
             var populations = BuildInitialPopulations(
                 numberOfPopulations, 
@@ -33,13 +35,18 @@ namespace Esp.Core.Builder
                 outputNeurons.Cast<IOutputNeuron>().ToList());
         }
 
-        private static List<HiddenNeuron> BuildInitialNeurons(int numberOfNeurons)
+        private static List<HiddenNeuron> BuildInitialNeurons(
+            int numberOfNeurons, 
+            int numberOfHiddenNeurons)
         {
             var neurons = new List<HiddenNeuron>();
 
             for (int i = 0; i < numberOfNeurons; i++)
             {
-                neurons.Add(new HiddenNeuron(new SigmoidActivationFunction(0.7), new WeightedSumFunction()));
+                neurons.Add(new HiddenNeuron(
+                    new SigmoidActivationFunction(0.7), 
+                    new WeightedSumFunction(),
+                    Genotype.CreateRandom(numberOfHiddenNeurons)));
             }
 
             return neurons;

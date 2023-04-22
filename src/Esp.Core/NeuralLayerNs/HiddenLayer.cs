@@ -30,5 +30,13 @@ namespace Esp.Core.NeuralLayerNs
 
             combos.ToList().ForEach(x => x.neuron.AddOutputNeuron(x.output));
         }
+
+        public void ResetConnections()
+        {
+            foreach (var neuron in _hiddenNeurons)
+            {
+                neuron.ResetConnection();
+            }
+        }
     }
 }
