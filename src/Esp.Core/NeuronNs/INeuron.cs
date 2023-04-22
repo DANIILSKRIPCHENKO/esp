@@ -11,6 +11,8 @@ namespace Esp.Core.NeuronNs
 
         public void AddInputNeuron(INeuron inputNeuron);
 
+        public void AddOutputNeuron(INeuron outputNeuron);
+
         public double CalculateOutput();
 
         public double GetFitness();

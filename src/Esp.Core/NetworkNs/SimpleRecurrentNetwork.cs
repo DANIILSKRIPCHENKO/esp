@@ -18,7 +18,7 @@ namespace Esp.Core.NetworkNs
         {
             AddFirstLayer(inputLayer);
             AddLayer(hiddenLayer);
-            AddLayer(outputLayer);
+            AddLastLayer(outputLayer);
         }
 
         public Guid GetId() => _id;
@@ -83,7 +83,18 @@ namespace Esp.Core.NetworkNs
             if (_layers.Any())
             {
                 var lastLayer = _layers.Last();
-                newLayer.ConnectLayers(lastLayer);
+                newLayer.ConnectInput(lastLayer);
+            }
+
+            _layers.Add(newLayer);
+        }
+
+        private void AddLastLayer(NeuralLayer newLayer)
+        {
+            if (_layers.Any())
+            {
+                var lastLayer = _layers.Last();
+                lastLayer.ConnectOutput(newLayer);
             }
 
             _layers.Add(newLayer);

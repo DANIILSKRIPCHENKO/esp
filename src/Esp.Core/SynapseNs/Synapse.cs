@@ -10,14 +10,6 @@ namespace Esp.Core.SynapseNs
 
         public double Weight { get => _weight; }
 
-        public Synapse(INeuron fromNeuron, INeuron toNeuron, double weight)
-        {
-            _fromNeuron = fromNeuron;
-            _toNeuron = toNeuron;
-
-            _weight = weight;
-        }
-
         public Synapse(INeuron fromNeuron, INeuron toNeuron)
         {
             _fromNeuron = fromNeuron;

@@ -52,7 +52,7 @@ namespace Esp.Core.NeuronNs
         {
             var synapse = new Synapse(inputNeuron, this);
             _inputs.Add(synapse);
-            inputNeuron.Outputs.ToList().Add(synapse);
+            inputNeuron.Outputs.Add(synapse);
         }
 
         public double CalculateOutput()
@@ -78,6 +78,13 @@ namespace Esp.Core.NeuronNs
         {
             var inputSynapse = new InputSynapse(this, inputValue);
             _inputs.Add(inputSynapse);
+        }
+
+        public void AddOutputNeuron(INeuron outputNeuron)
+        {
+            var synapse = new Synapse(this, outputNeuron);
+            _outputs.Add(synapse);
+            outputNeuron.Inputs.Add(synapse);
         }
     }
 }

@@ -13,13 +13,22 @@ namespace Esp.Core.NeuralLayerNs
             _neurons = neurons;
         }
 
-        public void ConnectLayers(NeuralLayer inputLayer)
+        public void ConnectInput(NeuralLayer inputLayer)
         {
             var combos = _neurons.SelectMany(
                 neuron => inputLayer.Neurons, 
                 (neuron, input) => new { neuron, input });
             
             combos.ToList().ForEach(x => x.neuron.AddInputNeuron(x.input));
+        }
+
+        public void ConnectOutput(NeuralLayer outputLayer)
+        {
+            var combos = _neurons.SelectMany(
+                neuron => outputLayer.Neurons,
+                (neuron, output) => new { neuron, output });
+
+            combos.ToList().ForEach(x => x.neuron.AddOutputNeuron(x.output));
         }
     }
 }

@@ -48,7 +48,6 @@ namespace Esp.Core.EspNS
                 network.ApplyFitness();
             }
 
-            var t = 5;
         }
 
         private void CheckUniqueness(IEnumerable<IId> idCollection)
