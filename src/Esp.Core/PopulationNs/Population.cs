@@ -7,18 +7,17 @@ namespace Esp.Core.PopulationNs
     {
         private readonly Guid _id = Guid.NewGuid();
 
-        private readonly IList<INeuron> _neurons;
+        private readonly IList<IHiddenNeuron> _neurons;
 
-        public Population(IList<INeuron> neurons)
+        public Population(IList<IHiddenNeuron> neurons)
         {
             _neurons = neurons;
         }
 
         public Guid GetId() => _id;
 
-        public IList<INeuron> GetNeurons() => _neurons;
+        public IList<IHiddenNeuron> GetNeurons() => _neurons;
 
-        public INeuron GetRandomNeuronNotIn(IList<INeuron> neurons) => 
-            _neurons.FirstRandomNotIn(neurons);
+        public IHiddenNeuron GetRandomNeuron() => _neurons.FirstRandom();
     }
 }

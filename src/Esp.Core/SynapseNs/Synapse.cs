@@ -4,26 +4,20 @@ namespace Esp.Core.SynapseNs
 {
     public class Synapse : ISynapse
     {
-        private readonly INeuron _fromNeuron;
-        private readonly INeuron _toNeuron;
+        private readonly INeuronBase _fromNeuron;
+        private readonly INeuronBase _toNeuron;
         private readonly double _weight;
 
-        public double Weight { get => _weight; }
-
-        public Synapse(INeuron fromNeuron, INeuron toNeuron, double weight)
+        public Synapse(
+            INeuronBase fromNeuron, 
+            INeuronBase toNeuron,
+            double weight)
         {
             _fromNeuron = fromNeuron;
             _toNeuron = toNeuron;
-
             _weight = weight;
         }
 
-        public Synapse(INeuron fromNeuron, INeuron toNeuron)
-        {
-            _fromNeuron = fromNeuron;
-            _toNeuron = toNeuron;
-        }
-
-        public double GetOutput() => _fromNeuron.CalculateOutput();
+        public double GetOutput() => _weight * _fromNeuron.CalculateOutput();
     }
 }

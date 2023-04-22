@@ -6,19 +6,20 @@ namespace Esp.Core.NetworkNs
     {
         private readonly Guid _id = Guid.NewGuid();
 
-        private readonly List<NeuralLayer> _layers = new List<NeuralLayer>();
+        private readonly IInputLayer _inputLayer;
+        private readonly IOutputLayer _outputLayer;
+        private readonly IList<IHiddenLayer> _hiddenLayers = new List<IHiddenLayer>();
+
         private IList<double> _expectedResult = new List<double>();
 
-        private readonly int _geneSize;
-
         public SimpleRecurrentNetwork(
-            NeuralLayer inputLayer,
-            NeuralLayer hiddenLayer,
-            NeuralLayer outputLayer)
+            IInputLayer inputLayer,
+            IList<IHiddenLayer> hiddenLayers,
+            IOutputLayer outputLayer)
         {
-            AddFirstLayer(inputLayer);
-            AddLayer(hiddenLayer);
-            AddLayer(outputLayer);
+            _inputLayer = inputLayer;
+            _outputLayer = outputLayer;
+            AddHiddenLayers(hiddenLayers);
         }
 
         public Guid GetId() => _id;
@@ -31,9 +32,9 @@ namespace Esp.Core.NetworkNs
 
         public void PushInputValues(IList<double> inputs)
         {
-            var neurons = _layers.First().Neurons;
+            var inputNeurons = _inputLayer.InputNeurons;
 
-            foreach(var neuron in neurons.Select((neuron, i) => (neuron, i)))
+            foreach(var neuron in inputNeurons.Select((neuron, i) => (neuron, i)))
             {
                 neuron.neuron.PushValueOnInput(inputs[neuron.i]);
             }
@@ -43,8 +44,8 @@ namespace Esp.Core.NetworkNs
         {
             var fitness = CalculateFitness();
 
-            var neurons = _layers
-                .SelectMany(x => x.Neurons)
+            var neurons = _hiddenLayers
+                .SelectMany(x => x.HiddenNeurons)
                 .ToList();
 
             foreach(var neuron in neurons)
@@ -59,7 +60,7 @@ namespace Esp.Core.NetworkNs
         {
             var result = new List<double>();
 
-            var outputLayerNeurons = _layers.Last().Neurons;
+            var outputLayerNeurons = _outputLayer.OutputNeurons;
 
             foreach (var neuron in outputLayerNeurons)
             {
@@ -69,26 +70,16 @@ namespace Esp.Core.NetworkNs
             return result;
         }
 
-        private void AddFirstLayer(NeuralLayer newLayer)
+        private void AddHiddenLayers(IList<IHiddenLayer> hiddenLayers)
         {
-            newLayer.Neurons
-                .ToList()
-                .ForEach(x => x.AddInputSynapse(0));
+            // Now only one hidden layer supported
+            var hiddenLayer = hiddenLayers.Single();
 
-            _layers.Add(newLayer);
+            hiddenLayer.ConnectInput(_inputLayer);
+            hiddenLayer.ConnectOutput(_outputLayer);
+
+            _hiddenLayers.Add(hiddenLayer);
         }
-
-        private void AddLayer(NeuralLayer newLayer)
-        {
-            if (_layers.Any())
-            {
-                var lastLayer = _layers.Last();
-                newLayer.ConnectLayers(lastLayer);
-            }
-
-            _layers.Add(newLayer);
-        }
-
 
         // TODO: infinite when error is 0
         private double CalculateFitness()
@@ -103,6 +94,13 @@ namespace Esp.Core.NetworkNs
                 .Sum();
 
             return 1 / error;
+        }
+
+        public void ResetConnection()
+        {
+            _hiddenLayers.Single().ResetConnections();
+            _inputLayer.ResetConnections();
+            _outputLayer.ResetConnections();
         }
     }
 }

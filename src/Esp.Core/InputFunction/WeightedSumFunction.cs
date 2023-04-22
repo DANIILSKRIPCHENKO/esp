@@ -10,7 +10,7 @@ namespace Esp.Core.InputFunction
 
             foreach(var input in inputs)
             {
-                var value = input.Weight * input.GetOutput();
+                var value = input.GetOutput();
                 result += value;
             }
 

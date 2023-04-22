@@ -5,8 +5,8 @@ namespace Esp.Core.PopulationNs
 {
     public interface IPopulation : IId
     {
-        public INeuron GetRandomNeuronNotIn(IList<INeuron> neurons);
+        public IHiddenNeuron GetRandomNeuron();
 
-        public IList<INeuron> GetNeurons();
+        public IList<IHiddenNeuron> GetNeurons();
     }
 }
