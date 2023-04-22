@@ -20,42 +20,46 @@ namespace Esp.Core.EspNS
 
         public void Evaluate()
         {
-            var neuronsInUsed = new List<INeuron>();
-
-            var randomNeuronsForInput = _populations
-                .Select(population => population.GetRandomNeuronNotIn(neuronsInUsed))
-                .ToList();
-
-            neuronsInUsed.AddRange(randomNeuronsForInput);
-
-            var randomNeuronsForHidden = _populations
-                .Select(population => population.GetRandomNeuronNotIn(neuronsInUsed))
-                .ToList();
-
-            neuronsInUsed.AddRange(randomNeuronsForHidden);
-
-            var randomNeuronsForOutput = _populations
-                .Select(population => population.GetRandomNeuronNotIn(neuronsInUsed))
-                .ToList();
-
-            neuronsInUsed.AddRange(randomNeuronsForOutput);
-
-            CheckUniqueness(neuronsInUsed);
-
-            var inputLayer = new NeuralLayer(randomNeuronsForInput);
-            var hiddenLayer = new NeuralLayer(randomNeuronsForHidden);
-            var outputLayer = new NeuralLayer(randomNeuronsForOutput);
-
-            var network = new SimpleRecurrentNetwork(inputLayer, hiddenLayer, outputLayer);
-
-            network.PushExpectedValues(new List<double>()
+            while (ShouldContinueEvolution())
             {
-                0.3, 0.5, 0.5, 0.5, 0.5
-            });
+                var neuronsInUsed = new List<INeuron>();
 
-            network.PushInputValues(new List<double> { 1054, 54, 234, 763, 21});
+                var randomNeuronsForInput = _populations
+                    .Select(population => population.GetRandomNeuronNotIn(neuronsInUsed))
+                    .ToList();
 
-            network.ApplyFitness();
+                neuronsInUsed.AddRange(randomNeuronsForInput);
+
+                var randomNeuronsForHidden = _populations
+                    .Select(population => population.GetRandomNeuronNotIn(neuronsInUsed))
+                    .ToList();
+
+                neuronsInUsed.AddRange(randomNeuronsForHidden);
+
+                var randomNeuronsForOutput = _populations
+                    .Select(population => population.GetRandomNeuronNotIn(neuronsInUsed))
+                    .ToList();
+
+                neuronsInUsed.AddRange(randomNeuronsForOutput);
+
+                CheckUniqueness(neuronsInUsed);
+
+                var inputLayer = new NeuralLayer(randomNeuronsForInput);
+                var hiddenLayer = new NeuralLayer(randomNeuronsForHidden);
+                var outputLayer = new NeuralLayer(randomNeuronsForOutput);
+
+                var network = new SimpleRecurrentNetwork(inputLayer, hiddenLayer, outputLayer);
+
+                network.PushExpectedValues(new List<double>(){ 0.3, 0.5, 0.5, 0.5, 0.5 });
+
+                network.PushInputValues(new List<double> { 1054, 54, 234, 763, 21 });
+
+                network.ApplyFitness();
+
+                int t = 5;
+            }
+
+            int p = 5;
         }
 
         private void CheckUniqueness(IEnumerable<IId> idCollection)
@@ -69,5 +73,9 @@ namespace Esp.Core.EspNS
 
             throw new Exception("Duplicate elements found");
         }
+
+        private bool ShouldContinueEvolution() => _populations
+            .SelectMany(population => population.GetNeurons())
+            .Any(neuron => neuron.Trials < 10);
     }
 }

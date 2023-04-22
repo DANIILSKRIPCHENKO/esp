@@ -20,5 +20,7 @@ namespace Esp.Core.NeuronNs
         public void PushValueOnInput(double inputValue);
 
         public void AddInputSynapse(double inputValue);
+
+        public int Trials { get; }
     }
 }

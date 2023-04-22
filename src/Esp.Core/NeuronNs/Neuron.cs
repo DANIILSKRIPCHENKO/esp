@@ -27,6 +27,8 @@ namespace Esp.Core.NeuronNs
             set { _outputs = value.ToList(); }
         }
 
+        public int Trials { get => _trials; }
+
         public Neuron(IActivationFunction activationFunction, IInputFunction inputFunction)
         {
             _activationFunction = activationFunction;
