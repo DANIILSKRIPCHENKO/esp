@@ -48,20 +48,14 @@ namespace Esp.Core.EspNS
 
             var network = new SimpleRecurrentNetwork(inputLayer, hiddenLayer, outputLayer);
 
-            network.PushExpectedValues(
-                new double[][] {
-                    new double[] { 0 },
-                    new double[] { 1 },
-                    new double[] { 1 },
-                    new double[] { 0 },
-                    new double[] { 1 },
-                    new double[] { 0 },
-                    new double[] { 0 },
-                });
+            network.PushExpectedValues(new List<double>()
+            {
+                0.3, 0.5, 0.5, 0.5, 0.5
+            });
 
-            network.PushInputValues(new double[] { 1054, 54, 234, 763, 21});
+            network.PushInputValues(new List<double> { 1054, 54, 234, 763, 21});
 
-            var outputs = network.GetOutput();
+            network.ApplyFitness();
         }
 
         private void CheckUniqueness(IEnumerable<IId> idCollection)

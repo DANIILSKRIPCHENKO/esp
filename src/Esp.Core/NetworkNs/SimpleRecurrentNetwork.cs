@@ -7,9 +7,9 @@ namespace Esp.Core.NetworkNs
         private readonly Guid _id = Guid.NewGuid();
 
         private readonly List<NeuralLayer> _layers = new List<NeuralLayer>();
+        private IList<double> _expectedResult = new List<double>();
 
         private readonly int _geneSize;
-        private double[][] _expectedResult;
 
         public SimpleRecurrentNetwork(
             NeuralLayer inputLayer,
@@ -23,26 +23,13 @@ namespace Esp.Core.NetworkNs
 
         public Guid GetId() => _id;
 
-        public IList<double> GetOutput()
-        {
-            var result = new List<double>();
 
-            var outputLayerNeurons = _layers.Last().Neurons;
-
-            foreach(var neuron in outputLayerNeurons)
-            {
-                result.Add(neuron.CalculateOutput());
-            }
-
-            return result;
-        }
-
-        public void PushExpectedValues(double[][] expectedOutputs)
+        public void PushExpectedValues(IList<double> expectedOutputs)
         {
             _expectedResult = expectedOutputs;
         }
 
-        public void PushInputValues(double[] inputs)
+        public void PushInputValues(IList<double> inputs)
         {
             var neurons = _layers.First().Neurons;
 
@@ -50,6 +37,36 @@ namespace Esp.Core.NetworkNs
             {
                 neuron.neuron.PushValueOnInput(inputs[neuron.i]);
             }
+        }
+
+        public double ApplyFitness()
+        {
+            var fitness = CalculateFitness();
+
+            var neurons = _layers
+                .SelectMany(x => x.Neurons)
+                .ToList();
+
+            foreach(var neuron in neurons)
+            {
+                neuron.AddFitness(fitness);
+            }
+
+            return fitness;
+        }
+
+        private IList<double> GetOutput()
+        {
+            var result = new List<double>();
+
+            var outputLayerNeurons = _layers.Last().Neurons;
+
+            foreach (var neuron in outputLayerNeurons)
+            {
+                result.Add(neuron.CalculateOutput());
+            }
+
+            return result;
         }
 
         private void AddFirstLayer(NeuralLayer newLayer)
@@ -70,6 +87,22 @@ namespace Esp.Core.NetworkNs
             }
 
             _layers.Add(newLayer);
+        }
+
+
+        // TODO: infinite when error is 0
+        private double CalculateFitness()
+        {
+            var output = GetOutput();
+
+            if (output.Count != _expectedResult.Count)
+                throw new Exception("Failed to calculate fitness");
+
+            var error = output
+                .Select((output, index) => Math.Abs(output - _expectedResult[index]))
+                .Sum();
+
+            return 1 / error;
         }
     }
 }

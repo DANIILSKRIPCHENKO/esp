@@ -4,6 +4,6 @@ namespace Esp.Core.NetworkNs
 {
     public interface INetwork : IId
     {
-        public IList<double> GetOutput();
+        public double ApplyFitness();
     }
 }
