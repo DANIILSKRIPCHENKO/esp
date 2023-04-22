@@ -23,9 +23,14 @@ namespace Esp.Core.Builder
                 numberOfNeuronsInPopulation,
                 neurons.Cast<INeuron>().ToList());
 
-            return new EspNS.Esp(populations
-                .Cast<IPopulation>()
-                .ToList());
+            var inputNeurons = BuildInputNeurons(numberOfHiddenNeurons);
+
+            var outputNeurons = BuildOutputNeurons(numberOfHiddenNeurons);
+
+            return new EspNS.Esp(
+                populations.Cast<IPopulation>().ToList(),
+                inputNeurons.Cast<INeuron>().ToList(),
+                outputNeurons.Cast<INeuron>().ToList());
         }
 
         private static IList<Neuron> BuildInitialNeurons(int numberOfNeurons)
@@ -62,6 +67,30 @@ namespace Esp.Core.Builder
             }
 
             return populations;
+        }
+
+        private static IList<Neuron> BuildInputNeurons(int numberOfInputNeurons)
+        {
+            var neurons = new List<Neuron>();
+
+            for (int i = 0; i < numberOfInputNeurons; i++)
+            {
+                neurons.Add(new Neuron(new SigmoidActivationFunction(0.7), new WeightedSumFunction()));
+            }
+
+            return neurons;
+        }
+
+        private static IList<Neuron> BuildOutputNeurons(int numberOfOutputNeurons)
+        {
+            var neurons = new List<Neuron>();
+
+            for (int i = 0; i < numberOfOutputNeurons; i++)
+            {
+                neurons.Add(new Neuron(new SigmoidActivationFunction(0.7), new WeightedSumFunction()));
+            }
+
+            return neurons;
         }
     }
 }

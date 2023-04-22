@@ -89,7 +89,6 @@ namespace Esp.Core.NetworkNs
             _layers.Add(newLayer);
         }
 
-
         // TODO: infinite when error is 0
         private double CalculateFitness()
         {

@@ -18,7 +18,6 @@ namespace Esp.Core.PopulationNs
 
         public IList<INeuron> GetNeurons() => _neurons;
 
-        public INeuron GetRandomNeuronNotIn(IList<INeuron> neurons) => 
-            _neurons.FirstRandomNotIn(neurons);
+        public INeuron GetRandomNeuron() => _neurons.FirstRandom();
     }
 }

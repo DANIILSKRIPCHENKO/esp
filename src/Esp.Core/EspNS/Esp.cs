@@ -10,10 +10,17 @@ namespace Esp.Core.EspNS
     {
         private readonly Guid _id = Guid.NewGuid();
         private readonly IList<IPopulation> _populations;
+        private readonly IList<INeuron> _inputNeurons;
+        private readonly IList<INeuron> _outputNeurons;
 
-        public Esp(IList<IPopulation> populations)
+        public Esp(
+            IList<IPopulation> populations,
+            IList<INeuron> inputNeurons, 
+            IList<INeuron> outputNeurons)
         {
+            _inputNeurons = inputNeurons;
             _populations = populations;
+            _outputNeurons = outputNeurons;
         }
 
         public Guid GetId() => _id;
@@ -22,31 +29,15 @@ namespace Esp.Core.EspNS
         {
             while (ShouldContinueEvolution())
             {
-                var neuronsInUsed = new List<INeuron>();
-
-                var randomNeuronsForInput = _populations
-                    .Select(population => population.GetRandomNeuronNotIn(neuronsInUsed))
-                    .ToList();
-
-                neuronsInUsed.AddRange(randomNeuronsForInput);
-
                 var randomNeuronsForHidden = _populations
-                    .Select(population => population.GetRandomNeuronNotIn(neuronsInUsed))
+                    .Select(population => population.GetRandomNeuron())
                     .ToList();
 
-                neuronsInUsed.AddRange(randomNeuronsForHidden);
+                CheckUniqueness(randomNeuronsForHidden);
 
-                var randomNeuronsForOutput = _populations
-                    .Select(population => population.GetRandomNeuronNotIn(neuronsInUsed))
-                    .ToList();
-
-                neuronsInUsed.AddRange(randomNeuronsForOutput);
-
-                CheckUniqueness(neuronsInUsed);
-
-                var inputLayer = new NeuralLayer(randomNeuronsForInput);
+                var inputLayer = new NeuralLayer(_inputNeurons);
                 var hiddenLayer = new NeuralLayer(randomNeuronsForHidden);
-                var outputLayer = new NeuralLayer(randomNeuronsForOutput);
+                var outputLayer = new NeuralLayer(_outputNeurons);
 
                 var network = new SimpleRecurrentNetwork(inputLayer, hiddenLayer, outputLayer);
 
@@ -55,11 +46,9 @@ namespace Esp.Core.EspNS
                 network.PushInputValues(new List<double> { 1054, 54, 234, 763, 21 });
 
                 network.ApplyFitness();
-
-                int t = 5;
             }
 
-            int p = 5;
+            var t = 5;
         }
 
         private void CheckUniqueness(IEnumerable<IId> idCollection)
