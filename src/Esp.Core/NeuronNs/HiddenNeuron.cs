@@ -4,7 +4,7 @@ using Esp.Core.SynapseNs;
 
 namespace Esp.Core.NeuronNs
 {
-    public class Neuron : INeuron
+    public class HiddenNeuron : IHiddenNeuron
     {
         private readonly Guid _id = Guid.NewGuid();
         private readonly IActivationFunction _activationFunction;
@@ -29,7 +29,9 @@ namespace Esp.Core.NeuronNs
 
         public int Trials { get => _trials; }
 
-        public Neuron(IActivationFunction activationFunction, IInputFunction inputFunction)
+        public HiddenNeuron(
+            IActivationFunction activationFunction, 
+            IInputFunction inputFunction)
         {
             _activationFunction = activationFunction;
             _inputFunction = inputFunction;
@@ -48,13 +50,6 @@ namespace Esp.Core.NeuronNs
             _trials++;
         }
 
-        public void AddInputNeuron(INeuron inputNeuron)
-        {
-            var synapse = new Synapse(inputNeuron, this);
-            _inputs.Add(synapse);
-            inputNeuron.Outputs.Add(synapse);
-        }
-
         public double CalculateOutput()
         {
             var input = _inputFunction.CalculateInput(_inputs);
@@ -63,28 +58,19 @@ namespace Esp.Core.NeuronNs
 
             return output;
         }
-            
-        public void PushValueOnInput(double inputValue)
-        {
-            var inputSynapse = _inputs.First() as IInputSunapse;
 
-            if (inputSynapse == null)
-                throw new ArgumentNullException();
-
-            inputSynapse!.SetOutput(inputValue);
-        }
-
-        public void AddInputSynapse(double inputValue)
-        {
-            var inputSynapse = new InputSynapse(this, inputValue);
-            _inputs.Add(inputSynapse);
-        }
-
-        public void AddOutputNeuron(INeuron outputNeuron)
+        public void AddOutputNeuron(IOutputNeuron outputNeuron)
         {
             var synapse = new Synapse(this, outputNeuron);
             _outputs.Add(synapse);
             outputNeuron.Inputs.Add(synapse);
+        }
+
+        public void AddInputNeuron(IInputNeuron inputNeuron)
+        {
+            var synapse = new Synapse(inputNeuron, this);
+            _inputs.Add(synapse);
+            inputNeuron.Outputs.Add(synapse);
         }
     }
 }

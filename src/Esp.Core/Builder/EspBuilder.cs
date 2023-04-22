@@ -21,7 +21,7 @@ namespace Esp.Core.Builder
             var populations = BuildInitialPopulations(
                 numberOfPopulations, 
                 numberOfNeuronsInPopulation,
-                neurons.Cast<INeuron>().ToList());
+                neurons.Cast<IHiddenNeuron>().ToList());
 
             var inputNeurons = BuildInputNeurons(numberOfHiddenNeurons);
 
@@ -29,17 +29,17 @@ namespace Esp.Core.Builder
 
             return new EspNS.Esp(
                 populations.Cast<IPopulation>().ToList(),
-                inputNeurons.Cast<INeuron>().ToList(),
-                outputNeurons.Cast<INeuron>().ToList());
+                inputNeurons.Cast<IInputNeuron>().ToList(),
+                outputNeurons.Cast<IOutputNeuron>().ToList());
         }
 
-        private static IList<Neuron> BuildInitialNeurons(int numberOfNeurons)
+        private static List<HiddenNeuron> BuildInitialNeurons(int numberOfNeurons)
         {
-            var neurons = new List<Neuron>();
+            var neurons = new List<HiddenNeuron>();
 
             for (int i = 0; i < numberOfNeurons; i++)
             {
-                neurons.Add(new Neuron(new SigmoidActivationFunction(0.7), new WeightedSumFunction()));
+                neurons.Add(new HiddenNeuron(new SigmoidActivationFunction(0.7), new WeightedSumFunction()));
             }
 
             return neurons;
@@ -48,16 +48,16 @@ namespace Esp.Core.Builder
         private static List<Population> BuildInitialPopulations(
             int numberOfPopulations, 
             int numberOfNeuronsInPopulation,
-            IList<INeuron> neurons)
+            IList<IHiddenNeuron> neurons)
         {
             var populations = new List<Population>();
 
-            var usedNeurons = new List<INeuron>();
+            var usedNeurons = new List<IHiddenNeuron>();
 
             for (int i = 0; i < numberOfPopulations; i++)
             {
                 var randomNeurons = neurons
-                    .TakeRandomNotIn(usedNeurons, numberOfNeuronsInPopulation).Cast<INeuron>()
+                    .TakeRandomNotIn(usedNeurons, numberOfNeuronsInPopulation).Cast<IHiddenNeuron>()
                     .ToList();
 
                 var population = new Population(randomNeurons);
@@ -69,25 +69,25 @@ namespace Esp.Core.Builder
             return populations;
         }
 
-        private static IList<Neuron> BuildInputNeurons(int numberOfInputNeurons)
+        private static List<InputNeuron> BuildInputNeurons(int numberOfInputNeurons)
         {
-            var neurons = new List<Neuron>();
+            var neurons = new List<InputNeuron>();
 
             for (int i = 0; i < numberOfInputNeurons; i++)
             {
-                neurons.Add(new Neuron(new SigmoidActivationFunction(0.7), new WeightedSumFunction()));
+                neurons.Add(new InputNeuron(new SigmoidActivationFunction(0.7)));
             }
 
             return neurons;
         }
 
-        private static IList<Neuron> BuildOutputNeurons(int numberOfOutputNeurons)
+        private static List<OutputNeuron> BuildOutputNeurons(int numberOfOutputNeurons)
         {
-            var neurons = new List<Neuron>();
+            var neurons = new List<OutputNeuron>();
 
             for (int i = 0; i < numberOfOutputNeurons; i++)
             {
-                neurons.Add(new Neuron(new SigmoidActivationFunction(0.7), new WeightedSumFunction()));
+                neurons.Add(new OutputNeuron(new SigmoidActivationFunction(0.7), new WeightedSumFunction()));
             }
 
             return neurons;
