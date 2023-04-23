@@ -54,6 +54,27 @@ namespace Esp.Core.EspNS
             }
         }
 
+        public void CheckStagnation()
+        {
+            // hardcode
+            var numberOfGenerationsToCheck = 3;
+
+            var bestNeuron = _populations
+                .SelectMany(population => population.HiddenNeurons)
+                .OrderBy(neuron => neuron.Fitness)
+                .First();
+
+            bestNeuron.FitnessHistory.TakeLast(numberOfGenerationsToCheck);
+        }
+
+        public void Recombine()
+        {
+            foreach(var population in _populations)
+            {
+                population.Recombine();
+            }
+        }
+
         private void CheckUniqueness(IEnumerable<IId> idCollection)
         {
             var duplicatedElements = idCollection
@@ -67,7 +88,7 @@ namespace Esp.Core.EspNS
         }
 
         private bool ShouldContinueEvolution() => _populations
-            .SelectMany(population => population.GetNeurons())
+            .SelectMany(population => population.HiddenNeurons)
             .Any(neuron => neuron.Trials < 10);
     }
 }

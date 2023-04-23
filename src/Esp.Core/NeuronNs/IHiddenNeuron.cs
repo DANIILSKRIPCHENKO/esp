@@ -1,4 +1,5 @@
-﻿using Esp.Core.SynapseNs;
+﻿using Esp.Core.GenotypeNs;
+using Esp.Core.SynapseNs;
 
 namespace Esp.Core.NeuronNs
 {
@@ -12,12 +13,18 @@ namespace Esp.Core.NeuronNs
 
         public void AddOutputNeuron(IOutputNeuron outputNeuron);
 
-        public double GetFitness();
+        public double Fitness { get; }
 
         public void AddFitness(double fit);
 
         public int Trials { get; }
 
         public void ResetConnection();
+
+        public IList<double> FitnessHistory { get; }
+
+        public IGenotype Genotype { get; }
+
+        public (IHiddenNeuron, IHiddenNeuron) Recombine(IHiddenNeuron hiddenNeuron);
     }
 }

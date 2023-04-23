@@ -7,6 +7,8 @@ namespace Esp.Core.PopulationNs
     {
         public IHiddenNeuron GetRandomNeuron();
 
-        public IList<IHiddenNeuron> GetNeurons();
+        public IList<IHiddenNeuron> HiddenNeurons { get; }
+
+        public void Recombine();
     }
 }
