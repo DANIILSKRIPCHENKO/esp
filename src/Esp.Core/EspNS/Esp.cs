@@ -68,10 +68,10 @@ namespace Esp.Core.EspNS
             // hardcode
             var numberOfGenerationsToCheck = 3;
 
-            var IsStagnate = _fitnessHistory
+            var IsStagnate = !_fitnessHistory
                 .TakeLast(numberOfGenerationsToCheck)
                 .ToList()
-                .IsSorted();
+                .IsDescending();
 
             if (!IsStagnate)
                 return;

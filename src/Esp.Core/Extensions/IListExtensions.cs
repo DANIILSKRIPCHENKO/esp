@@ -70,14 +70,14 @@ namespace Esp.Core.Extensions
             return collection.IndexOf(collection.Last()) + 1;
         }
 
-        public static bool IsSorted<T>(this IList<T> collection) where T : IComparable<T>
+        public static bool IsDescending<T>(this IList<T> collection) where T : IComparable<T>
         {
             if (!collection.Any() || collection.Count == 1)
                 return false;
 
             for(var i=1; i < collection.Count; i++)
             {
-                if (collection[i - 1].CompareTo(collection[i]) > 0)
+                if (collection[i - 1].CompareTo(collection[i]) >= 0)
                     return false;
             }
 
