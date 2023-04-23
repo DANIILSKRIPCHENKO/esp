@@ -1,4 +1,7 @@
-﻿namespace Esp.Core.Extensions
+﻿using System.Linq;
+using System.Text;
+
+namespace Esp.Core.Extensions
 {
     public static class IListExtensions
     {
@@ -69,6 +72,9 @@
 
         public static bool IsSorted<T>(this IList<T> collection) where T : IComparable<T>
         {
+            if (!collection.Any() || collection.Count == 1)
+                return false;
+
             for(var i=1; i < collection.Count; i++)
             {
                 if (collection[i - 1].CompareTo(collection[i]) > 0)
@@ -116,6 +122,16 @@
             var size = collection.Count;
 
             return (collection.Take(size / 2).ToList(), collection.TakeLast(size / 2).ToList());
+        }
+
+        public static IList<T> ReplaceFromLast<T>(this IList<T> collection, IList<T> collectionToPaste)
+        {
+            var result = new List<T>();
+
+            result.AddRange(collection.Take(collection.Count - collectionToPaste.Count));
+            result.AddRange(collectionToPaste);
+
+            return result;
         }
     }
 }

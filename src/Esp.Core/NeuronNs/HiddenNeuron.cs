@@ -118,5 +118,17 @@ namespace Esp.Core.NeuronNs
 
             return (childNeuron1, childNeuron2);
         }
+
+        public IList<IHiddenNeuron> BurstMutate(int numberOfNeuronsToGrow)
+        {
+            var newGenotypes = _genotype.BurstMutate(numberOfNeuronsToGrow);
+
+            var result = new List<IHiddenNeuron>();
+
+            foreach (var genotype in newGenotypes)
+                result.Add(new HiddenNeuron(_activationFunction, _inputFunction, genotype));
+
+            return result;
+        }
     }
 }

@@ -7,5 +7,7 @@
         public IList<double> OutputWeights { get; }
 
         public (IGenotype, IGenotype) Recombine(IGenotype genotype);
+
+        public IList<IGenotype> BurstMutate(int numberOfGenotypes);
     }
 }

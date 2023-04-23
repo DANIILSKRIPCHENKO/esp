@@ -6,13 +6,16 @@ namespace Esp.Core.Executor
     {
         public void Execute()
         {
-            var esp = EspBuilder.Build(5, 20);
+            var esp = EspBuilder.Build(3, 20);
 
-            esp.Evaluate();
+            while (true)
+            {
+                esp.Evaluate();
 
-            esp.CheckStagnation();
+                esp.CheckStagnation();
 
-            esp.Recombine();
+                esp.Recombine();
+            }
         }
     }
 }

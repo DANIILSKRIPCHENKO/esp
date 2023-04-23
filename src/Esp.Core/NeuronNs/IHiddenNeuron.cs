@@ -26,5 +26,7 @@ namespace Esp.Core.NeuronNs
         public IGenotype Genotype { get; }
 
         public (IHiddenNeuron, IHiddenNeuron) Recombine(IHiddenNeuron hiddenNeuron);
+
+        public IList<IHiddenNeuron> BurstMutate(int numberOfNeuronsToGrow);
     }
 }

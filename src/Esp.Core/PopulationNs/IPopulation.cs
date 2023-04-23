@@ -10,5 +10,7 @@ namespace Esp.Core.PopulationNs
         public IList<IHiddenNeuron> HiddenNeurons { get; }
 
         public void Recombine();
+
+        public void BurstMutation();
     }
 }

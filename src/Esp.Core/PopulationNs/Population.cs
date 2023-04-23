@@ -39,18 +39,24 @@ namespace Esp.Core.PopulationNs
                 offsptingNeurons.Add(child2);
             }
 
-            foreach(var offsptingNeuron in offsptingNeurons)
-                _neurons.Add(offsptingNeuron);
-
-            RemoveRedundantNeurons();
-        }
-
-        private void RemoveRedundantNeurons()
-        {
             _neurons = _neurons
                 .OrderByDescending(neuron => neuron.Fitness)
-                .Take(_initialSize)
-                .ToList();
+                .ToList()
+                .ReplaceFromLast(offsptingNeurons);
+        }
+
+        public void BurstMutation()
+        {
+            var bestNeuron = _neurons
+                .OrderByDescending(neuron => neuron.Fitness)
+                .First();
+                
+            var newNeurons = bestNeuron.BurstMutate(_neurons.Count/2);
+
+            _neurons = _neurons
+                .OrderByDescending(neuron => neuron.Fitness)
+                .ToList()
+                .ReplaceFromLast(newNeurons);
         }
     }
 }

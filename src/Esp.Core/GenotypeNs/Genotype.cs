@@ -1,4 +1,5 @@
 ﻿using Esp.Core.Extensions;
+using System.Dynamic;
 
 namespace Esp.Core.GenotypeNs
 {
@@ -38,6 +39,31 @@ namespace Esp.Core.GenotypeNs
         public static Genotype CreateRandom(int hiddenLayerSize) =>
             new(hiddenLayerSize);
 
+        public IList<IGenotype> BurstMutate(int numberOfGenotypes)
+        {
+            var weights = new List<double>();
+            weights.AddRange(_inputWeights);
+            weights.AddRange(_outputWeights);
+
+            var result = new List<IGenotype>();
+            
+            for(var i = 0; i < numberOfGenotypes; i++)
+            {
+                var newWeights = new List<double>();
+
+                foreach(var weight in weights)
+                {
+                    newWeights.Add(weight + GetCauchyNoise());
+                }
+
+                (var inputWeights, var outputWeights) = newWeights.Half();
+
+                result.Add(new Genotype(inputWeights, outputWeights));
+            }
+
+            return result;
+        }
+
         public (IGenotype, IGenotype) Recombine(IGenotype genotype)
         {
             if (genotype.InputWeights.Count != _inputWeights.Count
@@ -64,6 +90,23 @@ namespace Esp.Core.GenotypeNs
             var resultGenotype2 = new Genotype(inputWeights2, outputWeights2);
 
             return (resultGenotype1, resultGenotype2);
+        }
+
+        private double GetCauchyNoise()
+        {
+            var x = GetPseudoDoubleWithinRange(-1, 1);
+
+            double a = 0.3;
+
+            return a / (Math.PI * (Math.Pow(a, 2) + Math.Pow(x, 2)));
+        }
+
+        private static double GetPseudoDoubleWithinRange(double lowerBound, double upperBound)
+        {
+            var random = new Random();
+            var rDouble = random.NextDouble();
+            var rRangeDouble = rDouble * (upperBound - lowerBound) + lowerBound;
+            return rRangeDouble;
         }
     }
 }

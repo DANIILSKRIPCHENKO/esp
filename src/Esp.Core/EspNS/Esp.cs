@@ -1,4 +1,5 @@
 ﻿using Esp.Core.Common;
+using Esp.Core.Extensions;
 using Esp.Core.NetworkNs;
 using Esp.Core.NeuralLayerNs;
 using Esp.Core.NeuronNs;
@@ -12,6 +13,7 @@ namespace Esp.Core.EspNS
         private readonly IList<IPopulation> _populations;
         private readonly IList<IInputNeuron> _inputNeurons;
         private readonly IList<IOutputNeuron> _outputNeurons;
+        private List<double> _fitnessHistory = new();
 
         public Esp(
             IList<IPopulation> populations,
@@ -27,7 +29,9 @@ namespace Esp.Core.EspNS
 
         public void Evaluate()
         {
-            while (ShouldContinueEvolution())
+            double bestFitness = 0;
+
+            while (ShouldContinueTrials())
             {
                 var randomNeuronsForHidden = _populations
                     .Select(population => population.GetRandomNeuron())
@@ -44,14 +48,19 @@ namespace Esp.Core.EspNS
                     new List<IHiddenLayer>() { hiddenLayer }, 
                     outputLayer);
 
-                network.PushExpectedValues(new List<double>(){ 0.3, 0.5, 0.5, 0.5, 0.5 });
+                network.PushExpectedValues(new List<double>(){ 1, 1, 1 });
 
-                network.PushInputValues(new List<double> { 1054, 54, 234, 763, 21 });
+                network.PushInputValues(new List<double> { 1054, 54, 234 });
 
-                network.ApplyFitness();
+                var fitness = network.ApplyFitness();
+
+                if (fitness > bestFitness)
+                    bestFitness = fitness;
 
                 network.ResetConnection();
             }
+
+            _fitnessHistory.Add(bestFitness);
         }
 
         public void CheckStagnation()
@@ -59,12 +68,16 @@ namespace Esp.Core.EspNS
             // hardcode
             var numberOfGenerationsToCheck = 3;
 
-            var bestNeuron = _populations
-                .SelectMany(population => population.HiddenNeurons)
-                .OrderBy(neuron => neuron.Fitness)
-                .First();
+            var IsStagnate = _fitnessHistory
+                .TakeLast(numberOfGenerationsToCheck)
+                .ToList()
+                .IsSorted();
 
-            bestNeuron.FitnessHistory.TakeLast(numberOfGenerationsToCheck);
+            if (!IsStagnate)
+                return;
+
+            foreach (var population in _populations)
+                population.BurstMutation();
         }
 
         public void Recombine()
@@ -87,7 +100,7 @@ namespace Esp.Core.EspNS
             throw new Exception("Duplicate elements found");
         }
 
-        private bool ShouldContinueEvolution() => _populations
+        private bool ShouldContinueTrials() => _populations
             .SelectMany(population => population.HiddenNeurons)
             .Any(neuron => neuron.Trials < 10);
     }
