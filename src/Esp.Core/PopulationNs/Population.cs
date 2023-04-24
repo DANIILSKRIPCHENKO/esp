@@ -6,14 +6,14 @@ namespace Esp.Core.PopulationNs
     public class Population : IPopulation
     {
         private readonly Guid _id = Guid.NewGuid();
-        private readonly int _initialSize;
         private IList<IHiddenNeuron> _neurons;
 
         public Population(IList<IHiddenNeuron> neurons)
         {
-            _initialSize = neurons.Count;
             _neurons = neurons;
         }
+
+        #region IPopulation implementation
 
         public Guid GetId() => _id;
 
@@ -58,5 +58,7 @@ namespace Esp.Core.PopulationNs
                 .ToList()
                 .ReplaceFromLast(newNeurons);
         }
+
+        #endregion
     }
 }

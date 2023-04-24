@@ -61,7 +61,17 @@ namespace Esp.Core.NetworkNs
             return fitness;
         }
 
+        public void ResetConnection()
+        {
+            _hiddenLayers.Single().ResetConnections();
+            _inputLayer.ResetConnections();
+            _outputLayer.ResetConnections();
+        }
+
         #endregion
+
+
+        #region Private Methods
 
         private IList<double> GetOutput()
         {
@@ -103,11 +113,6 @@ namespace Esp.Core.NetworkNs
             return 1 / error;
         }
 
-        public void ResetConnection()
-        {
-            _hiddenLayers.Single().ResetConnections();
-            _inputLayer.ResetConnections();
-            _outputLayer.ResetConnections();
-        }
+        #endregion
     }
 }

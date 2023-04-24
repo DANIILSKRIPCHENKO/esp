@@ -2,6 +2,9 @@
 
 namespace Esp.Core.NeuralLayerNs
 {
+    /// <summary>
+    /// IInputLayer interface implementation
+    /// </summary>
     public class InputLayer : IInputLayer
     {
         private IList<IInputNeuron> _inputNeurons;
@@ -10,6 +13,8 @@ namespace Esp.Core.NeuralLayerNs
         {
             _inputNeurons = inputNeurons;
         }
+
+        #region IInputLayer implementation
 
         public IList<IInputNeuron> InputNeurons => _inputNeurons;
 
@@ -21,5 +26,7 @@ namespace Esp.Core.NeuralLayerNs
             }
 
         }
+
+        #endregion
     }
 }

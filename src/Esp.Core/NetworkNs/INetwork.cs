@@ -22,6 +22,12 @@ namespace Esp.Core.NetworkNs
         /// Pushes expected outpur values in Network
         /// </summary>
         /// <param name="expectedOutputs"></param>
-        public void PushExpectedValues(IList<double> expectedOutputs)
+        public void PushExpectedValues(IList<double> expectedOutputs);
+
+        /// <summary>
+        /// Pushes input values in Network
+        /// </summary>
+        /// <param name="inputs"></param>
+        public void PushInputValues(IList<double> inputs);
     }
 }

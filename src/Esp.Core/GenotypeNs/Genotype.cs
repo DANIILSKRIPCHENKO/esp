@@ -10,6 +10,8 @@ namespace Esp.Core.GenotypeNs
         private readonly IList<double> _inputWeights;
         private readonly IList<double> _outputWeights;
 
+        #region ctor
+
         private Genotype(int hiddenLayerSize)
         {
             var inputWeights = new List<double>();
@@ -33,6 +35,8 @@ namespace Esp.Core.GenotypeNs
             _inputWeights = inputWeights;
             _outputWeights = outputWeights;
         }
+
+        #endregion
 
         #region IGenotype implementation
 
@@ -97,7 +101,6 @@ namespace Esp.Core.GenotypeNs
         }
 
         #endregion
-
 
         #region Private methods
 

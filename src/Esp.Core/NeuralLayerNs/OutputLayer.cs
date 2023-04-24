@@ -2,6 +2,9 @@
 
 namespace Esp.Core.NeuralLayerNs
 {
+    /// <summary>
+    /// Implementation of IOutputLayer
+    /// </summary>
     public class OutputLayer : IOutputLayer
     {
         private IList<IOutputNeuron> _outputNeurons;
@@ -10,6 +13,8 @@ namespace Esp.Core.NeuralLayerNs
         {
             _outputNeurons = outputNeurons;
         }
+
+        #region OutputLayer implementation
 
         public IList<IOutputNeuron> OutputNeurons => _outputNeurons;
 
@@ -20,5 +25,7 @@ namespace Esp.Core.NeuralLayerNs
                 neuron.Inputs.Clear();
             }
         }
+
+        #endregion
     }
 }

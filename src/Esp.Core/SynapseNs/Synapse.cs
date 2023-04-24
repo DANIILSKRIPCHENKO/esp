@@ -2,6 +2,9 @@
 
 namespace Esp.Core.SynapseNs
 {
+    /// <summary>
+    /// Represents ISynapse implementation
+    /// </summary>
     public class Synapse : ISynapse
     {
         private readonly INeuronBase _fromNeuron;

@@ -6,6 +6,9 @@ using Esp.Core.SynapseNs;
 
 namespace Esp.Core.NeuronNs
 {
+    /// <summary>
+    /// Implementation of IHiddenNeuron
+    /// </summary>
     public class HiddenNeuron : IHiddenNeuron
     {
         private readonly Guid _id = Guid.NewGuid();
@@ -15,7 +18,6 @@ namespace Esp.Core.NeuronNs
 
         private List<ISynapse> _inputs = new();
         private List<ISynapse> _outputs = new();
-        private readonly List<double> _fitnessHistory= new();
         private int _trials = 0;
         private double _fitness = 0;
 
@@ -28,6 +30,8 @@ namespace Esp.Core.NeuronNs
             _inputFunction = inputFunction;
             _genotype = genotype;
         }
+
+        #region IHiddenNeuron implementation
 
         public Guid GetId() => _id;
 
@@ -44,8 +48,6 @@ namespace Esp.Core.NeuronNs
         }
 
         public int Trials => _trials;
-
-        public IList<double> FitnessHistory => _fitnessHistory;
 
         public double Fitness =>
             _trials == 0
@@ -130,5 +132,7 @@ namespace Esp.Core.NeuronNs
 
             return result;
         }
+
+        #endregion
     }
 }

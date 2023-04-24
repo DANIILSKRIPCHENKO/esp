@@ -2,6 +2,9 @@
 
 namespace Esp.Core.NeuralLayerNs
 {
+    /// <summary>
+    /// HiddenLayer implementation
+    /// </summary>
     public class HiddenLayer : IHiddenLayer
     {
         private readonly IList<IHiddenNeuron> _hiddenNeurons;
@@ -12,6 +15,8 @@ namespace Esp.Core.NeuralLayerNs
         {
             _hiddenNeurons = hiddenNeurons;
         }
+
+        #region IHiddenLayer implementation
 
         public void ConnectInput(IInputLayer inputLayer)
         {
@@ -38,5 +43,7 @@ namespace Esp.Core.NeuralLayerNs
                 neuron.ResetConnection();
             }
         }
+
+        #endregion
     }
 }

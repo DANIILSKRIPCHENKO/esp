@@ -3,6 +3,9 @@ using Esp.Core.SynapseNs;
 
 namespace Esp.Core.NeuronNs
 {
+    /// <summary>
+    /// Implementation of IInputNeuron
+    /// </summary>
     public class InputNeuron : IInputNeuron
     {
         private readonly Guid _id = Guid.NewGuid();
@@ -14,17 +17,20 @@ namespace Esp.Core.NeuronNs
         {
             _activationFunction = activationFunction;
         }
-        
-        public IList<ISynapse> Outputs { get => _outputs;}
 
-        // Hardcode output for inputs neurons
-        public double CalculateOutput() => _activationFunction.CalculateOutput(_input);
+        #region IInputNeuron implementation
 
         public Guid GetId() => _id;
+
+        public IList<ISynapse> Outputs { get => _outputs;}
+
+        public double CalculateOutput() => _activationFunction.CalculateOutput(_input);
 
         public void PushValueOnInput(double input)
         {
             _input = input;
         }
+
+        #endregion
     }
 }

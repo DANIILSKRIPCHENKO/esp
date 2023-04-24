@@ -4,6 +4,9 @@ using Esp.Core.SynapseNs;
 
 namespace Esp.Core.NeuronNs
 {
+    /// <summary>
+    /// Implementation of IOutputNeuron interface
+    /// </summary>
     public class OutputNeuron : IOutputNeuron
     {
         private readonly Guid _id = Guid.NewGuid();
@@ -19,6 +22,10 @@ namespace Esp.Core.NeuronNs
             _activationFunction = activationFunction;
         }
 
+        #region implementation of IOutputNeuron
+
+        public Guid GetId() => _id;
+
         public IList<ISynapse> Inputs { get => _inputs; }
 
         public double CalculateOutput()
@@ -30,6 +37,6 @@ namespace Esp.Core.NeuronNs
             return output;
         }
 
-        public Guid GetId() => _id;
+        #endregion
     }
 }
