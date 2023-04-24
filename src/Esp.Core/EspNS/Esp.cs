@@ -43,7 +43,7 @@ namespace Esp.Core.EspNS
                 var hiddenLayer = new HiddenLayer(randomNeuronsForHidden);
                 var outputLayer = new OutputLayer(_outputNeurons);
 
-                var network = new SimpleRecurrentNetwork(
+                var network = new FullyConnectedNetwork(
                     inputLayer, 
                     new List<IHiddenLayer>() { hiddenLayer }, 
                     outputLayer);

@@ -2,7 +2,7 @@
 
 namespace Esp.Core.NetworkNs
 {
-    public class SimpleRecurrentNetwork : INetwork
+    public class FullyConnectedNetwork : INetwork
     {
         private readonly Guid _id = Guid.NewGuid();
 
@@ -12,7 +12,7 @@ namespace Esp.Core.NetworkNs
 
         private IList<double> _expectedResult = new List<double>();
 
-        public SimpleRecurrentNetwork(
+        public FullyConnectedNetwork(
             IInputLayer inputLayer,
             IList<IHiddenLayer> hiddenLayers,
             IOutputLayer outputLayer)
