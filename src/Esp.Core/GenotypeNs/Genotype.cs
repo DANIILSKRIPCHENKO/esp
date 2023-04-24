@@ -1,8 +1,10 @@
 ﻿using Esp.Core.Extensions;
-using System.Dynamic;
 
 namespace Esp.Core.GenotypeNs
 {
+    /// <summary>
+    /// Implementation of IGenotype interface
+    /// </summary>
     public class Genotype : IGenotype
     {
         private readonly IList<double> _inputWeights;
@@ -31,6 +33,8 @@ namespace Esp.Core.GenotypeNs
             _inputWeights = inputWeights;
             _outputWeights = outputWeights;
         }
+
+        #region IGenotype implementation
 
         public IList<double> InputWeights => _inputWeights;
 
@@ -92,6 +96,11 @@ namespace Esp.Core.GenotypeNs
             return (resultGenotype1, resultGenotype2);
         }
 
+        #endregion
+
+
+        #region Private methods
+
         private double GetCauchyNoise()
         {
             var x = GetPseudoDoubleWithinRange(-1, 1);
@@ -108,5 +117,7 @@ namespace Esp.Core.GenotypeNs
             var rRangeDouble = rDouble * (upperBound - lowerBound) + lowerBound;
             return rRangeDouble;
         }
+
+        #endregion
     }
 }

@@ -7,6 +7,9 @@ using Esp.Core.PopulationNs;
 
 namespace Esp.Core.EspNS
 {
+    /// <summary>
+    /// Enforces sub population implementation of GA
+    /// </summary>
     public class Esp : IEsp
     {
         private readonly Guid _id = Guid.NewGuid();
@@ -24,6 +27,8 @@ namespace Esp.Core.EspNS
             _populations = populations;
             _outputNeurons = outputNeurons;
         }
+
+        #region IEsp implementation
 
         public Guid GetId() => _id;
 
@@ -88,6 +93,10 @@ namespace Esp.Core.EspNS
             }
         }
 
+        #endregion IEsp implementation
+
+
+        #region Private methods 
         private void CheckUniqueness(IEnumerable<IId> idCollection)
         {
             var duplicatedElements = idCollection
@@ -103,5 +112,7 @@ namespace Esp.Core.EspNS
         private bool ShouldContinueTrials() => _populations
             .SelectMany(population => population.HiddenNeurons)
             .Any(neuron => neuron.Trials < 10);
+
+        #endregion
     }
 }

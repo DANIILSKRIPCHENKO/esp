@@ -1,25 +1,19 @@
-﻿using System.Linq;
-using System.Text;
-
-namespace Esp.Core.Extensions
+﻿namespace Esp.Core.Extensions
 {
+    /// <summary>
+    /// Provides extension methods for IList collection
+    /// </summary>
     public static class IListExtensions
     {
-        public static IList<T> TakeRandom<T>(this IList<T> collection, int numberOfElements)
-        {
-            var result = new List<T>();
-
-            while(result.Count != numberOfElements)
-            {
-                var random = new Random();
-                var index = random.Next(collection.Count);
-                result.Add(collection[index]);
-                collection.Remove(collection[index]);
-            }
-
-            return result;
-        }
-
+        /// <summary>
+        /// Returns N random unique elements from collection, 
+        /// which are not in input collection
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="collection"></param>
+        /// <param name="notInCollection"></param>
+        /// <param name="numberOfElements"></param>
+        /// <returns></returns>
         public static IList<T> TakeRandomNotIn<T>(
             this IList<T> collection, 
             IList<T> notInCollection, 
@@ -42,6 +36,12 @@ namespace Esp.Core.Extensions
             return result;
         }
 
+        /// <summary>
+        /// Returns first random element of collection
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="collection"></param>
+        /// <returns></returns>
         public static T FirstRandom<T>(this IList<T> collection) where T : class
         {
             var random = new Random();
@@ -50,18 +50,12 @@ namespace Esp.Core.Extensions
             return collection[index];
         }
 
-        public static T FirstRandomNotIn<T>(this IList<T> collection, IList<T> notInCollection) where T : class
-        {
-            var filteredCollection = collection
-                .Where(x => !notInCollection.Any(y => y == x))
-                .ToList();
-
-            var random = new Random();
-            var index = random.Next(filteredCollection.Count);
-
-            return filteredCollection[index];
-        }
-
+        /// <summary>
+        /// Returns last + 1 index of collection
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="collection"></param>
+        /// <returns></returns>
         public static int NextIndex<T>(this IList<T> collection) where T : class
         {
             if (!collection.Any())
@@ -70,6 +64,12 @@ namespace Esp.Core.Extensions
             return collection.IndexOf(collection.Last()) + 1;
         }
 
+        /// <summary>
+        /// Return true if collection is descending
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="collection"></param>
+        /// <returns></returns>
         public static bool IsDescending<T>(this IList<T> collection) where T : IComparable<T>
         {
             if (!collection.Any() || collection.Count == 1)
@@ -84,6 +84,15 @@ namespace Esp.Core.Extensions
             return true;
         }
 
+        /// <summary>
+        /// Returns two collections after performing crossover operation
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="collection"></param>
+        /// <param name="collection2"></param>
+        /// <param name="crossOverIndex"></param>
+        /// <returns></returns>
+        /// <exception cref="ArgumentException"></exception>
         public static (IList<T>, IList<T>) CrossOver<T>(
             this IList<T> collection,
             IList<T> collection2,
@@ -114,6 +123,13 @@ namespace Esp.Core.Extensions
             return (result1, result2);
         }
 
+        /// <summary>
+        /// Returns two collections, witch are first and second halfs of initial collection 
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="collection"></param>
+        /// <returns></returns>
+        /// <exception cref="ArgumentException"></exception>
         public static (IList<T>, IList<T>) Half<T>(this IList<T> collection)
         {
             if (collection.Count % 2 != 0)
@@ -124,6 +140,13 @@ namespace Esp.Core.Extensions
             return (collection.Take(size / 2).ToList(), collection.TakeLast(size / 2).ToList());
         }
 
+        /// <summary>
+        /// Replaces last elements in collection with elements, passed in a parameter
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="collection"></param>
+        /// <param name="collectionToPaste"></param>
+        /// <returns></returns>
         public static IList<T> ReplaceFromLast<T>(this IList<T> collection, IList<T> collectionToPaste)
         {
             var result = new List<T>();

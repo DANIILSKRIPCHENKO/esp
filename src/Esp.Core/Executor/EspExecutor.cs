@@ -2,6 +2,9 @@
 
 namespace Esp.Core.Executor
 {
+    /// <summary>
+    /// Represents EspExecutor implementation
+    /// </summary>
     public class EspExecutor : IExecutable
     {
         public void Execute()

@@ -2,6 +2,9 @@
 
 namespace Esp.Core.InputFunction
 {
+    /// <summary>
+    ///  WeightedSum implementation of IInputFunction interafce
+    /// </summary>
     public class WeightedSumFunction : IInputFunction
     {
         public double CalculateInput(IList<ISynapse> inputs)

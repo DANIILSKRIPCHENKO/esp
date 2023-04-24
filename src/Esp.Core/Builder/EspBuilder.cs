@@ -10,6 +10,14 @@ namespace Esp.Core.Builder
 {
     public static class EspBuilder
     {
+        #region Public methods
+
+        /// <summary>
+        /// Builds new Esp instance based on input parameters
+        /// </summary>
+        /// <param name="numberOfHiddenNeurons"></param>
+        /// <param name="numberOfNeuronsInPopulation"></param>
+        /// <returns></returns>
         public static EspNS.Esp Build(
             int numberOfHiddenNeurons, 
             int numberOfNeuronsInPopulation)
@@ -34,6 +42,10 @@ namespace Esp.Core.Builder
                 inputNeurons.Cast<IInputNeuron>().ToList(),
                 outputNeurons.Cast<IOutputNeuron>().ToList());
         }
+
+        #endregion Public methods
+
+        #region Private methods
 
         private static List<HiddenNeuron> BuildInitialNeurons(
             int numberOfNeurons, 
@@ -99,5 +111,7 @@ namespace Esp.Core.Builder
 
             return neurons;
         }
+
+        #endregion
     }
 }

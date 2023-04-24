@@ -1,5 +1,8 @@
 ﻿namespace Esp.Core.ActivationFunction
 {
+    /// <summary>
+    /// Represents sigmoid activation function
+    /// </summary>
     public class SigmoidActivationFunction : IActivationFunction
     {
         private readonly double _coeficient;

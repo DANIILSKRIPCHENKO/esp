@@ -2,6 +2,9 @@
 
 namespace Esp.Core.NetworkNs
 {
+    /// <summary>
+    /// Fully Connected Network implementation of INetwork interface
+    /// </summary>
     public class FullyConnectedNetwork : INetwork
     {
         private readonly Guid _id = Guid.NewGuid();
@@ -21,6 +24,8 @@ namespace Esp.Core.NetworkNs
             _outputLayer = outputLayer;
             AddHiddenLayers(hiddenLayers);
         }
+
+        #region INetwork implementation
 
         public Guid GetId() => _id;
 
@@ -55,6 +60,8 @@ namespace Esp.Core.NetworkNs
 
             return fitness;
         }
+
+        #endregion
 
         private IList<double> GetOutput()
         {
