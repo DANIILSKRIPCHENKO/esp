@@ -17,6 +17,7 @@ namespace Esp.Core.EspNS
         private readonly IList<IInputNeuron> _inputNeurons;
         private readonly IList<IOutputNeuron> _outputNeurons;
         private List<double> _fitnessHistory = new();
+        private List<double> _burstMutationHistory = new();
 
         public Esp(
             IList<IPopulation> populations,
@@ -53,7 +54,7 @@ namespace Esp.Core.EspNS
                     new List<IHiddenLayer>() { hiddenLayer }, 
                     outputLayer);
 
-                network.PushExpectedValues(new List<double>(){ 1, 1, 1 });
+                network.PushExpectedValues(new List<double>(){ 1, 1, 0 });
 
                 network.PushInputValues(new List<double> { 1054, 54, 234 });
 
@@ -70,19 +71,21 @@ namespace Esp.Core.EspNS
 
         public void CheckStagnation()
         {
-            // hardcode
-            var numberOfGenerationsToCheck = 3;
+            if (ShouldAdaptNetwork())
+                AdaptNetworkStructure();
 
-            var IsStagnate = !_fitnessHistory
-                .TakeLast(numberOfGenerationsToCheck)
-                .ToList()
-                .IsDescending();
+            // hardcode  number of generations to check
+            if (ShouldBurstMutate(3))
+            {
+                foreach (var population in _populations)
+                    population.BurstMutation();
 
-            if (!IsStagnate)
-                return;
+                var bestFitness = _fitnessHistory
+                    .OrderByDescending(fitness => fitness)
+                    .First();
 
-            foreach (var population in _populations)
-                population.BurstMutation();
+                _burstMutationHistory.Add(bestFitness);
+            }
         }
 
         public void Recombine()
@@ -109,9 +112,38 @@ namespace Esp.Core.EspNS
             throw new Exception("Duplicate elements found");
         }
 
+        private bool ShouldBurstMutate(int numberOfGenerationsToCheck)
+        {
+            if (numberOfGenerationsToCheck > _fitnessHistory.Count)
+                return false;
+
+            var IsStagnate = !_fitnessHistory
+                .TakeLast(numberOfGenerationsToCheck)
+                .ToList()
+                .IsAscending();
+
+            return IsStagnate;
+        }
+
         private bool ShouldContinueTrials() => _populations
             .SelectMany(population => population.HiddenNeurons)
             .Any(neuron => neuron.Trials < 10);
+
+        private bool ShouldAdaptNetwork()
+        {
+            if (_burstMutationHistory.Count < 2)
+                return false;
+
+            if (_burstMutationHistory.Count > 2)
+                throw new Exception("Invalid burst mutation history");
+
+            return !_burstMutationHistory.IsAscending();
+        }
+
+        private void AdaptNetworkStructure()
+        {
+            _burstMutationHistory.Clear();
+        }
 
         #endregion
     }

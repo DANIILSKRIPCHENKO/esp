@@ -9,7 +9,7 @@ namespace Esp.Core.Executor
     {
         public void Execute()
         {
-            var esp = EspBuilder.Build(3, 20);
+            var esp = EspBuilder.Build(20, 20);
 
             while (true)
             {

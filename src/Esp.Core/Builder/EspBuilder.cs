@@ -33,9 +33,9 @@ namespace Esp.Core.Builder
                 numberOfNeuronsInPopulation,
                 neurons.Cast<IHiddenNeuron>().ToList());
 
-            var inputNeurons = BuildInputNeurons(numberOfHiddenNeurons);
+            var inputNeurons = BuildInputNeurons(3);
 
-            var outputNeurons = BuildOutputNeurons(numberOfHiddenNeurons);
+            var outputNeurons = BuildOutputNeurons(3);
 
             return new EspNS.Esp(
                 populations.Cast<IPopulation>().ToList(),

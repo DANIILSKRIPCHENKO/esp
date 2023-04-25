@@ -65,15 +65,15 @@
         }
 
         /// <summary>
-        /// Return true if collection is descending
+        /// Return true if collection is ascending
         /// </summary>
         /// <typeparam name="T"></typeparam>
         /// <param name="collection"></param>
         /// <returns></returns>
-        public static bool IsDescending<T>(this IList<T> collection) where T : IComparable<T>
+        public static bool IsAscending<T>(this IList<T> collection) where T : IComparable<T>
         {
             if (!collection.Any() || collection.Count == 1)
-                return false;
+                throw new ArgumentException("Collection should contatin more then one elements");
 
             for(var i=1; i < collection.Count; i++)
             {
