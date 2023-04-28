@@ -5,12 +5,12 @@ namespace Esp.Core.EspNS
     /// <summary>
     /// Represents interface of genetic algorithm (GA)
     /// </summary>
-    public interface IEsp : IId
+    public interface IGeneticAlgorith : IId
     {
         /// <summary>
         /// Starts evaluation process of an GA
         /// </summary>
-        public void Evaluate();
+        public double Evaluate();
 
         /// <summary>
         /// Starts check stagnation process of an GA

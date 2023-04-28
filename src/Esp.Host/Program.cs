@@ -9,6 +9,8 @@ namespace Esp.Host
             var espExecutor = new EspExecutor();
 
             espExecutor.Execute();
+
+            Console.WriteLine("Genetic algorithm finished");
         }
     }
 }

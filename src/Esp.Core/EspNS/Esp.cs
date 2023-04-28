@@ -10,14 +10,15 @@ namespace Esp.Core.EspNS
     /// <summary>
     /// Enforces sub population implementation of GA
     /// </summary>
-    public class Esp : IEsp
+    public class Esp : IGeneticAlgorith
     {
         private readonly Guid _id = Guid.NewGuid();
         private readonly IList<IPopulation> _populations;
         private readonly IList<IInputNeuron> _inputNeurons;
         private readonly IList<IOutputNeuron> _outputNeurons;
-        private List<double> _fitnessHistory = new();
-        private List<double> _burstMutationHistory = new();
+        private readonly List<double> _fitnessHistory = new();
+        private readonly List<double> _burstMutationHistory = new();
+        private double _bestFitnessEver { get => _fitnessHistory.OrderByDescending(x => x).First();}
 
         public Esp(
             IList<IPopulation> populations,
@@ -29,11 +30,11 @@ namespace Esp.Core.EspNS
             _outputNeurons = outputNeurons;
         }
 
-        #region IEsp implementation
+        #region IGeneticAlgorith implementation
 
         public Guid GetId() => _id;
 
-        public void Evaluate()
+        public double Evaluate()
         {
             double bestFitness = 0;
 
@@ -53,11 +54,11 @@ namespace Esp.Core.EspNS
                     inputLayer, 
                     new List<IHiddenLayer>() { hiddenLayer }, 
                     outputLayer);
+                
+                network.PushExpectedValues(new List<double>() { 0, 1, 0 });
 
-                network.PushExpectedValues(new List<double>(){ 1, 1, 0 });
-
-                network.PushInputValues(new List<double> { 1054, 54, 234 });
-
+                network.PushInputValues(new List<double> { 0.1, 1.1, 0.1 });
+                
                 var fitness = network.ApplyFitness();
 
                 if (fitness > bestFitness)
@@ -67,6 +68,8 @@ namespace Esp.Core.EspNS
             }
 
             _fitnessHistory.Add(bestFitness);
+
+            return bestFitness;
         }
 
         public void CheckStagnation()
@@ -96,7 +99,7 @@ namespace Esp.Core.EspNS
             }
         }
 
-        #endregion IEsp implementation
+        #endregion
 
 
         #region Private methods 
@@ -129,13 +132,14 @@ namespace Esp.Core.EspNS
             .SelectMany(population => population.HiddenNeurons)
             .Any(neuron => neuron.Trials < 10);
 
+        //TODO another way to check it
         private bool ShouldAdaptNetwork()
         {
             if (_burstMutationHistory.Count < 2)
                 return false;
 
-            if (_burstMutationHistory.Count > 2)
-                throw new Exception("Invalid burst mutation history");
+            //if (_burstMutationHistory.Count > 2)
+                //throw new Exception("Invalid burst mutation history");
 
             return !_burstMutationHistory.IsAscending();
         }

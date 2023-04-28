@@ -9,11 +9,13 @@ namespace Esp.Core.Executor
     {
         public void Execute()
         {
-            var esp = EspBuilder.Build(20, 20);
+            var esp = EspBuilder.Build(50, 50);
 
-            while (true)
+            double fitness = 0;
+
+            while (fitness <  600000)
             {
-                esp.Evaluate();
+                fitness = esp.Evaluate();
 
                 esp.CheckStagnation();
 

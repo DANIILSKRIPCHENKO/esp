@@ -16,12 +16,11 @@ namespace Esp.Core.GenotypeNs
         {
             var inputWeights = new List<double>();
             var outputWeights = new List<double>();
-            var random = new Random();
 
             for (int i = 0; i < hiddenLayerSize; i++)
             {
-                inputWeights.Add(random.NextDouble());
-                outputWeights.Add(random.NextDouble());
+                inputWeights.Add(GetPseudoDoubleWithinRange(-1, 1));
+                outputWeights.Add(GetPseudoDoubleWithinRange(-1, 1));
             }
 
             _inputWeights = inputWeights;
@@ -104,6 +103,7 @@ namespace Esp.Core.GenotypeNs
 
         #region Private methods
 
+        //TODO rewrite process of calculation
         private double GetCauchyNoise()
         {
             var x = GetPseudoDoubleWithinRange(-1, 1);
