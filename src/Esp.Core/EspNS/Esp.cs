@@ -16,9 +16,12 @@ namespace Esp.Core.EspNS
         private readonly IList<IPopulation> _populations;
         private readonly IList<IInputNeuron> _inputNeurons;
         private readonly IList<IOutputNeuron> _outputNeurons;
-        private readonly List<double> _fitnessHistory = new();
+
+        private readonly List<double> _actualFitnessHistory = new();
+        private readonly List<double> _bestFitnessHistory = new();
+        private double _bestFitnessEver { get => _bestFitnessHistory.LastOrDefault(); }
+
         private readonly List<double> _burstMutationHistory = new();
-        private double _bestFitnessEver { get => _fitnessHistory.OrderByDescending(x => x).First();}
 
         public Esp(
             IList<IPopulation> populations,
@@ -55,9 +58,9 @@ namespace Esp.Core.EspNS
                     new List<IHiddenLayer>() { hiddenLayer }, 
                     outputLayer);
                 
-                network.PushExpectedValues(new List<double>() { 0.33333, 0.77777, 0.999999 });
+                network.PushExpectedValues(new List<double>() { 0.3, 0.7, 0.9 });
 
-                network.PushInputValues(new List<double> { 0.1, 1.1, 0.1 });
+                network.PushInputValues(new List<double> { 0, 1, 0 });
                 
                 var fitness = network.ApplyFitness();
 
@@ -67,7 +70,7 @@ namespace Esp.Core.EspNS
                 network.ResetConnection();
             }
 
-            _fitnessHistory.Add(bestFitness);
+            RecordFitness(bestFitness);
 
             return bestFitness;
         }
@@ -83,7 +86,7 @@ namespace Esp.Core.EspNS
                 foreach (var population in _populations)
                     population.BurstMutation();
 
-                var bestFitness = _fitnessHistory
+                var bestFitness = _actualFitnessHistory
                     .OrderByDescending(fitness => fitness)
                     .First();
 
@@ -117,10 +120,10 @@ namespace Esp.Core.EspNS
 
         private bool ShouldBurstMutate(int numberOfGenerationsToCheck)
         {
-            if (numberOfGenerationsToCheck > _fitnessHistory.Count)
+            if (numberOfGenerationsToCheck > _actualFitnessHistory.Count)
                 return false;
 
-            var IsStagnate = !_fitnessHistory
+            var IsStagnate = !_actualFitnessHistory
                 .TakeLast(numberOfGenerationsToCheck)
                 .ToList()
                 .IsAscending();
@@ -147,6 +150,19 @@ namespace Esp.Core.EspNS
         private void AdaptNetworkStructure()
         {
             _burstMutationHistory.Clear();
+        }
+
+        private void RecordFitness(double fitness)
+        {
+            _actualFitnessHistory.Add(fitness);
+
+            if (fitness > _bestFitnessEver)
+            {
+                _bestFitnessHistory.Add(fitness);
+                return;
+            }
+            
+            _bestFitnessHistory.Add(_bestFitnessEver);
         }
 
         #endregion
