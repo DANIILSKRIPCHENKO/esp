@@ -51,7 +51,7 @@ namespace Esp.Core.PopulationNs
                 .OrderByDescending(neuron => neuron.Fitness)
                 .First();
                 
-            var newNeurons = bestNeuron.BurstMutate(_neurons.Count/2);
+            var newNeurons = bestNeuron.BurstMutate(_neurons.Count/4);
 
             _neurons = _neurons
                 .OrderByDescending(neuron => neuron.Fitness)

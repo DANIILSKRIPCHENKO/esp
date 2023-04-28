@@ -55,7 +55,7 @@ namespace Esp.Core.EspNS
                     new List<IHiddenLayer>() { hiddenLayer }, 
                     outputLayer);
                 
-                network.PushExpectedValues(new List<double>() { 0, 1, 0 });
+                network.PushExpectedValues(new List<double>() { 0.33333, 0.77777, 0.999999 });
 
                 network.PushInputValues(new List<double> { 0.1, 1.1, 0.1 });
                 
