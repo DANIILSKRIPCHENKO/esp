@@ -46,6 +46,7 @@ namespace Esp.Core.GenotypeNs
         public static Genotype CreateRandom(int hiddenLayerSize) =>
             new(hiddenLayerSize);
 
+        //TODO change not all genes
         public IList<IGenotype> BurstMutate(int numberOfGenotypes)
         {
             var weights = new List<double>();

@@ -105,7 +105,8 @@ namespace Esp.Core.EspNS
         #endregion
 
 
-        #region Private methods 
+        #region Private methods
+
         private void CheckUniqueness(IEnumerable<IId> idCollection)
         {
             var duplicatedElements = idCollection
@@ -118,6 +119,7 @@ namespace Esp.Core.EspNS
             throw new Exception("Duplicate elements found");
         }
 
+        //TODO logic error
         private bool ShouldBurstMutate(int numberOfGenerationsToCheck)
         {
             if (numberOfGenerationsToCheck > _actualFitnessHistory.Count)
@@ -131,6 +133,7 @@ namespace Esp.Core.EspNS
             return IsStagnate;
         }
 
+        //TODO hide neurons
         private bool ShouldContinueTrials() => _populations
             .SelectMany(population => population.HiddenNeurons)
             .Any(neuron => neuron.Trials < 10);
