@@ -1,7 +1,9 @@
 ﻿using Esp.Core.GenotypeNs;
+using Esp.Core.NeuronNs.Input;
+using Esp.Core.NeuronNs.Output;
 using Esp.Core.SynapseNs;
 
-namespace Esp.Core.NeuronNs
+namespace Esp.Core.NeuronNs.Hidden
 {
     /// <summary>
     /// Represents interface of neuron in hidden layer

@@ -1,8 +1,7 @@
 ﻿using Esp.Core.Common;
 using Esp.Core.Extensions;
 using Esp.Core.NetworkNs;
-using Esp.Core.NeuralLayerNs;
-using Esp.Core.NeuronNs;
+using Esp.Core.NeuralLayerNs.Hidden;
 using Esp.Core.PopulationNs;
 
 namespace Esp.Core.EspNS
@@ -10,27 +9,27 @@ namespace Esp.Core.EspNS
     /// <summary>
     /// Enforces sub population implementation of GA
     /// </summary>
-    public class Esp : IGeneticAlgorith
+    public class Esp : IGeneticAlgorithm
     {
         private readonly Guid _id = Guid.NewGuid();
         private readonly IList<IPopulation> _populations;
-        private readonly IList<IInputNeuron> _inputNeurons;
-        private readonly IList<IOutputNeuron> _outputNeurons;
 
         private readonly List<double> _actualFitnessHistory = new();
         private readonly List<double> _bestFitnessHistory = new();
         private double _bestFitnessEver { get => _bestFitnessHistory.LastOrDefault(); }
 
         private readonly List<double> _burstMutationHistory = new();
+        private readonly INeuralNetworkBuilder _neuralNetworkBuilder;
+        private readonly IHiddenLayerBuilder _hiddenLayerBuilder;
 
         public Esp(
-            IList<IPopulation> populations,
-            IList<IInputNeuron> inputNeurons, 
-            IList<IOutputNeuron> outputNeurons)
+            INeuralNetworkBuilder neuralNetworkBuilder,
+            IHiddenLayerBuilder hiddenLayerBuilder,
+            IPopulationBuilder populationBuilder)
         {
-            _inputNeurons = inputNeurons;
-            _populations = populations;
-            _outputNeurons = outputNeurons;
+            _neuralNetworkBuilder = neuralNetworkBuilder;
+            _hiddenLayerBuilder = hiddenLayerBuilder;
+            _populations = populationBuilder.BuildInitialPopulations();
         }
 
         #region IGeneticAlgorith implementation
@@ -49,18 +48,14 @@ namespace Esp.Core.EspNS
 
                 CheckUniqueness(randomNeuronsForHidden);
 
-                var inputLayer = new InputLayer(_inputNeurons);
-                var hiddenLayer = new HiddenLayer(randomNeuronsForHidden);
-                var outputLayer = new OutputLayer(_outputNeurons);
+                var hiddenLayer = _hiddenLayerBuilder.BuildHiddenLayer(randomNeuronsForHidden);    
 
-                var network = new FullyConnectedNetwork(
-                    inputLayer, 
-                    new List<IHiddenLayer>() { hiddenLayer }, 
-                    outputLayer);
-                
+                var network = _neuralNetworkBuilder
+                    .BuildNeuralNetwork(new List<IHiddenLayer>(){ hiddenLayer });
+
                 network.PushExpectedValues(new List<double>() { 0.3, 0.7, 0.9 });
 
-                network.PushInputValues(new List<double> { 0, 1, 0 });
+                network.PushInputValues(new List<double> { 130, 120, 100 });
                 
                 var fitness = network.ApplyFitness();
 

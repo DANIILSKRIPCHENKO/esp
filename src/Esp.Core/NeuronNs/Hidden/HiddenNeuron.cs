@@ -2,9 +2,11 @@
 using Esp.Core.Extensions;
 using Esp.Core.GenotypeNs;
 using Esp.Core.InputFunction;
+using Esp.Core.NeuronNs.Input;
+using Esp.Core.NeuronNs.Output;
 using Esp.Core.SynapseNs;
 
-namespace Esp.Core.NeuronNs
+namespace Esp.Core.NeuronNs.Hidden
 {
     /// <summary>
     /// Implementation of IHiddenNeuron
@@ -22,7 +24,7 @@ namespace Esp.Core.NeuronNs
         private double _fitness = 0;
 
         public HiddenNeuron(
-            IActivationFunction activationFunction, 
+            IActivationFunction activationFunction,
             IInputFunction inputFunction,
             IGenotype genotype)
         {
@@ -58,7 +60,7 @@ namespace Esp.Core.NeuronNs
 
         public void AddFitness(double fit)
         {
-            _fitness =+ fit;
+            _fitness = +fit;
             _trials++;
         }
 
@@ -76,8 +78,8 @@ namespace Esp.Core.NeuronNs
             var index = _outputs.NextIndex();
 
             var synapse = new Synapse(
-                this, 
-                outputNeuron, 
+                this,
+                outputNeuron,
                 _genotype.OutputWeights[index]);
 
             _outputs.Add(synapse);
@@ -85,14 +87,14 @@ namespace Esp.Core.NeuronNs
         }
 
         public void AddInputNeuron(IInputNeuron inputNeuron)
-        {  
+        {
             var index = _inputs.NextIndex();
 
             var synapse = new Synapse(
-                inputNeuron, 
-                this, 
+                inputNeuron,
+                this,
                 _genotype.InputWeights[index]);
-            
+
             _inputs.Add(synapse);
             inputNeuron.Outputs.Add(synapse);
         }
@@ -105,17 +107,17 @@ namespace Esp.Core.NeuronNs
 
         public (IHiddenNeuron, IHiddenNeuron) Recombine(IHiddenNeuron hiddenNeuron)
         {
-            (var childGenotype1, var childGenotype2) = 
+            (var childGenotype1, var childGenotype2) =
                 _genotype.Recombine(hiddenNeuron.Genotype);
 
             var childNeuron1 = new HiddenNeuron(
-                _activationFunction, 
-                _inputFunction, 
+                _activationFunction,
+                _inputFunction,
                 childGenotype1);
 
             var childNeuron2 = new HiddenNeuron(
-                _activationFunction, 
-                _inputFunction, 
+                _activationFunction,
+                _inputFunction,
                 childGenotype2);
 
             return (childNeuron1, childNeuron2);

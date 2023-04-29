@@ -1,6 +1,8 @@
-﻿using Esp.Core.NeuronNs;
+﻿using Esp.Core.NeuralLayerNs.Input;
+using Esp.Core.NeuralLayerNs.Output;
+using Esp.Core.NeuronNs.Hidden;
 
-namespace Esp.Core.NeuralLayerNs
+namespace Esp.Core.NeuralLayerNs.Hidden
 {
     /// <summary>
     /// Represents interface of hidden layer of Neural Network

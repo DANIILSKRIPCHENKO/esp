@@ -1,6 +1,8 @@
-﻿using Esp.Core.NeuronNs;
+﻿using Esp.Core.NeuralLayerNs.Input;
+using Esp.Core.NeuralLayerNs.Output;
+using Esp.Core.NeuronNs.Hidden;
 
-namespace Esp.Core.NeuralLayerNs
+namespace Esp.Core.NeuralLayerNs.Hidden
 {
     /// <summary>
     /// HiddenLayer implementation
@@ -21,9 +23,9 @@ namespace Esp.Core.NeuralLayerNs
         public void ConnectInput(IInputLayer inputLayer)
         {
             var combos = _hiddenNeurons.SelectMany(
-                neuron => inputLayer.InputNeurons, 
+                neuron => inputLayer.InputNeurons,
                 (neuron, input) => new { neuron, input });
-            
+
             combos.ToList().ForEach(x => x.neuron.AddInputNeuron(x.input));
         }
 

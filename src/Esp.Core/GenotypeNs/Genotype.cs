@@ -12,16 +12,16 @@ namespace Esp.Core.GenotypeNs
 
         #region ctor
 
-        private Genotype(int hiddenLayerSize)
+        private Genotype(int inputConnectionsNumber, int outputConnectionsNumber)
         {
             var inputWeights = new List<double>();
             var outputWeights = new List<double>();
 
-            for (int i = 0; i < hiddenLayerSize; i++)
-            {
+            for (int i = 0; i < inputConnectionsNumber; i++)
                 inputWeights.Add(GetPseudoDoubleWithinRange(-1, 1));
+
+            for (int i = 0; i < outputConnectionsNumber; i++)
                 outputWeights.Add(GetPseudoDoubleWithinRange(-1, 1));
-            }
 
             _inputWeights = inputWeights;
             _outputWeights = outputWeights;
@@ -43,8 +43,8 @@ namespace Esp.Core.GenotypeNs
 
         public IList<double> OutputWeights => _outputWeights;
 
-        public static Genotype CreateRandom(int hiddenLayerSize) =>
-            new(hiddenLayerSize);
+        public static Genotype CreateRandom(int inputConnectionsNumber, int outputConnectionsNumber) =>
+            new(inputConnectionsNumber, outputConnectionsNumber);
 
         //TODO change not all genes
         public IList<IGenotype> BurstMutate(int numberOfGenotypes)

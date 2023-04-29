@@ -1,11 +1,13 @@
-﻿using Esp.Core.NeuralLayerNs;
+﻿using Esp.Core.NeuralLayerNs.Hidden;
+using Esp.Core.NeuralLayerNs.Input;
+using Esp.Core.NeuralLayerNs.Output;
 
 namespace Esp.Core.NetworkNs
 {
     /// <summary>
     /// Fully Connected Network implementation of INetwork interface
     /// </summary>
-    public class FullyConnectedNetwork : INetwork
+    public class FullyConnectedNetwork : INeuralNetwork
     {
         private readonly Guid _id = Guid.NewGuid();
 

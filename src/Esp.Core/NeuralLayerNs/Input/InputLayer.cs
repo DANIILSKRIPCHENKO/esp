@@ -1,6 +1,6 @@
-﻿using Esp.Core.NeuronNs;
+﻿using Esp.Core.NeuronNs.Input;
 
-namespace Esp.Core.NeuralLayerNs
+namespace Esp.Core.NeuralLayerNs.Input
 {
     /// <summary>
     /// IInputLayer interface implementation
@@ -9,9 +9,9 @@ namespace Esp.Core.NeuralLayerNs
     {
         private IList<IInputNeuron> _inputNeurons;
 
-        public InputLayer(IList<IInputNeuron> inputNeurons)
+        public InputLayer(IInputNeuronBuilder inputNeuronBuilder)
         {
-            _inputNeurons = inputNeurons;
+            _inputNeurons = inputNeuronBuilder.BuildInputNeurons();
         }
 
         #region IInputLayer implementation
@@ -20,7 +20,7 @@ namespace Esp.Core.NeuralLayerNs
 
         public void ResetConnections()
         {
-            foreach(var neuron in _inputNeurons)
+            foreach (var neuron in _inputNeurons)
             {
                 neuron.Outputs.Clear();
             }

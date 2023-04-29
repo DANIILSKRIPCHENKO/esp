@@ -7,9 +7,9 @@
     {
         private readonly double _coeficient;
 
-        public SigmoidActivationFunction(double coeficient)
+        public SigmoidActivationFunction()
         {
-            _coeficient = coeficient;
+            _coeficient = 0.7;
         }
 
         public double CalculateOutput(double input)

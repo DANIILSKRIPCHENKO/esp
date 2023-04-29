@@ -5,7 +5,7 @@ namespace Esp.Core.NetworkNs
     /// <summary>
     /// Represents interface for Neural Network
     /// </summary>
-    public interface INetwork : IId
+    public interface INeuralNetwork : IId
     {
         /// <summary>
         /// Calculates and applies fitness to neurons

@@ -1,7 +1,7 @@
 ﻿using Esp.Core.ActivationFunction;
 using Esp.Core.SynapseNs;
 
-namespace Esp.Core.NeuronNs
+namespace Esp.Core.NeuronNs.Input
 {
     /// <summary>
     /// Implementation of IInputNeuron
@@ -22,7 +22,7 @@ namespace Esp.Core.NeuronNs
 
         public Guid GetId() => _id;
 
-        public IList<ISynapse> Outputs { get => _outputs;}
+        public IList<ISynapse> Outputs { get => _outputs; }
 
         public double CalculateOutput() => _activationFunction.CalculateOutput(_input);
 
