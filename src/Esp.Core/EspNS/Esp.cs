@@ -117,13 +117,15 @@ namespace Esp.Core.EspNS
         //TODO logic error
         private bool ShouldBurstMutate(int numberOfGenerationsToCheck)
         {
-            if (numberOfGenerationsToCheck > _actualFitnessHistory.Count)
+            if (numberOfGenerationsToCheck > _bestFitnessHistory.Count)
                 return false;
 
-            var IsStagnate = !_actualFitnessHistory
+            var lastFitnesses = _bestFitnessHistory
                 .TakeLast(numberOfGenerationsToCheck)
-                .ToList()
-                .IsAscending();
+                .ToList();
+
+            var IsStagnate = !lastFitnesses
+                .Any(x => x != lastFitnesses.First());
 
             return IsStagnate;
         }

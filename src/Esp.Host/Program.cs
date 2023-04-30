@@ -29,22 +29,22 @@ namespace Esp.Host
 
         private static void ConfigureServices(IServiceCollection services)
         {
-            services.AddSingleton<IExecutable, Executor>();
-            services.AddSingleton<IGeneticAlgorithm, Core.EspNS.Esp>();
-            services.AddSingleton<INeuralNetworkBuilder, FullyConnectedNeuralNetworkBuilder>();
+            services.AddTransient<IExecutable, Executor>();
+            services.AddTransient<IGeneticAlgorithm, Core.EspNS.Esp>();
+            services.AddTransient<INeuralNetworkBuilder, FullyConnectedNeuralNetworkBuilder>();
             
-            services.AddSingleton<IInputLayer, InputLayer>();
-            services.AddSingleton<IInputNeuronBuilder, InputNeuronBuilder>();
+            services.AddTransient<IInputLayer, InputLayer>();
+            services.AddTransient<IInputNeuronBuilder, InputNeuronBuilder>();
 
-            services.AddSingleton<IOutputLayer, OutputLayer>();
-            services.AddSingleton<IOutputNeuronBuilder, OutputNeuronBuilder>();
+            services.AddTransient<IOutputLayer, OutputLayer>();
+            services.AddTransient<IOutputNeuronBuilder, OutputNeuronBuilder>();
 
-            services.AddSingleton<IHiddenNeuronBuilder, HiddenNeuronBuilder>();
-            services.AddSingleton<IHiddenLayerBuilder, HiddenLayerBuilder>();
+            services.AddTransient<IHiddenNeuronBuilder, HiddenNeuronBuilder>();
+            services.AddTransient<IHiddenLayerBuilder, HiddenLayerBuilder>();
 
-            services.AddSingleton<IActivationFunction, SigmoidActivationFunction>();
-            services.AddSingleton<IPopulationBuilder, PopulationBuilder>();
-            services.AddSingleton<IGenotypeBuilder, GenotypeBuilder>();
+            services.AddTransient<IActivationFunction, SigmoidActivationFunction>();
+            services.AddTransient<IPopulationBuilder, PopulationBuilder>();
+            services.AddTransient<IGenotypeBuilder, GenotypeBuilder>();
 
         }
     }
