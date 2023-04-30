@@ -1,4 +1,5 @@
 ﻿using Esp.Core.ActivationFunction;
+using Esp.Core.Distribution;
 using Esp.Core.EspNS;
 using Esp.Core.Executor;
 using Esp.Core.GenotypeNs;
@@ -46,6 +47,7 @@ namespace Esp.Host
             services.AddTransient<IPopulationBuilder, PopulationBuilder>();
             services.AddTransient<IGenotypeBuilder, GenotypeBuilder>();
 
+            services.AddTransient<IDistribution, CauchyDistribution>();
         }
     }
 }

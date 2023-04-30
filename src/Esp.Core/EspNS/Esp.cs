@@ -81,9 +81,7 @@ namespace Esp.Core.EspNS
                 foreach (var population in _populations)
                     population.BurstMutation();
 
-                var bestFitness = _actualFitnessHistory
-                    .OrderByDescending(fitness => fitness)
-                    .First();
+                var bestFitness = _bestFitnessHistory.Last();
 
                 _burstMutationHistory.Add(bestFitness);
             }
