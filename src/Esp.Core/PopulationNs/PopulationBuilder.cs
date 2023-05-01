@@ -1,33 +1,50 @@
-﻿using Esp.Core.Extensions;
+﻿using Esp.Api;
+using Esp.Core.Extensions;
 using Esp.Core.NeuronNs.Hidden;
 
 namespace Esp.Core.PopulationNs
 {
     public class PopulationBuilder : IPopulationBuilder
     {
-        private readonly IList<IHiddenNeuron> _hiddenNeurons;
+        private readonly IOptions _options;
+        private readonly IHiddenNeuronBuilder _hiddenNeuronBuilder;
 
-        public PopulationBuilder(IHiddenNeuronBuilder hiddenNeuronBuilder)
+        public PopulationBuilder(
+            IOptions options,
+            IHiddenNeuronBuilder hiddenNeuronBuilder)
         {
-            _hiddenNeurons = hiddenNeuronBuilder.BuildHiddenNeurons(2500);
+            _options = options;
+            _hiddenNeuronBuilder = hiddenNeuronBuilder;
         }
 
         public IList<IPopulation> BuildInitialPopulations()
         {
-            return BuildInitialPopulations(5, 500);
+            return BuildInitialPopulations(
+                _options.NumberOfPopulations, 
+                _options.NumberOfNeuronsInPopulation);
+        }
+
+        public IPopulation BuildPopulation()
+        {
+            var neurons = _hiddenNeuronBuilder.BuildHiddenNeurons(_options.NumberOfNeuronsInPopulation);
+            return new Population(neurons);
         }
 
         private IList<IPopulation> BuildInitialPopulations(
             int numberOfPopulations,
             int numberOfNeuronsInPopulation)
         {
+
+            var initialNeurons = _hiddenNeuronBuilder
+                .BuildHiddenNeurons(_options.NumberOfNeuronsInPopulation * _options.NumberOfPopulations);
+
             var populations = new List<IPopulation>();
 
             var usedNeurons = new List<IHiddenNeuron>();
 
             for (int i = 0; i < numberOfPopulations; i++)
             {
-                var randomNeurons = _hiddenNeurons
+                var randomNeurons = initialNeurons
                     .TakeRandomNotIn(usedNeurons, numberOfNeuronsInPopulation)
                     .ToList();
 

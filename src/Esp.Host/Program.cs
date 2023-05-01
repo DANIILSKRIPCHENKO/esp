@@ -1,4 +1,6 @@
-﻿using Esp.Core.ActivationFunction;
+﻿using CommandLine;
+using Esp.Api;
+using Esp.Core.ActivationFunction;
 using Esp.Core.Distribution;
 using Esp.Core.EspNS;
 using Esp.Core.Executor;
@@ -20,17 +22,21 @@ namespace Esp.Host
     {
         static void Main(string[] args)
         {
-            var services = new ServiceCollection();
+            Parser.Default.ParseArguments<Options>(args).WithParsed(options =>
+            {
+                IServiceProvider serviceProvider = BuildServiceProvider(options);
+
+                var exucutor = serviceProvider.GetService<IExecutable>();
+
+                exucutor!.Execute();
+            });
             
-            ConfigureServices(services);
-            
-            services.BuildServiceProvider()
-                .GetService<IExecutable>()
-                !.Execute();
         }
 
-        private static void ConfigureServices(IServiceCollection services)
+        private static IServiceProvider BuildServiceProvider(Options options)
         {
+            var services = new ServiceCollection();
+
             services.AddTransient<IExecutable, Executor>();
             services.AddTransient<IGeneticAlgorithm, Core.EspNS.Esp>();
             services.AddTransient<INeuralNetworkBuilder, FullyConnectedNeuralNetworkBuilder>();
@@ -51,6 +57,10 @@ namespace Esp.Host
             services.AddTransient<IDistribution, CauchyDistribution>();
 
             services.AddTransient<ILossFunction, Mse>();
+
+            services.AddSingleton<IOptions>(options);
+
+            return services.BuildServiceProvider();
         }
     }
 }

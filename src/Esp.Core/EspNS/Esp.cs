@@ -1,5 +1,4 @@
 ﻿using Esp.Core.Common;
-using Esp.Core.Extensions;
 using Esp.Core.NetworkNs;
 using Esp.Core.NeuralLayerNs.Hidden;
 using Esp.Core.PopulationNs;
@@ -18,9 +17,11 @@ namespace Esp.Core.EspNS
         private readonly List<double> _bestFitnessHistory = new();
         private double _bestFitnessEver { get => _bestFitnessHistory.LastOrDefault(); }
 
-        private readonly List<double> _burstMutationHistory = new();
+        private int _burstMutationCounter = 0;
+
         private readonly INeuralNetworkBuilder _neuralNetworkBuilder;
         private readonly IHiddenLayerBuilder _hiddenLayerBuilder;
+        private readonly IPopulationBuilder _populationBuilder;
 
         public Esp(
             INeuralNetworkBuilder neuralNetworkBuilder,
@@ -29,6 +30,7 @@ namespace Esp.Core.EspNS
         {
             _neuralNetworkBuilder = neuralNetworkBuilder;
             _hiddenLayerBuilder = hiddenLayerBuilder;
+            _populationBuilder = populationBuilder;
             _populations = populationBuilder.BuildInitialPopulations();
         }
 
@@ -38,26 +40,67 @@ namespace Esp.Core.EspNS
 
         public double Evaluate()
         {
+            return Evaluate(isTracking: true);
+        }
+
+        public void CheckStagnation()
+        {
+            if (ShouldAdaptNetwork())
+            {
+                AdaptNetworkStructure();
+                _burstMutationCounter = 0;
+
+                return;
+            }
+
+            // hardcode  number of generations to check
+            if (ShouldBurstMutate(3))
+            {
+                foreach (var population in _populations.Where(population => population.IsTurnedOff == false))
+                    population.BurstMutation();
+
+                _burstMutationCounter++;
+            }
+        }
+
+        public void Recombine()
+        {
+            foreach(var population in _populations.Where(population => population.IsTurnedOff == false))
+                population.Recombine();
+        }
+
+        #endregion
+
+
+        #region Private methods
+
+        private double Evaluate(bool isTracking)
+        {
+            ResetFitnesses();
+
             double bestFitness = 0;
 
             while (ShouldContinueTrials())
             {
                 var randomNeuronsForHidden = _populations
+                    .Where(population => population.IsTurnedOff == false)
                     .Select(population => population.GetRandomNeuron())
                     .ToList();
 
                 CheckUniqueness(randomNeuronsForHidden);
 
-                var hiddenLayer = _hiddenLayerBuilder.BuildHiddenLayer(randomNeuronsForHidden);    
+                var hiddenLayer = _hiddenLayerBuilder.BuildHiddenLayer(randomNeuronsForHidden);
 
                 var network = _neuralNetworkBuilder
-                    .BuildNeuralNetwork(new List<IHiddenLayer>(){ hiddenLayer });
+                    .BuildNeuralNetwork(new List<IHiddenLayer>() { hiddenLayer });
 
                 network.PushExpectedValues(new List<double>() { 0.3, 0.7, 0.9 });
 
-                network.PushInputValues(new List<double> { 0.1, 0.2, 0.5 });
+                network.PushInputValues(new List<double> { 0.1, 3, 0.5 });
+
+                var fitness = network.GetFitness();
                 
-                var fitness = network.ApplyFitness();
+                network.ApplyFitness();
 
                 if (fitness > bestFitness)
                     bestFitness = fitness;
@@ -65,40 +108,17 @@ namespace Esp.Core.EspNS
                 network.ResetConnection();
             }
 
-            RecordFitness(bestFitness);
+            if(isTracking)
+                RecordFitness(bestFitness);
 
             return bestFitness;
         }
 
-        public void CheckStagnation()
+        private void ResetFitnesses()
         {
-            if (ShouldAdaptNetwork())
-                AdaptNetworkStructure();
-
-            // hardcode  number of generations to check
-            if (ShouldBurstMutate(3))
-            {
-                foreach (var population in _populations)
-                    population.BurstMutation();
-
-                var bestFitness = _bestFitnessHistory.Last();
-
-                _burstMutationHistory.Add(bestFitness);
-            }
+            foreach (var population in _populations)
+                population.ResetFitnesses();
         }
-
-        public void Recombine()
-        {
-            foreach(var population in _populations)
-            {
-                population.Recombine();
-            }
-        }
-
-        #endregion
-
-
-        #region Private methods
 
         private void CheckUniqueness(IEnumerable<IId> idCollection)
         {
@@ -130,24 +150,58 @@ namespace Esp.Core.EspNS
 
         //TODO hide neurons
         private bool ShouldContinueTrials() => _populations
+            .Where(population => population.IsTurnedOff == false)
             .SelectMany(population => population.HiddenNeurons)
             .Any(neuron => neuron.Trials < 10);
 
-        //TODO another way to check it
+
         private bool ShouldAdaptNetwork()
         {
-            if (_burstMutationHistory.Count < 2)
+            if (_burstMutationCounter < 2)
                 return false;
 
-            //if (_burstMutationHistory.Count > 2)
-                //throw new Exception("Invalid burst mutation history");
+            var lastBestFitnesses = _bestFitnessHistory
+                .TakeLast(_burstMutationCounter)
+                .ToList();
 
-            return !_burstMutationHistory.IsAscending();
+            return !lastBestFitnesses.Any(x => x != lastBestFitnesses.First());
         }
 
         private void AdaptNetworkStructure()
         {
-            _burstMutationHistory.Clear();
+            var removedAny = RemoveUselessPopulations();
+
+            if (removedAny)
+                return;
+
+            _populations.Add(_populationBuilder.BuildPopulation());
+        }
+
+        private bool RemoveUselessPopulations()
+        {
+            var bestFitnessEver = _bestFitnessEver;
+
+            var populationsToRemove = new List<IPopulation>();
+
+            foreach (var population in _populations)
+            {
+                population.IsTurnedOff = true;
+
+                var fitness = Evaluate(isTracking: false);
+
+                if (fitness > bestFitnessEver)
+                    populationsToRemove.Add(population);
+
+                population.IsTurnedOff = false;
+            }
+
+            if (!populationsToRemove.Any())
+                return false;
+
+            foreach (var populationToRemove in populationsToRemove)
+                _populations.Remove(populationToRemove);
+
+            return true;
         }
 
         private void RecordFitness(double fitness)

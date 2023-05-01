@@ -2,6 +2,6 @@
 {
     public interface IHiddenNeuronBuilder
     {
-        public IList<IHiddenNeuron> BuildHiddenNeurons(int number);
+        public IList<IHiddenNeuron> BuildHiddenNeurons(int numberOfNeuronsToBuild);
     }
 }

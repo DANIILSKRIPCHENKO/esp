@@ -18,7 +18,7 @@ namespace Esp.Core.Executor
         {
             double fitness = 0;
 
-            while (fitness <  600000)
+            while (fitness <  6000000)
             {
                 fitness = _geneticAlgorithm.Evaluate();
 

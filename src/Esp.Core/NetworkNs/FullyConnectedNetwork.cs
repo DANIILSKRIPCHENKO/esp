@@ -50,6 +50,8 @@ namespace Esp.Core.NetworkNs
             }
         }
 
+        public double GetFitness() => CalculateFitness();
+
         public double ApplyFitness()
         {
             var fitness = CalculateFitness();

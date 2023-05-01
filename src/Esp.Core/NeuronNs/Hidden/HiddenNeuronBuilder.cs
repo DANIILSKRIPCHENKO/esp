@@ -1,4 +1,5 @@
-﻿using Esp.Core.ActivationFunction;
+﻿using Esp.Api;
+using Esp.Core.ActivationFunction;
 using Esp.Core.GenotypeNs;
 using Esp.Core.InputFunction;
 
@@ -17,9 +18,9 @@ namespace Esp.Core.NeuronNs.Hidden
             _genotypeBuilder = genotypeBuilder;
         }
 
-        public IList<IHiddenNeuron> BuildHiddenNeurons(int number)
+        public IList<IHiddenNeuron> BuildHiddenNeurons(int numberOfNeuronsToBuild)
         {
-            return BuildInitialNeurons(number);
+            return BuildInitialNeurons(numberOfNeuronsToBuild);
         }
 
         private IList<IHiddenNeuron> BuildInitialNeurons(
