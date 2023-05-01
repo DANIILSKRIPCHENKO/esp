@@ -28,5 +28,15 @@ namespace Esp.Core.PopulationNs
         /// Performs burst mutation pf population
         /// </summary>
         public void BurstMutation();
+
+        /// <summary>
+        /// Shows if population turned off
+        /// </summary>
+        public bool IsTurnedOff { get; set; }
+
+        /// <summary>
+        /// Resetes fitness and trials values of neurons
+        /// </summary>
+        public void ResetFitnesses();
     }
 }

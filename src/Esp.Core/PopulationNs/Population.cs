@@ -7,6 +7,7 @@ namespace Esp.Core.PopulationNs
     {
         private readonly Guid _id = Guid.NewGuid();
         private IList<IHiddenNeuron> _neurons;
+        private bool _isTurnedOff = false;
 
         public Population(IList<IHiddenNeuron> neurons)
         {
@@ -18,6 +19,8 @@ namespace Esp.Core.PopulationNs
         public Guid GetId() => _id;
 
         public IList<IHiddenNeuron> HiddenNeurons => _neurons;
+
+        public bool IsTurnedOff { get => _isTurnedOff; set => _isTurnedOff = value; }
 
         public IHiddenNeuron GetRandomNeuron() => _neurons.FirstRandom();
 
@@ -57,6 +60,12 @@ namespace Esp.Core.PopulationNs
                 .OrderByDescending(neuron => neuron.Fitness)
                 .ToList()
                 .ReplaceFromLast(newNeurons);
+        }
+
+        public void ResetFitnesses()
+        {
+            foreach (var neuron in _neurons)
+                neuron.ResetFitness();
         }
 
         #endregion

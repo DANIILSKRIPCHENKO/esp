@@ -54,6 +54,11 @@ namespace Esp.Core.NeuronNs.Hidden
         public void ResetConnection();
 
         /// <summary>
+        /// Resets fitness and trials of neuron
+        /// </summary>
+        public void ResetFitness();
+
+        /// <summary>
         /// Genotype of neuron
         /// </summary>
         public IGenotype Genotype { get; }

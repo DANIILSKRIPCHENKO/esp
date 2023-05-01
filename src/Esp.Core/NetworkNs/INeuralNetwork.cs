@@ -14,6 +14,12 @@ namespace Esp.Core.NetworkNs
         public double ApplyFitness();
 
         /// <summary>
+        /// Calculates and returns fitness
+        /// </summary>
+        /// <returns></returns>
+        public double GetFitness();
+
+        /// <summary>
         /// Reset connections of neurons
         /// </summary>
         public void ResetConnection();

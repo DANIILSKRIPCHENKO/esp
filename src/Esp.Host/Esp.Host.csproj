@@ -8,10 +8,12 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="CommandLineParser" Version="2.9.1" />
     <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="7.0.0" />
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\Esp.Api\Esp.Api.csproj" />
     <ProjectReference Include="..\Esp.Core\Esp.Core.csproj" />
   </ItemGroup>
 

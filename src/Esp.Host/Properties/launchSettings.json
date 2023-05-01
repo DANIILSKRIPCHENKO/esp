@@ -1,0 +1,8 @@
+{
+  "profiles": {
+    "Esp.Host": {
+      "commandName": "Project",
+      "commandLineArgs": "-p 5\r\n-n 10"
+    }
+  }
+}

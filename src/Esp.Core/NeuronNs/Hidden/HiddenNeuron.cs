@@ -135,6 +135,12 @@ namespace Esp.Core.NeuronNs.Hidden
             return result;
         }
 
+        public void ResetFitness()
+        {
+            _fitness= 0;
+            _trials = 0;
+        }
+
         #endregion
     }
 }
