@@ -55,7 +55,7 @@ namespace Esp.Core.EspNS
 
                 network.PushExpectedValues(new List<double>() { 0.3, 0.7, 0.9 });
 
-                network.PushInputValues(new List<double> { 130, 120, 100 });
+                network.PushInputValues(new List<double> { 0.1, 0.2, 0.5 });
                 
                 var fitness = network.ApplyFitness();
 
