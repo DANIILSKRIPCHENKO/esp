@@ -1,6 +1,6 @@
-﻿using Esp.Core.NeuronNs;
+﻿using Esp.Core.NeuronNs.Output;
 
-namespace Esp.Core.NeuralLayerNs
+namespace Esp.Core.NeuralLayerNs.Output
 {
     /// <summary>
     /// Implementation of IOutputLayer
@@ -9,9 +9,9 @@ namespace Esp.Core.NeuralLayerNs
     {
         private IList<IOutputNeuron> _outputNeurons;
 
-        public OutputLayer(IList<IOutputNeuron> outputNeurons)
+        public OutputLayer(IOutputNeuronBuilder outputNeuronBuilder)
         {
-            _outputNeurons = outputNeurons;
+            _outputNeurons = outputNeuronBuilder.BuildOutputNeurons();
         }
 
         #region OutputLayer implementation

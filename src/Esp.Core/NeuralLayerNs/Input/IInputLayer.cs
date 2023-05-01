@@ -1,6 +1,6 @@
-﻿using Esp.Core.NeuronNs;
+﻿using Esp.Core.NeuronNs.Input;
 
-namespace Esp.Core.NeuralLayerNs
+namespace Esp.Core.NeuralLayerNs.Input
 {
     /// <summary>
     /// Represents interface of input layer in Neural Network

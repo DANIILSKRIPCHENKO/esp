@@ -1,4 +1,5 @@
-﻿using Esp.Core.Extensions;
+﻿using Esp.Core.Distribution;
+using Esp.Core.Extensions;
 
 namespace Esp.Core.GenotypeNs
 {
@@ -9,19 +10,25 @@ namespace Esp.Core.GenotypeNs
     {
         private readonly IList<double> _inputWeights;
         private readonly IList<double> _outputWeights;
+        private readonly IDistribution _distribution;
 
         #region ctor
 
-        private Genotype(int hiddenLayerSize)
+        private Genotype(
+            int inputConnectionsNumber, 
+            int outputConnectionsNumber,
+            IDistribution distribution)
         {
+            _distribution = distribution;
+            
             var inputWeights = new List<double>();
             var outputWeights = new List<double>();
 
-            for (int i = 0; i < hiddenLayerSize; i++)
-            {
+            for (int i = 0; i < inputConnectionsNumber; i++)
                 inputWeights.Add(GetPseudoDoubleWithinRange(-1, 1));
+
+            for (int i = 0; i < outputConnectionsNumber; i++)
                 outputWeights.Add(GetPseudoDoubleWithinRange(-1, 1));
-            }
 
             _inputWeights = inputWeights;
             _outputWeights = outputWeights;
@@ -29,10 +36,12 @@ namespace Esp.Core.GenotypeNs
 
         private Genotype(
             IList<double> inputWeights,
-            IList<double> outputWeights)
+            IList<double> outputWeights,
+            IDistribution distribution)
         {
             _inputWeights = inputWeights;
             _outputWeights = outputWeights;
+            _distribution = distribution;
         }
 
         #endregion
@@ -43,10 +52,14 @@ namespace Esp.Core.GenotypeNs
 
         public IList<double> OutputWeights => _outputWeights;
 
-        public static Genotype CreateRandom(int hiddenLayerSize) =>
-            new(hiddenLayerSize);
+        public static Genotype CreateRandom(
+            int inputConnectionsNumber, 
+            int outputConnectionsNumber,
+            IDistribution distribution) =>
+            new(inputConnectionsNumber, 
+                outputConnectionsNumber, 
+                distribution);
 
-        //TODO change not all genes
         public IList<IGenotype> BurstMutate(int numberOfGenotypes)
         {
             var weights = new List<double>();
@@ -61,12 +74,18 @@ namespace Esp.Core.GenotypeNs
 
                 foreach(var weight in weights)
                 {
-                    newWeights.Add(weight + GetCauchyNoise());
+                    if (!ShouldMutateGene())
+                    {
+                        newWeights.Add(weight);
+                        continue;
+                    }
+                    
+                    newWeights.Add(_distribution.GenerateRandom(weight));
                 }
 
                 (var inputWeights, var outputWeights) = newWeights.Half();
 
-                result.Add(new Genotype(inputWeights, outputWeights));
+                result.Add(new Genotype(inputWeights, outputWeights, _distribution));
             }
 
             return result;
@@ -92,10 +111,10 @@ namespace Esp.Core.GenotypeNs
             (var result1, var result2) = weights.CrossOver(newWeights, crossOverPointIndex);
 
             (var inputWeights1, var outputWeights1) = result1.Half();
-            var resultGenotype1 = new Genotype(inputWeights1, outputWeights1);
+            var resultGenotype1 = new Genotype(inputWeights1, outputWeights1, _distribution);
 
             (var inputWeights2, var outputWeights2) = result2.Half();
-            var resultGenotype2 = new Genotype(inputWeights2, outputWeights2);
+            var resultGenotype2 = new Genotype(inputWeights2, outputWeights2, _distribution);
 
             return (resultGenotype1, resultGenotype2);
         }
@@ -104,14 +123,15 @@ namespace Esp.Core.GenotypeNs
 
         #region Private methods
 
-        //TODO rewrite process of calculation
-        private double GetCauchyNoise()
+        private bool ShouldMutateGene()
         {
-            var x = GetPseudoDoubleWithinRange(-1, 1);
+            var mutateGeneProbability = 0.3;
 
-            double a = 0.3;
+            var randomValue = new Random().NextDouble();
+            if (randomValue <= mutateGeneProbability)
+                return true;
 
-            return a / (Math.PI * (Math.Pow(a, 2) + Math.Pow(x, 2)));
+            return false;
         }
 
         private static double GetPseudoDoubleWithinRange(double lowerBound, double upperBound)

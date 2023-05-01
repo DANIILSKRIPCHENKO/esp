@@ -1,6 +1,6 @@
 ﻿using Esp.Core.SynapseNs;
 
-namespace Esp.Core.NeuronNs
+namespace Esp.Core.NeuronNs.Input
 {
     /// <summary>
     /// Represents interface of neuron in input layer
@@ -10,7 +10,7 @@ namespace Esp.Core.NeuronNs
         /// <summary>
         /// Output connections of neuron
         /// </summary>
-        public IList<ISynapse> Outputs { get;}
+        public IList<ISynapse> Outputs { get; }
 
         /// <summary>
         /// Pushes values in neuron input

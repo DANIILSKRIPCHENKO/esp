@@ -2,7 +2,7 @@
 using Esp.Core.InputFunction;
 using Esp.Core.SynapseNs;
 
-namespace Esp.Core.NeuronNs
+namespace Esp.Core.NeuronNs.Output
 {
     /// <summary>
     /// Implementation of IOutputNeuron interface
