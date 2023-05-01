@@ -9,12 +9,12 @@ namespace Esp.Core.PopulationNs
 
         public PopulationBuilder(IHiddenNeuronBuilder hiddenNeuronBuilder)
         {
-            _hiddenNeurons = hiddenNeuronBuilder.BuildHiddenNeurons(250);
+            _hiddenNeurons = hiddenNeuronBuilder.BuildHiddenNeurons(2500);
         }
 
         public IList<IPopulation> BuildInitialPopulations()
         {
-            return BuildInitialPopulations(5, 50);
+            return BuildInitialPopulations(5, 500);
         }
 
         private IList<IPopulation> BuildInitialPopulations(

@@ -1,4 +1,5 @@
-﻿using Esp.Core.NeuralLayerNs.Hidden;
+﻿using Esp.Core.LossFunction;
+using Esp.Core.NeuralLayerNs.Hidden;
 using Esp.Core.NeuralLayerNs.Input;
 using Esp.Core.NeuralLayerNs.Output;
 
@@ -14,17 +15,19 @@ namespace Esp.Core.NetworkNs
         private readonly IInputLayer _inputLayer;
         private readonly IOutputLayer _outputLayer;
         private readonly IList<IHiddenLayer> _hiddenLayers = new List<IHiddenLayer>();
-
+        private readonly ILossFunction _lossFunction;
         private IList<double> _expectedResult = new List<double>();
 
         public FullyConnectedNetwork(
             IInputLayer inputLayer,
             IList<IHiddenLayer> hiddenLayers,
-            IOutputLayer outputLayer)
+            IOutputLayer outputLayer,
+            ILossFunction lossFunction)
         {
             _inputLayer = inputLayer;
             _outputLayer = outputLayer;
             AddHiddenLayers(hiddenLayers);
+            _lossFunction = lossFunction;
         }
 
         #region INetwork implementation
@@ -105,12 +108,7 @@ namespace Esp.Core.NetworkNs
         {
             var output = GetOutput();
 
-            if (output.Count != _expectedResult.Count)
-                throw new Exception("Failed to calculate fitness");
-
-            var error = output
-                .Select((output, index) => Math.Abs(output - _expectedResult[index]))
-                .Sum();
+            var error = _lossFunction.CalculateError(output, _expectedResult);
 
             return 1 / error;
         }

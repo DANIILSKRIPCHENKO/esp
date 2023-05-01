@@ -3,6 +3,7 @@ using Esp.Core.Distribution;
 using Esp.Core.EspNS;
 using Esp.Core.Executor;
 using Esp.Core.GenotypeNs;
+using Esp.Core.LossFunction;
 using Esp.Core.NetworkNs;
 using Esp.Core.NeuralLayerNs.Hidden;
 using Esp.Core.NeuralLayerNs.Input;
@@ -48,6 +49,8 @@ namespace Esp.Host
             services.AddTransient<IGenotypeBuilder, GenotypeBuilder>();
 
             services.AddTransient<IDistribution, CauchyDistribution>();
+
+            services.AddTransient<ILossFunction, Mse>();
         }
     }
 }
