@@ -14,6 +14,7 @@ using Esp.Core.NeuronNs.Hidden;
 using Esp.Core.NeuronNs.Input;
 using Esp.Core.NeuronNs.Output;
 using Esp.Core.PopulationNs;
+using Esp.Core.Report;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace Esp.Host
@@ -57,6 +58,8 @@ namespace Esp.Host
             services.AddTransient<IDistribution, CauchyDistribution>();
 
             services.AddTransient<ILossFunction, Mse>();
+
+            services.AddTransient<IGeneticAlgorithmReportBuilder, GeneticAlgorithmReportBuilder>();
 
             services.AddSingleton<IOptions>(options);
 

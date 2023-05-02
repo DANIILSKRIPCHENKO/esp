@@ -8,13 +8,15 @@ namespace Esp.Core.EspNS
     /// <summary>
     /// Enforces sub population implementation of GA
     /// </summary>
-    public class Esp : IGeneticAlgorithm
+    public class Esp : IGeneticAlgorithm, IReportableGeneticAlgorithm
     {
         private readonly Guid _id = Guid.NewGuid();
         private readonly IList<IPopulation> _populations;
 
         private readonly List<double> _actualFitnessHistory = new();
         private readonly List<double> _bestFitnessHistory = new();
+        private readonly List<int> _populationHitory = new();
+
         private double _bestFitnessEver { get => _bestFitnessHistory.LastOrDefault(); }
 
         private int _burstMutationCounter = 0;
@@ -71,6 +73,15 @@ namespace Esp.Core.EspNS
 
         #endregion
 
+        #region IReportableGeneticAlgorithm implementation
+
+        public IList<double> GetActualFitnessHistory() => _actualFitnessHistory;
+
+        public IList<double> GetBestFitnessHistory() => _bestFitnessHistory;
+
+        public IList<int> GetPopulationHistory() => _populationHitory;
+
+        #endregion
 
         #region Private methods
 
@@ -109,7 +120,7 @@ namespace Esp.Core.EspNS
             }
 
             if(isTracking)
-                RecordFitness(bestFitness);
+                RecordParameters(bestFitness);
 
             return bestFitness;
         }
@@ -132,7 +143,7 @@ namespace Esp.Core.EspNS
             throw new Exception("Duplicate elements found");
         }
 
-        //TODO logic error
+        
         private bool ShouldBurstMutate(int numberOfGenerationsToCheck)
         {
             if (numberOfGenerationsToCheck > _bestFitnessHistory.Count)
@@ -204,8 +215,10 @@ namespace Esp.Core.EspNS
             return true;
         }
 
-        private void RecordFitness(double fitness)
+        private void RecordParameters(double fitness)
         {
+            _populationHitory.Add(_populations.Count);
+
             _actualFitnessHistory.Add(fitness);
 
             if (fitness > _bestFitnessEver)
