@@ -13,7 +13,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\Esp.Api\Ga.Configuration.csproj" />
+    <ProjectReference Include="..\Esp.Api\Ga.Configuration.csproj" />
     <ProjectReference Include="..\Esp.Core\Ga.Core.csproj" />
   </ItemGroup>
 

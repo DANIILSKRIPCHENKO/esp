@@ -25,7 +25,7 @@ namespace Ga.Host
         {
             Parser.Default.ParseArguments<Options>(args).WithParsed(options =>
             {
-                IServiceProvider serviceProvider = BuildServiceProvider(options);
+                var serviceProvider = BuildServiceProvider(options);
 
                 var exucutor = serviceProvider.GetService<IExecutable>();
 

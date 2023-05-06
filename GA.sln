@@ -7,7 +7,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Ga.Core", "src\Esp.Core\Ga.
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Ga.Host", "src\Esp.Host\Ga.Host.csproj", "{5FD577A5-1077-4C61-B1C5-201925DE99C0}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Ga.Configuration", "Esp.Api\Ga.Configuration.csproj", "{35D299B7-BC9E-4841-87C5-781CB74915A2}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Ga.Configuration", "src\Esp.Api\Ga.Configuration.csproj", "{0C650581-140F-48E0-A789-DB8B88BBE922}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -23,10 +23,10 @@ Global
 		{5FD577A5-1077-4C61-B1C5-201925DE99C0}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{5FD577A5-1077-4C61-B1C5-201925DE99C0}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{5FD577A5-1077-4C61-B1C5-201925DE99C0}.Release|Any CPU.Build.0 = Release|Any CPU
-		{35D299B7-BC9E-4841-87C5-781CB74915A2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{35D299B7-BC9E-4841-87C5-781CB74915A2}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{35D299B7-BC9E-4841-87C5-781CB74915A2}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{35D299B7-BC9E-4841-87C5-781CB74915A2}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0C650581-140F-48E0-A789-DB8B88BBE922}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0C650581-140F-48E0-A789-DB8B88BBE922}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0C650581-140F-48E0-A789-DB8B88BBE922}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0C650581-140F-48E0-A789-DB8B88BBE922}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

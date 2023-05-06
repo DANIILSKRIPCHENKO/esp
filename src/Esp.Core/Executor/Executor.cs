@@ -24,7 +24,7 @@ namespace Ga.Core.Executor
             double fitness = 0;
             int generation = 0;
 
-            while (fitness < 100000000 && generation < 100)
+            while (fitness < 100000000 && generation < 10)
             {
                 fitness = _geneticAlgorithm.Evaluate();
 
