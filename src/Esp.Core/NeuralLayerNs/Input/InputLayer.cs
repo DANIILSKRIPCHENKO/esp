@@ -1,6 +1,6 @@
-﻿using Esp.Core.NeuronNs.Input;
+﻿using Ga.Core.NeuronNs.Input;
 
-namespace Esp.Core.NeuralLayerNs.Input
+namespace Ga.Core.NeuralLayerNs.Input
 {
     /// <summary>
     /// IInputLayer interface implementation

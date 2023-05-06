@@ -1,4 +1,4 @@
-﻿namespace Esp.Core.Common
+﻿namespace Ga.Core.Common
 {
     /// <summary>
     /// Represents interface of entities with identifier

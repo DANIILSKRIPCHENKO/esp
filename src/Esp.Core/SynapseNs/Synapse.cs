@@ -1,6 +1,6 @@
-﻿using Esp.Core.NeuronNs;
+﻿using Ga.Core.NeuronNs;
 
-namespace Esp.Core.SynapseNs
+namespace Ga.Core.SynapseNs
 {
     /// <summary>
     /// Represents ISynapse implementation
@@ -12,7 +12,7 @@ namespace Esp.Core.SynapseNs
         private readonly double _weight;
 
         public Synapse(
-            INeuronBase fromNeuron, 
+            INeuronBase fromNeuron,
             INeuronBase toNeuron,
             double weight)
         {

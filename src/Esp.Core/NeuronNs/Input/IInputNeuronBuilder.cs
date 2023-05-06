@@ -1,4 +1,4 @@
-﻿namespace Esp.Core.NeuronNs.Input
+﻿namespace Ga.Core.NeuronNs.Input
 {
     public interface IInputNeuronBuilder
     {

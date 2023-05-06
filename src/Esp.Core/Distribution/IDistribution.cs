@@ -1,4 +1,4 @@
-﻿namespace Esp.Core.Distribution
+﻿namespace Ga.Core.Distribution
 {
     public interface IDistribution
     {

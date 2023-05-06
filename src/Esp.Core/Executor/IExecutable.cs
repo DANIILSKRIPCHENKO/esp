@@ -1,4 +1,4 @@
-﻿namespace Esp.Core.Executor
+﻿namespace Ga.Core.Executor
 {
     /// <summary>
     /// Represents interface for entities with Execute method

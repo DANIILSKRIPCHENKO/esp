@@ -1,9 +1,9 @@
-﻿using Esp.Core.Common;
-using Esp.Core.NetworkNs;
-using Esp.Core.NeuralLayerNs.Hidden;
-using Esp.Core.PopulationNs;
+﻿using Ga.Core.Common;
+using Ga.Core.NetworkNs;
+using Ga.Core.NeuralLayerNs.Hidden;
+using Ga.Core.PopulationNs;
 
-namespace Esp.Core.EspNS
+namespace Ga.Core.EspNS
 {
     /// <summary>
     /// Enforces sub population implementation of GA
@@ -67,7 +67,7 @@ namespace Esp.Core.EspNS
 
         public void Recombine()
         {
-            foreach(var population in _populations.Where(population => population.IsTurnedOff == false))
+            foreach (var population in _populations.Where(population => population.IsTurnedOff == false))
                 population.Recombine();
         }
 
@@ -110,7 +110,7 @@ namespace Esp.Core.EspNS
                 network.PushInputValues(new List<double> { 0.1, 3, 0.5 });
 
                 var fitness = network.GetFitness();
-                
+
                 network.ApplyFitness();
 
                 if (fitness > bestFitness)
@@ -119,7 +119,7 @@ namespace Esp.Core.EspNS
                 network.ResetConnection();
             }
 
-            if(isTracking)
+            if (isTracking)
                 RecordParameters(bestFitness);
 
             return bestFitness;
@@ -143,7 +143,7 @@ namespace Esp.Core.EspNS
             throw new Exception("Duplicate elements found");
         }
 
-        
+
         private bool ShouldBurstMutate(int numberOfGenerationsToCheck)
         {
             if (numberOfGenerationsToCheck > _bestFitnessHistory.Count)
@@ -226,7 +226,7 @@ namespace Esp.Core.EspNS
                 _bestFitnessHistory.Add(fitness);
                 return;
             }
-            
+
             _bestFitnessHistory.Add(_bestFitnessEver);
         }
 

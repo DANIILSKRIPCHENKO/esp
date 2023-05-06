@@ -1,4 +1,4 @@
-﻿namespace Esp.Core.Extensions
+﻿namespace Ga.Core.Extensions
 {
     /// <summary>
     /// Provides extension methods for IList collection
@@ -15,8 +15,8 @@
         /// <param name="numberOfElements"></param>
         /// <returns></returns>
         public static IList<T> TakeRandomNotIn<T>(
-            this IList<T> collection, 
-            IList<T> notInCollection, 
+            this IList<T> collection,
+            IList<T> notInCollection,
             int numberOfElements) where T : class
         {
             var filteredCollection = collection
@@ -75,7 +75,7 @@
             if (!collection.Any() || collection.Count == 1)
                 throw new ArgumentException("Collection should contatin more then one elements");
 
-            for(var i=1; i < collection.Count; i++)
+            for (var i = 1; i < collection.Count; i++)
             {
                 if (collection[i - 1].CompareTo(collection[i]) >= 0)
                     return false;
@@ -98,7 +98,7 @@
             IList<T> collection2,
             int crossOverIndex)
         {
-            if(collection.Count != collection2.Count)
+            if (collection.Count != collection2.Count)
                 throw new ArgumentException("Collections should be the same size");
 
             if (crossOverIndex > collection.IndexOf(collection.Last()))
@@ -114,7 +114,7 @@
                 result2.Add(collection2[i]);
             }
 
-            for (int i = crossOverIndex; i < collection.Count ; i++)
+            for (int i = crossOverIndex; i < collection.Count; i++)
             {
                 result1.Add(collection2[i]);
                 result2.Add(collection[i]);

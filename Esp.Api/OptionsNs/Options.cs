@@ -1,6 +1,6 @@
 ﻿using CommandLine;
 
-namespace Esp.Api
+namespace Ga.Configuration.OptionsNs
 {
     public class Options : IOptions
     {

@@ -13,8 +13,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\Esp.Api\Esp.Api.csproj" />
-    <ProjectReference Include="..\Esp.Core\Esp.Core.csproj" />
+    <ProjectReference Include="..\..\Esp.Api\Ga.Configuration.csproj" />
+    <ProjectReference Include="..\Esp.Core\Ga.Core.csproj" />
   </ItemGroup>
 
 </Project>

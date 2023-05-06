@@ -1,7 +1,7 @@
-﻿using Esp.Core.ActivationFunction;
-using Esp.Core.InputFunction;
+﻿using Ga.Core.ActivationFunction;
+using Ga.Core.InputFunction;
 
-namespace Esp.Core.NeuronNs.Output
+namespace Ga.Core.NeuronNs.Output
 {
     public class OutputNeuronBuilder : IOutputNeuronBuilder
     {

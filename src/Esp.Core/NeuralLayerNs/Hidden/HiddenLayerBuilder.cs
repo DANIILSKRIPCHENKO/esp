@@ -1,6 +1,6 @@
-﻿using Esp.Core.NeuronNs.Hidden;
+﻿using Ga.Core.NeuronNs.Hidden;
 
-namespace Esp.Core.NeuralLayerNs.Hidden
+namespace Ga.Core.NeuralLayerNs.Hidden
 {
     public class HiddenLayerBuilder : IHiddenLayerBuilder
     {

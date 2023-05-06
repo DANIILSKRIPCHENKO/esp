@@ -1,7 +1,7 @@
-﻿using Esp.Core.EspNS;
-using Esp.Core.Report;
+﻿using Ga.Core.EspNS;
+using Ga.Core.Report;
 
-namespace Esp.Core.Executor
+namespace Ga.Core.Executor
 {
     /// <summary>
     /// Represents Executor implementation
@@ -24,7 +24,7 @@ namespace Esp.Core.Executor
             double fitness = 0;
             int generation = 0;
 
-            while (fitness < 10000000 && generation < 35)
+            while (fitness < 100000000 && generation < 100)
             {
                 fitness = _geneticAlgorithm.Evaluate();
 

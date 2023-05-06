@@ -1,8 +1,8 @@
-﻿using Esp.Api;
-using Esp.Core.Extensions;
-using Esp.Core.NeuronNs.Hidden;
+﻿using Ga.Configuration.OptionsNs;
+using Ga.Core.Extensions;
+using Ga.Core.NeuronNs.Hidden;
 
-namespace Esp.Core.PopulationNs
+namespace Ga.Core.PopulationNs
 {
     public class PopulationBuilder : IPopulationBuilder
     {
@@ -20,7 +20,7 @@ namespace Esp.Core.PopulationNs
         public IList<IPopulation> BuildInitialPopulations()
         {
             return BuildInitialPopulations(
-                _options.NumberOfPopulations, 
+                _options.NumberOfPopulations,
                 _options.NumberOfNeuronsInPopulation);
         }
 

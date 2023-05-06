@@ -1,6 +1,6 @@
-﻿using Esp.Core.Common;
+﻿using Ga.Core.Common;
 
-namespace Esp.Core.EspNS
+namespace Ga.Core.EspNS
 {
     /// <summary>
     /// Represents interface of genetic algorithm (GA)

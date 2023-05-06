@@ -1,4 +1,4 @@
-﻿namespace Esp.Core.GenotypeNs
+﻿namespace Ga.Core.GenotypeNs
 {
     public interface IGenotypeBuilder
     {

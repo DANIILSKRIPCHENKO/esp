@@ -1,4 +1,4 @@
-﻿namespace Esp.Core.NeuronNs.Output
+﻿namespace Ga.Core.NeuronNs.Output
 {
     public interface IOutputNeuronBuilder
     {

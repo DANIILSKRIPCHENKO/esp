@@ -1,6 +1,6 @@
-﻿using Esp.Core.SynapseNs;
+﻿using Ga.Core.SynapseNs;
 
-namespace Esp.Core.NeuronNs.Output
+namespace Ga.Core.NeuronNs.Output
 {
     /// <summary>
     /// Represents interface of neuron in output layer

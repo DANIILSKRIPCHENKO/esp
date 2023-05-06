@@ -1,4 +1,4 @@
-﻿namespace Esp.Core.EspNS
+﻿namespace Ga.Core.EspNS
 {
     public interface IReportableGeneticAlgorithm
     {

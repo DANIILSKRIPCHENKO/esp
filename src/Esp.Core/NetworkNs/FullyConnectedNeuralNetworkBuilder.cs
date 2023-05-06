@@ -1,9 +1,9 @@
-﻿using Esp.Core.LossFunction;
-using Esp.Core.NeuralLayerNs.Hidden;
-using Esp.Core.NeuralLayerNs.Input;
-using Esp.Core.NeuralLayerNs.Output;
+﻿using Ga.Core.LossFunction;
+using Ga.Core.NeuralLayerNs.Hidden;
+using Ga.Core.NeuralLayerNs.Input;
+using Ga.Core.NeuralLayerNs.Output;
 
-namespace Esp.Core.NetworkNs
+namespace Ga.Core.NetworkNs
 {
     public class FullyConnectedNeuralNetworkBuilder : INeuralNetworkBuilder
     {
@@ -12,7 +12,7 @@ namespace Esp.Core.NetworkNs
         private readonly ILossFunction _lossFunction;
 
         public FullyConnectedNeuralNetworkBuilder(
-            IInputLayer inputLayer, 
+            IInputLayer inputLayer,
             IOutputLayer outputLayer,
             ILossFunction lossFunction)
         {

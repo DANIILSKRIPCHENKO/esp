@@ -1,7 +1,7 @@
-﻿using Esp.Core.EspNS;
+﻿using Ga.Core.EspNS;
 using ScottPlot;
 
-namespace Esp.Core.Report
+namespace Ga.Core.Report
 {
     public class GeneticAlgorithmReportBuilder : IGeneticAlgorithmReportBuilder
     {
@@ -19,7 +19,7 @@ namespace Esp.Core.Report
             var plot = new Plot(1000, 1000);
 
             var pointCount = DataGen.Consecutive(values.Count);
-            
+
             plot.AddScatter(pointCount, values.ToArray());
 
             plot.SaveFig("actualFitness.png");

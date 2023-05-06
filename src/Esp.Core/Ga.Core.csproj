@@ -11,7 +11,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\Esp.Api\Esp.Api.csproj" />
+    <ProjectReference Include="..\..\Esp.Api\Ga.Configuration.csproj" />
   </ItemGroup>
 
 </Project>

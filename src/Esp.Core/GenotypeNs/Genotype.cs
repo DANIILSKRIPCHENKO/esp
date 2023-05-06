@@ -1,7 +1,7 @@
-﻿using Esp.Core.Distribution;
-using Esp.Core.Extensions;
+﻿using Ga.Core.Distribution;
+using Ga.Core.Extensions;
 
-namespace Esp.Core.GenotypeNs
+namespace Ga.Core.GenotypeNs
 {
     /// <summary>
     /// Implementation of IGenotype interface
@@ -15,12 +15,12 @@ namespace Esp.Core.GenotypeNs
         #region ctor
 
         private Genotype(
-            int inputConnectionsNumber, 
+            int inputConnectionsNumber,
             int outputConnectionsNumber,
             IDistribution distribution)
         {
             _distribution = distribution;
-            
+
             var inputWeights = new List<double>();
             var outputWeights = new List<double>();
 
@@ -53,11 +53,11 @@ namespace Esp.Core.GenotypeNs
         public IList<double> OutputWeights => _outputWeights;
 
         public static Genotype CreateRandom(
-            int inputConnectionsNumber, 
+            int inputConnectionsNumber,
             int outputConnectionsNumber,
             IDistribution distribution) =>
-            new(inputConnectionsNumber, 
-                outputConnectionsNumber, 
+            new(inputConnectionsNumber,
+                outputConnectionsNumber,
                 distribution);
 
         public IList<IGenotype> BurstMutate(int numberOfGenotypes)
@@ -67,19 +67,19 @@ namespace Esp.Core.GenotypeNs
             weights.AddRange(_outputWeights);
 
             var result = new List<IGenotype>();
-            
-            for(var i = 0; i < numberOfGenotypes; i++)
+
+            for (var i = 0; i < numberOfGenotypes; i++)
             {
                 var newWeights = new List<double>();
 
-                foreach(var weight in weights)
+                foreach (var weight in weights)
                 {
                     if (!ShouldMutateGene())
                     {
                         newWeights.Add(weight);
                         continue;
                     }
-                    
+
                     newWeights.Add(_distribution.GenerateRandom(weight));
                 }
 

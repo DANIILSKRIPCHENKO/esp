@@ -1,9 +1,9 @@
-﻿using Esp.Core.LossFunction;
-using Esp.Core.NeuralLayerNs.Hidden;
-using Esp.Core.NeuralLayerNs.Input;
-using Esp.Core.NeuralLayerNs.Output;
+﻿using Ga.Core.LossFunction;
+using Ga.Core.NeuralLayerNs.Hidden;
+using Ga.Core.NeuralLayerNs.Input;
+using Ga.Core.NeuralLayerNs.Output;
 
-namespace Esp.Core.NetworkNs
+namespace Ga.Core.NetworkNs
 {
     /// <summary>
     /// Fully Connected Network implementation of INetwork interface
@@ -44,7 +44,7 @@ namespace Esp.Core.NetworkNs
         {
             var inputNeurons = _inputLayer.InputNeurons;
 
-            foreach(var neuron in inputNeurons.Select((neuron, i) => (neuron, i)))
+            foreach (var neuron in inputNeurons.Select((neuron, i) => (neuron, i)))
             {
                 neuron.neuron.PushValueOnInput(inputs[neuron.i]);
             }
@@ -60,7 +60,7 @@ namespace Esp.Core.NetworkNs
                 .SelectMany(x => x.HiddenNeurons)
                 .ToList();
 
-            foreach(var neuron in neurons)
+            foreach (var neuron in neurons)
             {
                 neuron.AddFitness(fitness);
             }

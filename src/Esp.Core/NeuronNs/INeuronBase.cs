@@ -1,6 +1,6 @@
-﻿using Esp.Core.Common;
+﻿using Ga.Core.Common;
 
-namespace Esp.Core.NeuronNs
+namespace Ga.Core.NeuronNs
 {
     /// <summary>
     /// Represents interface of neuron

@@ -1,8 +1,8 @@
-﻿using Esp.Core.ActivationFunction;
-using Esp.Core.InputFunction;
-using Esp.Core.SynapseNs;
+﻿using Ga.Core.ActivationFunction;
+using Ga.Core.InputFunction;
+using Ga.Core.SynapseNs;
 
-namespace Esp.Core.NeuronNs.Output
+namespace Ga.Core.NeuronNs.Output
 {
     /// <summary>
     /// Implementation of IOutputNeuron interface

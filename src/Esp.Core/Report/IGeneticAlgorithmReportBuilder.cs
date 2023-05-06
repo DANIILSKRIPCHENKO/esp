@@ -1,6 +1,6 @@
-﻿using Esp.Core.EspNS;
+﻿using Ga.Core.EspNS;
 
-namespace Esp.Core.Report
+namespace Ga.Core.Report
 {
     public interface IGeneticAlgorithmReportBuilder
     {

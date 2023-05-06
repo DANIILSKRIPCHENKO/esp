@@ -1,4 +1,4 @@
-﻿namespace Esp.Core.LossFunction
+﻿namespace Ga.Core.LossFunction
 {
     public interface ILossFunction
     {

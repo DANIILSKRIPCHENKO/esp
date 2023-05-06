@@ -1,6 +1,6 @@
-﻿using Esp.Core.SynapseNs;
+﻿using Ga.Core.SynapseNs;
 
-namespace Esp.Core.InputFunction
+namespace Ga.Core.InputFunction
 {
     /// <summary>
     ///  WeightedSum implementation of IInputFunction interafce
@@ -11,7 +11,7 @@ namespace Esp.Core.InputFunction
         {
             double result = 0;
 
-            foreach(var input in inputs)
+            foreach (var input in inputs)
             {
                 var value = input.GetOutput();
                 result += value;

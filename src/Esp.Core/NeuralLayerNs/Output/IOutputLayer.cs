@@ -1,6 +1,6 @@
-﻿using Esp.Core.NeuronNs.Output;
+﻿using Ga.Core.NeuronNs.Output;
 
-namespace Esp.Core.NeuralLayerNs.Output
+namespace Ga.Core.NeuralLayerNs.Output
 {
     /// <summary>
     /// Represents interface of output layer in Neural Network

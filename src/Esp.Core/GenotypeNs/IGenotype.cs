@@ -1,4 +1,4 @@
-﻿namespace Esp.Core.GenotypeNs
+﻿namespace Ga.Core.GenotypeNs
 {
     /// <summary>
     /// Represents an interface of genotype of Neuron

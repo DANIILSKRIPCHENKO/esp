@@ -1,4 +1,4 @@
-﻿namespace Esp.Core.NeuronNs.Hidden
+﻿namespace Ga.Core.NeuronNs.Hidden
 {
     public interface IHiddenNeuronBuilder
     {

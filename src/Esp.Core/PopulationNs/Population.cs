@@ -1,7 +1,7 @@
-﻿using Esp.Core.Extensions;
-using Esp.Core.NeuronNs.Hidden;
+﻿using Ga.Core.Extensions;
+using Ga.Core.NeuronNs.Hidden;
 
-namespace Esp.Core.PopulationNs
+namespace Ga.Core.PopulationNs
 {
     public class Population : IPopulation
     {
@@ -28,12 +28,12 @@ namespace Esp.Core.PopulationNs
         {
             var neuronsToRecombine = _neurons
                 .OrderByDescending(neuron => neuron.Fitness)
-                .Take(_neurons.Count/4)
+                .Take(_neurons.Count / 4)
                 .ToList();
 
             var offsptingNeurons = new List<IHiddenNeuron>();
 
-            for(var i = 1; i < neuronsToRecombine.Count; i++)
+            for (var i = 1; i < neuronsToRecombine.Count; i++)
             {
                 (var child1, var child2) = neuronsToRecombine[i - 1]
                     .Recombine(neuronsToRecombine[i]);
@@ -53,8 +53,8 @@ namespace Esp.Core.PopulationNs
             var bestNeuron = _neurons
                 .OrderByDescending(neuron => neuron.Fitness)
                 .First();
-                
-            var newNeurons = bestNeuron.BurstMutate(_neurons.Count/4);
+
+            var newNeurons = bestNeuron.BurstMutate(_neurons.Count / 4);
 
             _neurons = _neurons
                 .OrderByDescending(neuron => neuron.Fitness)

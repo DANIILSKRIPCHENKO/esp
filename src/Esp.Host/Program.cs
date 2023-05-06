@@ -1,23 +1,23 @@
 ﻿using CommandLine;
-using Esp.Api;
-using Esp.Core.ActivationFunction;
-using Esp.Core.Distribution;
-using Esp.Core.EspNS;
-using Esp.Core.Executor;
-using Esp.Core.GenotypeNs;
-using Esp.Core.LossFunction;
-using Esp.Core.NetworkNs;
-using Esp.Core.NeuralLayerNs.Hidden;
-using Esp.Core.NeuralLayerNs.Input;
-using Esp.Core.NeuralLayerNs.Output;
-using Esp.Core.NeuronNs.Hidden;
-using Esp.Core.NeuronNs.Input;
-using Esp.Core.NeuronNs.Output;
-using Esp.Core.PopulationNs;
-using Esp.Core.Report;
+using Ga.Configuration.OptionsNs;
+using Ga.Core.ActivationFunction;
+using Ga.Core.Distribution;
+using Ga.Core.EspNS;
+using Ga.Core.Executor;
+using Ga.Core.GenotypeNs;
+using Ga.Core.LossFunction;
+using Ga.Core.NetworkNs;
+using Ga.Core.NeuralLayerNs.Hidden;
+using Ga.Core.NeuralLayerNs.Input;
+using Ga.Core.NeuralLayerNs.Output;
+using Ga.Core.NeuronNs.Hidden;
+using Ga.Core.NeuronNs.Input;
+using Ga.Core.NeuronNs.Output;
+using Ga.Core.PopulationNs;
+using Ga.Core.Report;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace Esp.Host
+namespace Ga.Host
 {
     internal class Program
     {
@@ -31,7 +31,7 @@ namespace Esp.Host
 
                 exucutor!.Execute();
             });
-            
+
         }
 
         private static IServiceProvider BuildServiceProvider(Options options)
@@ -39,9 +39,9 @@ namespace Esp.Host
             var services = new ServiceCollection();
 
             services.AddTransient<IExecutable, Executor>();
-            services.AddTransient<IGeneticAlgorithm, Core.EspNS.Esp>();
+            services.AddTransient<IGeneticAlgorithm, Esp>();
             services.AddTransient<INeuralNetworkBuilder, FullyConnectedNeuralNetworkBuilder>();
-            
+
             services.AddTransient<IInputLayer, InputLayer>();
             services.AddTransient<IInputNeuronBuilder, InputNeuronBuilder>();
 

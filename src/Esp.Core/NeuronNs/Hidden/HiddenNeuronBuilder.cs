@@ -1,9 +1,8 @@
-﻿using Esp.Api;
-using Esp.Core.ActivationFunction;
-using Esp.Core.GenotypeNs;
-using Esp.Core.InputFunction;
+﻿using Ga.Core.ActivationFunction;
+using Ga.Core.GenotypeNs;
+using Ga.Core.InputFunction;
 
-namespace Esp.Core.NeuronNs.Hidden
+namespace Ga.Core.NeuronNs.Hidden
 {
     public class HiddenNeuronBuilder : IHiddenNeuronBuilder
     {

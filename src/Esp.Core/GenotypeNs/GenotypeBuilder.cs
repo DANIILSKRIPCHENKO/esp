@@ -1,6 +1,6 @@
-﻿using Esp.Core.Distribution;
+﻿using Ga.Core.Distribution;
 
-namespace Esp.Core.GenotypeNs
+namespace Ga.Core.GenotypeNs
 {
     public class GenotypeBuilder : IGenotypeBuilder
     {

@@ -1,4 +1,4 @@
-﻿namespace Esp.Core.PopulationNs
+﻿namespace Ga.Core.PopulationNs
 {
     public interface IPopulationBuilder
     {

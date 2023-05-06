@@ -1,4 +1,4 @@
-﻿namespace Esp.Core.ActivationFunction
+﻿namespace Ga.Core.ActivationFunction
 {
     /// <summary>
     /// Represents interface for activation function of Neuron

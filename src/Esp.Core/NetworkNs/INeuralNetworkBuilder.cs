@@ -1,6 +1,6 @@
-﻿using Esp.Core.NeuralLayerNs.Hidden;
+﻿using Ga.Core.NeuralLayerNs.Hidden;
 
-namespace Esp.Core.NetworkNs
+namespace Ga.Core.NetworkNs
 {
     public interface INeuralNetworkBuilder
     {

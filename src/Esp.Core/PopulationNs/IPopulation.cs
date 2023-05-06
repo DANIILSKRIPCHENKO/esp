@@ -1,7 +1,7 @@
-﻿using Esp.Core.Common;
-using Esp.Core.NeuronNs.Hidden;
+﻿using Ga.Core.Common;
+using Ga.Core.NeuronNs.Hidden;
 
-namespace Esp.Core.PopulationNs
+namespace Ga.Core.PopulationNs
 {
     /// <summary>
     /// Represents interface for interaction with population

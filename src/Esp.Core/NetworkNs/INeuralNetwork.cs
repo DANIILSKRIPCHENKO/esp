@@ -1,6 +1,6 @@
-﻿using Esp.Core.Common;
+﻿using Ga.Core.Common;
 
-namespace Esp.Core.NetworkNs
+namespace Ga.Core.NetworkNs
 {
     /// <summary>
     /// Represents interface for Neural Network

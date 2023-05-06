@@ -1,6 +1,6 @@
-﻿using Esp.Core.SynapseNs;
+﻿using Ga.Core.SynapseNs;
 
-namespace Esp.Core.InputFunction
+namespace Ga.Core.InputFunction
 {
 
     /// <summary>

@@ -1,4 +1,4 @@
-﻿namespace Esp.Core.SynapseNs
+﻿namespace Ga.Core.SynapseNs
 {
     /// <summary>
     /// Represent neuron connection interface

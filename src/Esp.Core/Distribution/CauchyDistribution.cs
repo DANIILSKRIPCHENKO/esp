@@ -1,4 +1,4 @@
-﻿namespace Esp.Core.Distribution
+﻿namespace Ga.Core.Distribution
 {
     public class CauchyDistribution : IDistribution
     {
@@ -7,7 +7,7 @@
             var randomValue = new Random().NextDouble();
 
             var result = referenceValue + Math.Tan(Math.PI * (randomValue - 0.5));
-            
+
             return result;
         }
     }

@@ -1,7 +1,7 @@
-﻿using Esp.Core.ActivationFunction;
-using Esp.Core.SynapseNs;
+﻿using Ga.Core.ActivationFunction;
+using Ga.Core.SynapseNs;
 
-namespace Esp.Core.NeuronNs.Input
+namespace Ga.Core.NeuronNs.Input
 {
     /// <summary>
     /// Implementation of IInputNeuron

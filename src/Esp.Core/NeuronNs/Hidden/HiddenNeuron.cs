@@ -1,12 +1,12 @@
-﻿using Esp.Core.ActivationFunction;
-using Esp.Core.Extensions;
-using Esp.Core.GenotypeNs;
-using Esp.Core.InputFunction;
-using Esp.Core.NeuronNs.Input;
-using Esp.Core.NeuronNs.Output;
-using Esp.Core.SynapseNs;
+﻿using Ga.Core.ActivationFunction;
+using Ga.Core.Extensions;
+using Ga.Core.GenotypeNs;
+using Ga.Core.InputFunction;
+using Ga.Core.NeuronNs.Input;
+using Ga.Core.NeuronNs.Output;
+using Ga.Core.SynapseNs;
 
-namespace Esp.Core.NeuronNs.Hidden
+namespace Ga.Core.NeuronNs.Hidden
 {
     /// <summary>
     /// Implementation of IHiddenNeuron
@@ -137,7 +137,7 @@ namespace Esp.Core.NeuronNs.Hidden
 
         public void ResetFitness()
         {
-            _fitness= 0;
+            _fitness = 0;
             _trials = 0;
         }
 
