@@ -14,7 +14,7 @@ namespace Ga.Core.NeuronNs.Output
 
         public IList<IOutputNeuron> BuildOutputNeurons()
         {
-            return BuildOutputNeurons(3);
+            return BuildOutputNeurons(2);
         }
 
         private IList<IOutputNeuron> BuildOutputNeurons(int numberOfOutputNeurons)

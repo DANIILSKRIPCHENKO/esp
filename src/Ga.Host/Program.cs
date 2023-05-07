@@ -15,7 +15,9 @@ using Ga.Core.NeuronNs.Input;
 using Ga.Core.NeuronNs.Output;
 using Ga.Core.PopulationNs;
 using Ga.Core.Report;
+using Ga.Core.Task;
 using Microsoft.Extensions.DependencyInjection;
+using Task = Ga.Core.Task.Task;
 
 namespace Ga.Host
 {
@@ -31,7 +33,6 @@ namespace Ga.Host
 
                 exucutor!.Execute();
             });
-
         }
 
         private static IServiceProvider BuildServiceProvider(Options options)
@@ -58,6 +59,8 @@ namespace Ga.Host
             services.AddTransient<IDistribution, CauchyDistribution>();
 
             services.AddTransient<ILossFunction, Mse>();
+
+            services.AddTransient<ITask, Task>();
 
             services.AddTransient<IGeneticAlgorithmReportBuilder, GeneticAlgorithmReportBuilder>();
 

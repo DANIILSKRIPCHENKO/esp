@@ -11,5 +11,8 @@ namespace Ga.Configuration.OptionsNs
 
         [Option('n', "neurons", Required = true, Default = 500, HelpText = "The number of neurons in population")]
         public int NumberOfNeuronsInPopulation { get; set; }
+
+        [Option('f', "dataset", Required = true, Default = "test", HelpText = "Full path to dataset file")]
+        public string DatasetFileName { get; set; } = string.Empty;
     }
 }

@@ -32,7 +32,7 @@ namespace Ga.Core.NeuronNs.Hidden
                 neurons.Add(new HiddenNeuron(
                     _activationFunction,
                     new WeightedSumFunction(),
-                    _genotypeBuilder.BuildGenotype(3, 3)));
+                    _genotypeBuilder.BuildGenotype(9, 2)));
             }
 
             return neurons;

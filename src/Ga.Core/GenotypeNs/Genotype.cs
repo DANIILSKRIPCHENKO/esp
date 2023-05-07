@@ -83,7 +83,13 @@ namespace Ga.Core.GenotypeNs
                     newWeights.Add(_distribution.GenerateRandom(weight));
                 }
 
-                (var inputWeights, var outputWeights) = newWeights.Half();
+                var inputWeights = newWeights
+                    .Take(_inputWeights.Count)
+                    .ToList();
+
+                var outputWeights = newWeights
+                    .TakeLast(_outputWeights.Count)
+                    .ToList();
 
                 result.Add(new Genotype(inputWeights, outputWeights, _distribution));
             }
@@ -108,12 +114,14 @@ namespace Ga.Core.GenotypeNs
             var random = new Random();
             var crossOverPointIndex = random.Next(weights.IndexOf(weights.Last()));
 
-            (var result1, var result2) = weights.CrossOver(newWeights, crossOverPointIndex);
+            var (result1, result2) = weights.CrossOver(newWeights, crossOverPointIndex);
 
-            (var inputWeights1, var outputWeights1) = result1.Half();
+            var inputWeights1 = result1.Take(_inputWeights.Count).ToList();
+            var outputWeights1 = result1.TakeLast(_outputWeights.Count).ToList();
             var resultGenotype1 = new Genotype(inputWeights1, outputWeights1, _distribution);
 
-            (var inputWeights2, var outputWeights2) = result2.Half();
+            var inputWeights2 = result2.Take(_inputWeights.Count).ToList();
+            var outputWeights2 = result2.TakeLast(_outputWeights.Count).ToList();
             var resultGenotype2 = new Genotype(inputWeights2, outputWeights2, _distribution);
 
             return (resultGenotype1, resultGenotype2);

@@ -21,5 +21,11 @@ namespace Ga.Core.EspNS
         /// Starts recombination process of GA
         /// </summary>
         public void Recombine();
+
+        public void SetInputs(IList<double> inputs);
+
+        public void SetOutputs(IList<double> outputs);
+
+        public void ResetParameters();
     }
 }

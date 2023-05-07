@@ -13,7 +13,7 @@ namespace Ga.Core.NeuronNs.Input
 
         public IList<IInputNeuron> BuildInputNeurons()
         {
-            return BuildInputNeurons(3);
+            return BuildInputNeurons(9);
         }
 
         private List<IInputNeuron> BuildInputNeurons(int numberOfInputNeurons)

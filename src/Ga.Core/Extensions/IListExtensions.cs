@@ -123,22 +123,6 @@
             return (result1, result2);
         }
 
-        /// <summary>
-        /// Returns two collections, witch are first and second halfs of initial collection 
-        /// </summary>
-        /// <typeparam name="T"></typeparam>
-        /// <param name="collection"></param>
-        /// <returns></returns>
-        /// <exception cref="ArgumentException"></exception>
-        public static (IList<T>, IList<T>) Half<T>(this IList<T> collection)
-        {
-            if (collection.Count % 2 != 0)
-                throw new ArgumentException("Failed to split collection");
-
-            var size = collection.Count;
-
-            return (collection.Take(size / 2).ToList(), collection.TakeLast(size / 2).ToList());
-        }
 
         /// <summary>
         /// Replaces last elements in collection with elements, passed in a parameter

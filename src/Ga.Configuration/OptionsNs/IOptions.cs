@@ -6,5 +6,7 @@
 
         public int NumberOfNeuronsInPopulation { get; }
 
+        public string DatasetFileName { get; }
+
     }
 }

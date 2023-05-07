@@ -1,5 +1,7 @@
 ﻿using Ga.Core.EspNS;
+using Ga.Core.NetworkNs;
 using Ga.Core.Report;
+using Ga.Core.Task;
 
 namespace Ga.Core.Executor
 {
@@ -10,29 +12,42 @@ namespace Ga.Core.Executor
     {
         private readonly IGeneticAlgorithm _geneticAlgorithm;
         private readonly IGeneticAlgorithmReportBuilder _geneticAlgorithmReportBuilder;
+        private readonly ITask _task;
 
         public Executor(
             IGeneticAlgorithm geneticAlgorithm,
-            IGeneticAlgorithmReportBuilder geneticAlgorithmReportBuilder)
+            IGeneticAlgorithmReportBuilder geneticAlgorithmReportBuilder,
+            ITask task)
         {
             _geneticAlgorithm = geneticAlgorithm;
             _geneticAlgorithmReportBuilder = geneticAlgorithmReportBuilder;
+            _task = task;
         }
 
         public void Execute()
         {
-            double fitness = 0;
-            int generation = 0;
-
-            while (fitness < 100000000 && generation < 10)
+            var currentDataFrame = 0;
+            foreach (var dataframe in _task.GetDataset().Take(40))
             {
-                fitness = _geneticAlgorithm.Evaluate();
+                double fitness = 0;
+                var generation = 0;
 
-                _geneticAlgorithm.CheckStagnation();
+                _geneticAlgorithm.SetInputs(dataframe.Inputs);
+                _geneticAlgorithm.SetOutputs(dataframe.ExpectedOutputs);
 
-                _geneticAlgorithm.Recombine();
+                while (fitness < 10)
+                {
+                    fitness = _geneticAlgorithm.Evaluate();
 
-                generation++;
+                    _geneticAlgorithm.CheckStagnation();
+
+                    _geneticAlgorithm.Recombine();
+
+                    generation++;
+                }
+
+                //_geneticAlgorithm.ResetParameters();
+                currentDataFrame++;
             }
 
             if (_geneticAlgorithm is IReportableGeneticAlgorithm reportableGeneticAlgorithm)

@@ -15,7 +15,7 @@ namespace Ga.Core.EspNS
 
         private readonly List<double> _actualFitnessHistory = new();
         private readonly List<double> _bestFitnessHistory = new();
-        private readonly List<int> _populationHitory = new();
+        private readonly List<int> _populationHistory = new();
 
         private double _bestFitnessEver { get => _bestFitnessHistory.LastOrDefault(); }
 
@@ -24,6 +24,8 @@ namespace Ga.Core.EspNS
         private readonly INeuralNetworkBuilder _neuralNetworkBuilder;
         private readonly IHiddenLayerBuilder _hiddenLayerBuilder;
         private readonly IPopulationBuilder _populationBuilder;
+        private IList<double> _inputs;
+        private IList<double> _expectedOutputs;
 
         public Esp(
             INeuralNetworkBuilder neuralNetworkBuilder,
@@ -71,6 +73,25 @@ namespace Ga.Core.EspNS
                 population.Recombine();
         }
 
+        public void SetInputs(IList<double> inputs)
+        {
+            _inputs = inputs;
+        }
+
+        public void SetOutputs(IList<double> outputs)
+        {
+            _expectedOutputs = outputs;
+        }
+
+        public void ResetParameters()
+        {
+            _actualFitnessHistory.Clear();
+            _bestFitnessHistory.Clear();
+            _populationHistory.Clear();
+            _burstMutationCounter = default;
+            //ResetFitnesses();
+        }
+
         #endregion
 
         #region IReportableGeneticAlgorithm implementation
@@ -79,7 +100,7 @@ namespace Ga.Core.EspNS
 
         public IList<double> GetBestFitnessHistory() => _bestFitnessHistory;
 
-        public IList<int> GetPopulationHistory() => _populationHitory;
+        public IList<int> GetPopulationHistory() => _populationHistory;
 
         #endregion
 
@@ -105,9 +126,9 @@ namespace Ga.Core.EspNS
                 var network = _neuralNetworkBuilder
                     .BuildNeuralNetwork(new List<IHiddenLayer>() { hiddenLayer });
 
-                network.PushExpectedValues(new List<double>() { 0.3, 0.7, 0.9 });
+                network.PushExpectedValues(_expectedOutputs);
 
-                network.PushInputValues(new List<double> { 0.1, 3, 0.5 });
+                network.PushInputValues(_inputs);
 
                 var fitness = network.GetFitness();
 
@@ -217,7 +238,7 @@ namespace Ga.Core.EspNS
 
         private void RecordParameters(double fitness)
         {
-            _populationHitory.Add(_populations.Count);
+            _populationHistory.Add(_populations.Count);
 
             _actualFitnessHistory.Add(fitness);
 
