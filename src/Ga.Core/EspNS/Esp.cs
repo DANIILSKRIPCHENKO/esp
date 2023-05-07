@@ -58,13 +58,11 @@ namespace Ga.Core.EspNS
             }
 
             // hardcode  number of generations to check
-            if (ShouldBurstMutate(3))
-            {
-                foreach (var population in _populations.Where(population => population.IsTurnedOff == false))
-                    population.BurstMutation();
+            if (!ShouldBurstMutate(3)) return;
+            foreach (var population in _populations.Where(population => population.IsTurnedOff == false))
+                population.BurstMutation();
 
-                _burstMutationCounter++;
-            }
+            _burstMutationCounter++;
         }
 
         public void Recombine()

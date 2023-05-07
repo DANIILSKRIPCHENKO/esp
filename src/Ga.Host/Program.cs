@@ -58,7 +58,7 @@ namespace Ga.Host
 
             services.AddTransient<IDistribution, CauchyDistribution>();
 
-            services.AddTransient<ILossFunction, Mse>();
+            services.AddTransient<ILossFunction, BinaryCrossEntropy>();
 
             services.AddTransient<ITask, Task>();
 

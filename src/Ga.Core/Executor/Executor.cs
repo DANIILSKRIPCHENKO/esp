@@ -27,7 +27,7 @@ namespace Ga.Core.Executor
         public void Execute()
         {
             var currentDataFrame = 0;
-            foreach (var dataframe in _task.GetDataset().Take(40))
+            foreach (var dataframe in _task.GetDataset().Take(100))
             {
                 double fitness = 0;
                 var generation = 0;
@@ -35,7 +35,7 @@ namespace Ga.Core.Executor
                 _geneticAlgorithm.SetInputs(dataframe.Inputs);
                 _geneticAlgorithm.SetOutputs(dataframe.ExpectedOutputs);
 
-                while (fitness < 10)
+                while (fitness < 3)
                 {
                     fitness = _geneticAlgorithm.Evaluate();
 
