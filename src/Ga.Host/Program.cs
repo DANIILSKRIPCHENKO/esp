@@ -13,6 +13,7 @@ using Ga.Core.NeuralLayerNs.Output;
 using Ga.Core.NeuronNs.Hidden;
 using Ga.Core.NeuronNs.Input;
 using Ga.Core.NeuronNs.Output;
+using Ga.Core.PersistenceManager;
 using Ga.Core.PopulationNs;
 using Ga.Core.Report;
 using Ga.Core.Task;
@@ -63,6 +64,8 @@ namespace Ga.Host
             services.AddTransient<ITask, Task>();
 
             services.AddTransient<IGeneticAlgorithmReportBuilder, GeneticAlgorithmReportBuilder>();
+
+            services.AddTransient<IPersistenceManager, PersistenceManager>();
 
             services.AddSingleton<IOptions>(options);
 

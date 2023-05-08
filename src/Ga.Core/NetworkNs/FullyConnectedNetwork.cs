@@ -2,6 +2,7 @@
 using Ga.Core.NeuralLayerNs.Hidden;
 using Ga.Core.NeuralLayerNs.Input;
 using Ga.Core.NeuralLayerNs.Output;
+using Newtonsoft.Json;
 
 namespace Ga.Core.NetworkNs
 {
@@ -12,11 +13,16 @@ namespace Ga.Core.NetworkNs
     {
         private readonly Guid _id = Guid.NewGuid();
 
+        [JsonProperty]
         private readonly IInputLayer _inputLayer;
+        [JsonProperty]
         private readonly IOutputLayer _outputLayer;
+        [JsonProperty]
         private readonly IList<IHiddenLayer> _hiddenLayers = new List<IHiddenLayer>();
+        [JsonProperty]
         private readonly ILossFunction _lossFunction;
         private IList<double> _expectedResult = new List<double>();
+
 
         public FullyConnectedNetwork(
             IInputLayer inputLayer,
@@ -28,6 +34,12 @@ namespace Ga.Core.NetworkNs
             _outputLayer = outputLayer;
             AddHiddenLayers(hiddenLayers);
             _lossFunction = lossFunction;
+        }
+
+        [JsonConstructor]
+        public FullyConnectedNetwork()
+        {
+
         }
 
         #region INetwork implementation
@@ -49,6 +61,13 @@ namespace Ga.Core.NetworkNs
                 neuron.neuron.PushValueOnInput(inputs[neuron.i]);
             }
         }
+
+        public void BindLayers()
+        {
+            AddHiddenLayers(_hiddenLayers);
+        }
+
+        public IList<double> GetOutputs() => GetOutput();
 
         public double GetFitness() => CalculateFitness();
 

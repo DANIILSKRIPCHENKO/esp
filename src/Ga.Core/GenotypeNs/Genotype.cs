@@ -1,5 +1,6 @@
 ﻿using Ga.Core.Distribution;
 using Ga.Core.Extensions;
+using Newtonsoft.Json;
 
 namespace Ga.Core.GenotypeNs
 {
@@ -10,6 +11,7 @@ namespace Ga.Core.GenotypeNs
     {
         private readonly IList<double> _inputWeights;
         private readonly IList<double> _outputWeights;
+        [JsonProperty]
         private readonly IDistribution _distribution;
 
         #region ctor
@@ -42,6 +44,15 @@ namespace Ga.Core.GenotypeNs
             _inputWeights = inputWeights;
             _outputWeights = outputWeights;
             _distribution = distribution;
+        }
+
+        [JsonConstructor]
+        public Genotype(
+            IList<double> inputWeights,
+            IList<double> outputWeights)
+        {
+            _inputWeights = inputWeights;
+            _outputWeights = outputWeights;
         }
 
         #endregion

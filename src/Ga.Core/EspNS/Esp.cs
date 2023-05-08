@@ -2,6 +2,7 @@
 using Ga.Core.NetworkNs;
 using Ga.Core.NeuralLayerNs.Hidden;
 using Ga.Core.PopulationNs;
+using Newtonsoft.Json;
 
 namespace Ga.Core.EspNS
 {
@@ -16,6 +17,7 @@ namespace Ga.Core.EspNS
         private readonly List<double> _actualFitnessHistory = new();
         private readonly List<double> _bestFitnessHistory = new();
         private readonly List<int> _populationHistory = new();
+        private INeuralNetwork _currentNeuralNetwork;
 
         private double _bestFitnessEver { get => _bestFitnessHistory.LastOrDefault(); }
 
@@ -58,7 +60,7 @@ namespace Ga.Core.EspNS
             }
 
             // hardcode  number of generations to check
-            if (!ShouldBurstMutate(3)) return;
+            if (!ShouldBurstMutate(10)) return;
             foreach (var population in _populations.Where(population => population.IsTurnedOff == false))
                 population.BurstMutation();
 
@@ -89,6 +91,8 @@ namespace Ga.Core.EspNS
             _burstMutationCounter = default;
             //ResetFitnesses();
         }
+
+        public INeuralNetwork GetCurrentNetwork() => _currentNeuralNetwork;
 
         #endregion
 
@@ -121,21 +125,21 @@ namespace Ga.Core.EspNS
 
                 var hiddenLayer = _hiddenLayerBuilder.BuildHiddenLayer(randomNeuronsForHidden);
 
-                var network = _neuralNetworkBuilder
+                _currentNeuralNetwork = _neuralNetworkBuilder
                     .BuildNeuralNetwork(new List<IHiddenLayer>() { hiddenLayer });
 
-                network.PushExpectedValues(_expectedOutputs);
+                _currentNeuralNetwork.PushExpectedValues(_expectedOutputs);
 
-                network.PushInputValues(_inputs);
+                _currentNeuralNetwork.PushInputValues(_inputs);
 
-                var fitness = network.GetFitness();
+                var fitness = _currentNeuralNetwork.GetFitness();
 
-                network.ApplyFitness();
+                _currentNeuralNetwork.ApplyFitness();
 
                 if (fitness > bestFitness)
                     bestFitness = fitness;
 
-                network.ResetConnection();
+                _currentNeuralNetwork.ResetConnection();
             }
 
             if (isTracking)

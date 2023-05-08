@@ -1,5 +1,6 @@
 ﻿using Ga.Core.ActivationFunction;
 using Ga.Core.SynapseNs;
+using Newtonsoft.Json;
 
 namespace Ga.Core.NeuronNs.Input
 {
@@ -10,6 +11,7 @@ namespace Ga.Core.NeuronNs.Input
     {
         private readonly Guid _id = Guid.NewGuid();
         private readonly IList<ISynapse> _outputs = new List<ISynapse>();
+        [JsonProperty]
         private readonly IActivationFunction _activationFunction;
         private double _input;
 

@@ -1,4 +1,5 @@
 ﻿using Ga.Core.NeuronNs.Output;
+using Newtonsoft.Json;
 
 namespace Ga.Core.NeuralLayerNs.Output
 {
@@ -12,6 +13,12 @@ namespace Ga.Core.NeuralLayerNs.Output
         public OutputLayer(IOutputNeuronBuilder outputNeuronBuilder)
         {
             _outputNeurons = outputNeuronBuilder.BuildOutputNeurons();
+        }
+
+        [JsonConstructor]
+        public OutputLayer(IList<IOutputNeuron> outputNeurons)
+        {
+            _outputNeurons = outputNeurons;
         }
 
         #region OutputLayer implementation

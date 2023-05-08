@@ -5,6 +5,7 @@ using Ga.Core.InputFunction;
 using Ga.Core.NeuronNs.Input;
 using Ga.Core.NeuronNs.Output;
 using Ga.Core.SynapseNs;
+using Newtonsoft.Json;
 
 namespace Ga.Core.NeuronNs.Hidden
 {
@@ -14,7 +15,9 @@ namespace Ga.Core.NeuronNs.Hidden
     public class HiddenNeuron : IHiddenNeuron
     {
         private readonly Guid _id = Guid.NewGuid();
+        [JsonProperty]
         private readonly IActivationFunction _activationFunction;
+        [JsonProperty]
         private readonly IInputFunction _inputFunction;
         private readonly IGenotype _genotype;
 

@@ -1,4 +1,5 @@
 ﻿using Ga.Core.Common;
+using Ga.Core.NetworkNs;
 
 namespace Ga.Core.EspNS
 {
@@ -27,5 +28,7 @@ namespace Ga.Core.EspNS
         public void SetOutputs(IList<double> outputs);
 
         public void ResetParameters();
+
+        public INeuralNetwork GetCurrentNetwork();
     }
 }

@@ -1,4 +1,5 @@
 ﻿using Ga.Core.NeuronNs.Input;
+using Newtonsoft.Json;
 
 namespace Ga.Core.NeuralLayerNs.Input
 {
@@ -12,6 +13,12 @@ namespace Ga.Core.NeuralLayerNs.Input
         public InputLayer(IInputNeuronBuilder inputNeuronBuilder)
         {
             _inputNeurons = inputNeuronBuilder.BuildInputNeurons();
+        }
+
+        [JsonConstructor]
+        public InputLayer(IList<IInputNeuron> inputNeurons)
+        {
+            _inputNeurons = inputNeurons;
         }
 
         #region IInputLayer implementation

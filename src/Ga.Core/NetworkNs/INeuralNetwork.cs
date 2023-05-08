@@ -35,5 +35,9 @@ namespace Ga.Core.NetworkNs
         /// </summary>
         /// <param name="inputs"></param>
         public void PushInputValues(IList<double> inputs);
+
+        public void BindLayers();
+
+        public IList<double> GetOutputs();
     }
 }

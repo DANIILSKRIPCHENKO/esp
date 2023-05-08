@@ -1,6 +1,7 @@
 ﻿using Ga.Core.NeuralLayerNs.Input;
 using Ga.Core.NeuralLayerNs.Output;
 using Ga.Core.NeuronNs.Hidden;
+using Newtonsoft.Json;
 
 namespace Ga.Core.NeuralLayerNs.Hidden
 {
@@ -13,6 +14,7 @@ namespace Ga.Core.NeuralLayerNs.Hidden
 
         public IList<IHiddenNeuron> HiddenNeurons { get => _hiddenNeurons; }
 
+        [JsonConstructor]
         public HiddenLayer(IList<IHiddenNeuron> hiddenNeurons)
         {
             _hiddenNeurons = hiddenNeurons;
