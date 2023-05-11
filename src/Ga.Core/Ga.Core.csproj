@@ -12,8 +12,4 @@
     <PackageReference Include="ScottPlot" Version="4.1.63" />
   </ItemGroup>
 
-  <ItemGroup>
-    <ProjectReference Include="..\Ga.Configuration\Ga.Configuration.csproj" />
-  </ItemGroup>
-
 </Project>

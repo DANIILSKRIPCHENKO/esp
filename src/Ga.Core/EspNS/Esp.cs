@@ -2,7 +2,6 @@
 using Ga.Core.NetworkNs;
 using Ga.Core.NeuralLayerNs.Hidden;
 using Ga.Core.PopulationNs;
-using Newtonsoft.Json;
 
 namespace Ga.Core.EspNS
 {
