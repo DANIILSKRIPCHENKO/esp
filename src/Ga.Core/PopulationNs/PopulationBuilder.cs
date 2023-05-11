@@ -1,4 +1,4 @@
-﻿using Ga.Configuration.OptionsNs;
+﻿using Ga.Core.ConfigurationNs;
 using Ga.Core.Extensions;
 using Ga.Core.NeuronNs.Hidden;
 
@@ -6,27 +6,27 @@ namespace Ga.Core.PopulationNs
 {
     public class PopulationBuilder : IPopulationBuilder
     {
-        private readonly IOptions _options;
+        private readonly IGeneticAlgorithmConfiguration _configuration;
         private readonly IHiddenNeuronBuilder _hiddenNeuronBuilder;
 
         public PopulationBuilder(
-            IOptions options,
+            IGeneticAlgorithmConfiguration configuration,
             IHiddenNeuronBuilder hiddenNeuronBuilder)
         {
-            _options = options;
+            _configuration = configuration;
             _hiddenNeuronBuilder = hiddenNeuronBuilder;
         }
 
         public IList<IPopulation> BuildInitialPopulations()
         {
             return BuildInitialPopulations(
-                _options.NumberOfPopulations,
-                _options.NumberOfNeuronsInPopulation);
+                _configuration.NumberOfPopulations,
+                _configuration.NumberOfNeuronsInPopulation);
         }
 
         public IPopulation BuildPopulation()
         {
-            var neurons = _hiddenNeuronBuilder.BuildHiddenNeurons(_options.NumberOfNeuronsInPopulation);
+            var neurons = _hiddenNeuronBuilder.BuildHiddenNeurons(_configuration.NumberOfNeuronsInPopulation);
             return new Population(neurons);
         }
 
@@ -36,7 +36,7 @@ namespace Ga.Core.PopulationNs
         {
 
             var initialNeurons = _hiddenNeuronBuilder
-                .BuildHiddenNeurons(_options.NumberOfNeuronsInPopulation * _options.NumberOfPopulations);
+                .BuildHiddenNeurons(_configuration.NumberOfNeuronsInPopulation * _configuration.NumberOfPopulations);
 
             var populations = new List<IPopulation>();
 

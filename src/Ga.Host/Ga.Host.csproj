@@ -13,7 +13,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Ga.Configuration\Ga.Configuration.csproj" />
+    <ProjectReference Include="..\..\Ga.Extensions.Microsoft.DependencyInjection\Ga.Extensions.Microsoft.DependencyInjection.csproj" />
     <ProjectReference Include="..\Ga.Core\Ga.Core.csproj" />
   </ItemGroup>
 

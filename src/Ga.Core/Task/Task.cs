@@ -1,7 +1,7 @@
 using System.Globalization;
 using CsvHelper;
 using CsvHelper.Configuration;
-using Ga.Configuration.OptionsNs;
+using Ga.Core.ConfigurationNs;
 
 namespace Ga.Core.Task;
 
@@ -9,9 +9,9 @@ public class Task : ITask
 {
     private List<Dataframe> _dataframes;
 
-    public Task(IOptions options)
+    public Task(IGeneticAlgorithmConfiguration configuration)
     {
-        ReadFileData(options.DatasetFileName);
+        ReadFileData(configuration.DatasetFileName);
     }
 
     public IReadOnlyCollection<Dataframe> GetDataset() => _dataframes.AsReadOnly();
