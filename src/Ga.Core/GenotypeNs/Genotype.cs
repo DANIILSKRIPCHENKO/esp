@@ -127,12 +127,36 @@ namespace Ga.Core.GenotypeNs
 
             var (result1, result2) = weights.CrossOver(newWeights, crossOverPointIndex);
 
-            var inputWeights1 = result1.Take(_inputWeights.Count).ToList();
-            var outputWeights1 = result1.TakeLast(_outputWeights.Count).ToList();
+            var result1News = new List<double>();
+            foreach (var value in result1)
+            {
+                if (!ShouldMutateGene())
+                {
+                    result1News.Add(value);
+                    continue;
+                }
+
+                result1News.Add(_distribution.GenerateRandom(value));
+            }
+
+            var result2News = new List<double>();
+            foreach (var value in result2)
+            {
+                if (!ShouldMutateGene())
+                {
+                    result2News.Add(value);
+                    continue;
+                }
+
+                result2News.Add(_distribution.GenerateRandom(value));
+            }
+
+            var inputWeights1 = result1News.Take(_inputWeights.Count).ToList();
+            var outputWeights1 = result1News.TakeLast(_outputWeights.Count).ToList();
             var resultGenotype1 = new Genotype(inputWeights1, outputWeights1, _distribution);
 
-            var inputWeights2 = result2.Take(_inputWeights.Count).ToList();
-            var outputWeights2 = result2.TakeLast(_outputWeights.Count).ToList();
+            var inputWeights2 = result2News.Take(_inputWeights.Count).ToList();
+            var outputWeights2 = result2News.TakeLast(_outputWeights.Count).ToList();
             var resultGenotype2 = new Genotype(inputWeights2, outputWeights2, _distribution);
 
             return (resultGenotype1, resultGenotype2);
@@ -144,7 +168,7 @@ namespace Ga.Core.GenotypeNs
 
         private bool ShouldMutateGene()
         {
-            var mutateGeneProbability = 0.3;
+            var mutateGeneProbability = 0.5;
 
             var randomValue = new Random().NextDouble();
             if (randomValue <= mutateGeneProbability)

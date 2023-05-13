@@ -217,7 +217,7 @@ namespace Ga.Core.EspNS
 
                 var fitness = Evaluate(isTracking: false);
 
-                if (fitness > fitnessToCompare * 0.99)
+                if (fitness >= fitnessToCompare)
                     populationsToRemove.Add(population);
 
                 population.IsTurnedOff = false;

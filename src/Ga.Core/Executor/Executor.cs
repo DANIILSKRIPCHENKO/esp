@@ -36,7 +36,7 @@ namespace Ga.Core.Executor
 
             double fitness = 0;
 
-            while (fitness < 3 && generation < 200)
+            while (fitness < 3 && generation < 2000)
             {
                 fitness = _geneticAlgorithm.Evaluate();
 
@@ -50,7 +50,6 @@ namespace Ga.Core.Executor
 
             if (_geneticAlgorithm is IReportableGeneticAlgorithm reportableGeneticAlgorithm)
                 _geneticAlgorithmReportBuilder.BuildAndSaveReport(reportableGeneticAlgorithm);
-
 
             var accuracy = TestNeuralNetwork();
         }
