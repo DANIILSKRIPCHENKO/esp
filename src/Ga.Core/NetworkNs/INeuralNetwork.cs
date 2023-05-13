@@ -1,4 +1,5 @@
 ﻿using Ga.Core.Common;
+using Ga.Core.Task;
 
 namespace Ga.Core.NetworkNs
 {
@@ -11,7 +12,7 @@ namespace Ga.Core.NetworkNs
         /// Calculates and applies fitness to neurons
         /// </summary>
         /// <returns></returns>
-        public double ApplyFitness();
+        public double ApplyFitness(double fitness);
 
         /// <summary>
         /// Calculates and returns fitness
@@ -39,5 +40,7 @@ namespace Ga.Core.NetworkNs
         public void BindLayers();
 
         public IList<double> GetOutputs();
+
+        public double EvaluateOnDataset(ITask task);
     }
 }

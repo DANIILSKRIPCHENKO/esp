@@ -1,5 +1,6 @@
 ﻿using Ga.Core.Common;
 using Ga.Core.NetworkNs;
+using Ga.Core.Task;
 
 namespace Ga.Core.EspNS
 {
@@ -23,12 +24,10 @@ namespace Ga.Core.EspNS
         /// </summary>
         public void Recombine();
 
-        public void SetInputs(IList<double> inputs);
-
-        public void SetOutputs(IList<double> outputs);
+        public void SetDataset(ITask task);
 
         public void ResetParameters();
 
-        public INeuralNetwork GetCurrentNetwork();
+        public INeuralNetwork GetBestNetwork();
     }
 }

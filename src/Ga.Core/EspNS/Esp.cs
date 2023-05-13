@@ -2,6 +2,7 @@
 using Ga.Core.NetworkNs;
 using Ga.Core.NeuralLayerNs.Hidden;
 using Ga.Core.PopulationNs;
+using Ga.Core.Task;
 
 namespace Ga.Core.EspNS
 {
@@ -16,7 +17,7 @@ namespace Ga.Core.EspNS
         private readonly List<double> _actualFitnessHistory = new();
         private readonly List<double> _bestFitnessHistory = new();
         private readonly List<int> _populationHistory = new();
-        private INeuralNetwork _currentNeuralNetwork;
+        private INeuralNetwork _bestNetwork;
 
         private double _bestFitnessEver { get => _bestFitnessHistory.LastOrDefault(); }
 
@@ -25,8 +26,7 @@ namespace Ga.Core.EspNS
         private readonly INeuralNetworkBuilder _neuralNetworkBuilder;
         private readonly IHiddenLayerBuilder _hiddenLayerBuilder;
         private readonly IPopulationBuilder _populationBuilder;
-        private IList<double> _inputs;
-        private IList<double> _expectedOutputs;
+        private ITask _task;
 
         public Esp(
             INeuralNetworkBuilder neuralNetworkBuilder,
@@ -58,8 +58,8 @@ namespace Ga.Core.EspNS
                 return;
             }
 
-            // hardcode  number of generations to check
-            if (!ShouldBurstMutate(10)) return;
+            // hardcode number of generations to check
+            if (!ShouldBurstMutate(3)) return;
             foreach (var population in _populations.Where(population => population.IsTurnedOff == false))
                 population.BurstMutation();
 
@@ -72,14 +72,9 @@ namespace Ga.Core.EspNS
                 population.Recombine();
         }
 
-        public void SetInputs(IList<double> inputs)
+        public void SetDataset(ITask task)
         {
-            _inputs = inputs;
-        }
-
-        public void SetOutputs(IList<double> outputs)
-        {
-            _expectedOutputs = outputs;
+            _task = task;
         }
 
         public void ResetParameters()
@@ -91,7 +86,7 @@ namespace Ga.Core.EspNS
             //ResetFitnesses();
         }
 
-        public INeuralNetwork GetCurrentNetwork() => _currentNeuralNetwork;
+        public INeuralNetwork GetBestNetwork() => _bestNetwork;
 
         #endregion
 
@@ -112,6 +107,7 @@ namespace Ga.Core.EspNS
             ResetFitnesses();
 
             double bestFitness = 0;
+            INeuralNetwork bestNetwork = null;
 
             while (ShouldContinueTrials())
             {
@@ -124,25 +120,24 @@ namespace Ga.Core.EspNS
 
                 var hiddenLayer = _hiddenLayerBuilder.BuildHiddenLayer(randomNeuronsForHidden);
 
-                _currentNeuralNetwork = _neuralNetworkBuilder
+                var network = _neuralNetworkBuilder
                     .BuildNeuralNetwork(new List<IHiddenLayer>() { hiddenLayer });
 
-                _currentNeuralNetwork.PushExpectedValues(_expectedOutputs);
+                var fitness = network.EvaluateOnDataset(_task);
 
-                _currentNeuralNetwork.PushInputValues(_inputs);
-
-                var fitness = _currentNeuralNetwork.GetFitness();
-
-                _currentNeuralNetwork.ApplyFitness();
+                network.ApplyFitness(fitness);
 
                 if (fitness > bestFitness)
+                {
                     bestFitness = fitness;
+                    bestNetwork = network;
+                }
 
-                _currentNeuralNetwork.ResetConnection();
+                network.ResetConnection();
             }
 
             if (isTracking)
-                RecordParameters(bestFitness);
+                RecordParameters(bestFitness, bestNetwork);
 
             return bestFitness;
         }
@@ -212,7 +207,7 @@ namespace Ga.Core.EspNS
 
         private bool RemoveUselessPopulations()
         {
-            var bestFitnessEver = _bestFitnessEver;
+            var fitnessToCompare = Evaluate(isTracking: false);
 
             var populationsToRemove = new List<IPopulation>();
 
@@ -222,7 +217,7 @@ namespace Ga.Core.EspNS
 
                 var fitness = Evaluate(isTracking: false);
 
-                if (fitness > bestFitnessEver)
+                if (fitness > fitnessToCompare * 0.99)
                     populationsToRemove.Add(population);
 
                 population.IsTurnedOff = false;
@@ -237,7 +232,7 @@ namespace Ga.Core.EspNS
             return true;
         }
 
-        private void RecordParameters(double fitness)
+        private void RecordParameters(double fitness, INeuralNetwork neuralNetwork)
         {
             _populationHistory.Add(_populations.Count);
 
@@ -246,6 +241,7 @@ namespace Ga.Core.EspNS
             if (fitness > _bestFitnessEver)
             {
                 _bestFitnessHistory.Add(fitness);
+                _bestNetwork = neuralNetwork;
                 return;
             }
 

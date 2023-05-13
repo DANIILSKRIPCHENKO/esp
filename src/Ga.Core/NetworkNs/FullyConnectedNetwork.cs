@@ -2,6 +2,7 @@
 using Ga.Core.NeuralLayerNs.Hidden;
 using Ga.Core.NeuralLayerNs.Input;
 using Ga.Core.NeuralLayerNs.Output;
+using Ga.Core.Task;
 using Newtonsoft.Json;
 
 namespace Ga.Core.NetworkNs
@@ -69,12 +70,24 @@ namespace Ga.Core.NetworkNs
 
         public IList<double> GetOutputs() => GetOutput();
 
+        public double EvaluateOnDataset(ITask task)
+        {
+            double cumulativeFitness = 0;
+            foreach (var dataframe in task.GetDataset())
+            {
+                PushInputValues(dataframe.Inputs);
+                PushExpectedValues(dataframe.ExpectedOutputs);
+
+                cumulativeFitness += GetFitness();
+            }
+
+            return cumulativeFitness / task.GetDataset().Count;
+        }
+
         public double GetFitness() => CalculateFitness();
 
-        public double ApplyFitness()
+        public double ApplyFitness(double fitness)
         {
-            var fitness = CalculateFitness();
-
             var neurons = _hiddenLayers
                 .SelectMany(x => x.HiddenNeurons)
                 .ToList();

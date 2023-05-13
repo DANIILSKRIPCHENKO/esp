@@ -30,32 +30,23 @@ namespace Ga.Core.Executor
 
         public void Execute()
         {
+            _geneticAlgorithm.SetDataset(_task);
 
-            var currentDataFrame = 0;
-            foreach (var dataframe in _task.GetDataset().Take(20))
+            var generation = 0;
+
+            double fitness = 0;
+
+            while (fitness < 3 && generation < 200)
             {
-                double fitness = 0;
-                var generation = 0;
+                fitness = _geneticAlgorithm.Evaluate();
 
-                _geneticAlgorithm.SetInputs(dataframe.Inputs);
-                _geneticAlgorithm.SetOutputs(dataframe.ExpectedOutputs);
+                _geneticAlgorithm.CheckStagnation();
 
-                while (fitness < 3)
-                {
-                    fitness = _geneticAlgorithm.Evaluate();
-
-                    _geneticAlgorithm.CheckStagnation();
-
-                    _geneticAlgorithm.Recombine();
-
-                    generation++;
-                }
-
-                //_geneticAlgorithm.ResetParameters();
-                currentDataFrame++;
+                _geneticAlgorithm.Recombine();
+                generation++;
             }
 
-            _persistenceManager.SaveToFile("network.json", _geneticAlgorithm.GetCurrentNetwork());
+            _persistenceManager.SaveToFile("network.json", _geneticAlgorithm.GetBestNetwork());
 
             if (_geneticAlgorithm is IReportableGeneticAlgorithm reportableGeneticAlgorithm)
                 _geneticAlgorithmReportBuilder.BuildAndSaveReport(reportableGeneticAlgorithm);

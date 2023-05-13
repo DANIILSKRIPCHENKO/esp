@@ -7,7 +7,7 @@ namespace Ga.Core.Task;
 
 public class Task : ITask
 {
-    private List<Dataframe> _dataframes;
+    private List<Dataframe> _dataframes = new();
 
     public Task(IGeneticAlgorithmConfiguration configuration)
     {
@@ -32,11 +32,25 @@ public class Task : ITask
                     .ToList())
             .ToList();
 
-        _dataframes = values.Select(value => new Dataframe()
+        var temp = values.Select(value => new Dataframe()
         {
             Inputs = value.Take(9).ToList(),
             ExpectedOutputs = value.TakeLast(2).ToList(),
         }).ToList();
+
+        var dataframes1 = temp
+            .Where(x => Convert.ToInt32(x.ExpectedOutputs.First()) == 0)
+            .Take(100).ToList();
+
+        var dataframes2 = temp
+            .Where(x => Convert.ToInt32(x.ExpectedOutputs.First()) == 1)
+            .Take(100).ToList();
+
+        for (var index = 0; index < dataframes1.Count; index++)
+        {
+            _dataframes.Add(dataframes1[index]);
+            _dataframes.Add(dataframes2[index]);
+        }
     }
 
     private class Record
