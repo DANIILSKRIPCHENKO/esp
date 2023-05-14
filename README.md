@@ -1,4 +1,4 @@
-# NeuroEvoComputing-lab
+# NeuroEvoComputing
 Educational implementation of neuroevolutionary ESP-algorithm for training fully connected neural network.
 Project was made within course of Neuroevolutionary Computing in Tomsk Polytechnic University.
 </br>
