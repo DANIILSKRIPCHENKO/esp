@@ -1,4 +1,5 @@
 ﻿using Ga.Core.Common;
+using Ga.Core.Models;
 using Ga.Core.NetworkNs;
 using Ga.Core.NeuralLayerNs.Hidden;
 using Ga.Core.PopulationNs;
@@ -9,13 +10,16 @@ namespace Ga.Core.EspNS
     /// <summary>
     /// Enforces sub population implementation of GA
     /// </summary>
-    public class Esp : IGeneticAlgorithm, IReportableGeneticAlgorithm
+    public class Esp : IGeneticAlgorithm
     {
         private readonly Guid _id = Guid.NewGuid();
         private readonly IList<IPopulation> _populations;
+        private IList<IPopulation> _clonedPopulations;
 
-        private readonly List<double> _actualFitnessHistory = new();
+        private readonly List<double> _fitnessHistory = new();
+        private readonly List<double> _lossHistory = new();
         private readonly List<double> _bestFitnessHistory = new();
+        private readonly List<double> _accuracyHistory = new();
         private readonly List<int> _populationHistory = new();
         private INeuralNetwork _bestNetwork;
 
@@ -37,6 +41,7 @@ namespace Ga.Core.EspNS
             _hiddenLayerBuilder = hiddenLayerBuilder;
             _populationBuilder = populationBuilder;
             _populations = populationBuilder.BuildInitialPopulations();
+            _clonedPopulations = _populations;
         }
 
         #region IGeneticAlgorith implementation
@@ -45,7 +50,7 @@ namespace Ga.Core.EspNS
 
         public double Evaluate()
         {
-            return Evaluate(isTracking: true);
+            return EvaluateInternal();
         }
 
         public void CheckStagnation()
@@ -79,39 +84,85 @@ namespace Ga.Core.EspNS
 
         public void ResetParameters()
         {
-            _actualFitnessHistory.Clear();
+            _fitnessHistory.Clear();
             _bestFitnessHistory.Clear();
             _populationHistory.Clear();
             _burstMutationCounter = default;
-            //ResetFitnesses();
+        }
+
+        public TrainResult GetTrainResult()
+        {
+            return new TrainResult(
+                _bestNetwork,
+                _fitnessHistory,
+                _lossHistory,
+                _accuracyHistory,
+                _populationHistory,
+                _bestFitnessHistory);
         }
 
         public INeuralNetwork GetBestNetwork() => _bestNetwork;
 
         #endregion
 
-        #region IReportableGeneticAlgorithm implementation
-
-        public IList<double> GetActualFitnessHistory() => _actualFitnessHistory;
-
-        public IList<double> GetBestFitnessHistory() => _bestFitnessHistory;
-
-        public IList<int> GetPopulationHistory() => _populationHistory;
-
-        #endregion
-
         #region Private methods
 
-        private double Evaluate(bool isTracking)
+        private double EvaluateInternal()
         {
-            ResetFitnesses();
+            ResetFitnesses(_populations);
 
             double bestFitness = 0;
+            double bestAccuracy = 0;
+            double bestLoss = int.MaxValue;
             INeuralNetwork bestNetwork = null;
 
-            while (ShouldContinueTrials())
+            while (ShouldContinueTrials(_populations))
             {
                 var randomNeuronsForHidden = _populations
+                    .Select(population => population.GetRandomNeuron())
+                    .ToList();
+
+                CheckUniqueness(randomNeuronsForHidden);
+
+                var hiddenLayer = _hiddenLayerBuilder.BuildHiddenLayer(randomNeuronsForHidden);
+
+                var network = _neuralNetworkBuilder
+                    .BuildNeuralNetwork(new List<IHiddenLayer>() { hiddenLayer });
+
+                var evaluationResult = network.EvaluateOnDataset(_task);
+
+                network.ApplyFitness(evaluationResult.Fitness);
+
+                if (evaluationResult.Fitness > bestFitness)
+                {
+                    bestFitness = evaluationResult.Fitness;
+                    bestNetwork = network;
+                }
+
+                if (evaluationResult.Accuracy > bestAccuracy)
+                    bestAccuracy = evaluationResult.Accuracy;
+
+                if (evaluationResult.Loss < bestLoss)
+                    bestLoss = evaluationResult.Loss;
+
+                network.ResetConnection();
+            }
+
+            RecordParameters(bestFitness, bestAccuracy, bestLoss, bestNetwork);
+
+            return bestFitness;
+        }
+
+        private double EvaluateInternalReadOnly()
+        {
+            _clonedPopulations = new List<IPopulation>(_populations);
+            ResetFitnesses(_clonedPopulations);
+
+            double bestFitness = 0;
+
+            while (ShouldContinueTrials(_clonedPopulations))
+            {
+                var randomNeuronsForHidden = _clonedPopulations
                     .Where(population => population.IsTurnedOff == false)
                     .Select(population => population.GetRandomNeuron())
                     .ToList();
@@ -123,28 +174,24 @@ namespace Ga.Core.EspNS
                 var network = _neuralNetworkBuilder
                     .BuildNeuralNetwork(new List<IHiddenLayer>() { hiddenLayer });
 
-                var fitness = network.EvaluateOnDataset(_task);
+                var evaluationResult = network.EvaluateOnDataset(_task);
 
-                network.ApplyFitness(fitness);
+                network.ApplyFitness(evaluationResult.Fitness);
 
-                if (fitness > bestFitness)
+                if (evaluationResult.Fitness > bestFitness)
                 {
-                    bestFitness = fitness;
-                    bestNetwork = network;
+                    bestFitness = evaluationResult.Fitness;
                 }
 
                 network.ResetConnection();
             }
 
-            if (isTracking)
-                RecordParameters(bestFitness, bestNetwork);
-
             return bestFitness;
         }
 
-        private void ResetFitnesses()
+        private static void ResetFitnesses(IEnumerable<IPopulation> populations)
         {
-            foreach (var population in _populations)
+            foreach (var population in populations)
                 population.ResetFitnesses();
         }
 
@@ -177,7 +224,7 @@ namespace Ga.Core.EspNS
         }
 
         //TODO hide neurons
-        private bool ShouldContinueTrials() => _populations
+        private static bool ShouldContinueTrials(IEnumerable<IPopulation> populations) => populations
             .Where(population => population.IsTurnedOff == false)
             .SelectMany(population => population.HiddenNeurons)
             .Any(neuron => neuron.Trials < 10);
@@ -207,36 +254,52 @@ namespace Ga.Core.EspNS
 
         private bool RemoveUselessPopulations()
         {
-            var fitnessToCompare = Evaluate(isTracking: false);
+            if (_populations.Count < 2) return false;
 
-            var populationsToRemove = new List<IPopulation>();
+            var fitnessToCompare = EvaluateInternalReadOnly();
 
+            var populationsFitnessMappings = new Dictionary<IPopulation, double>();
             foreach (var population in _populations)
             {
                 population.IsTurnedOff = true;
 
-                var fitness = Evaluate(isTracking: false);
+                var fitness = EvaluateInternalReadOnly();
 
                 if (fitness >= fitnessToCompare)
-                    populationsToRemove.Add(population);
+                    populationsFitnessMappings.Add(population, fitness);
 
                 population.IsTurnedOff = false;
             }
 
-            if (!populationsToRemove.Any())
+            if (!populationsFitnessMappings.Any())
                 return false;
 
-            foreach (var populationToRemove in populationsToRemove)
-                _populations.Remove(populationToRemove);
+            if (populationsFitnessMappings.Count == _populations.Count)
+            {
+                populationsFitnessMappings = populationsFitnessMappings
+                    .OrderByDescending(pf => pf.Value)
+                    .Take(_populations.Count - 1)
+                    .ToDictionary(x => x.Key, y => y.Value);
+            }
+
+            var populationsToDelete = populationsFitnessMappings
+                .Select(pf => pf.Key);
+
+            foreach (var population in populationsToDelete)
+            {
+                _populations.Remove(population);
+            }
 
             return true;
         }
 
-        private void RecordParameters(double fitness, INeuralNetwork neuralNetwork)
+        private void RecordParameters(double fitness, double accuracy, double loss, INeuralNetwork neuralNetwork)
         {
             _populationHistory.Add(_populations.Count);
 
-            _actualFitnessHistory.Add(fitness);
+            _fitnessHistory.Add(fitness);
+            _lossHistory.Add(loss);
+            _accuracyHistory.Add(accuracy);
 
             if (fitness > _bestFitnessEver)
             {

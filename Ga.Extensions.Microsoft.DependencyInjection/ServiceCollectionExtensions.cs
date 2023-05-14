@@ -2,7 +2,7 @@
 using Ga.Core.ConfigurationNs;
 using Ga.Core.Distribution;
 using Ga.Core.EspNS;
-using Ga.Core.Executor;
+using Ga.Core.GeneticAlgorithmManager;
 using Ga.Core.GenotypeNs;
 using Ga.Core.LossFunction;
 using Ga.Core.NetworkNs;
@@ -24,7 +24,7 @@ namespace Ga.Extensions.Microsoft.DependencyInjection
     {
         public static IServiceCollection AddGeneticAlgorithms(this IServiceCollection services, GeneticAlgorithmConfiguration configuration)
         {
-            services.AddTransient<IExecutable, Executor>();
+            services.AddTransient<IGeneticAlgorithmManager, GeneticAlgorithmManager>();
             services.AddTransient<IGeneticAlgorithm, Esp>();
             services.AddTransient<INeuralNetworkBuilder, FullyConnectedNeuralNetworkBuilder>();
 
@@ -47,7 +47,7 @@ namespace Ga.Extensions.Microsoft.DependencyInjection
 
             services.AddTransient<ITask, Core.Task.Task>();
 
-            services.AddTransient<IGeneticAlgorithmReportBuilder, GeneticAlgorithmReportBuilder>();
+            services.AddTransient<IReportBuilder, ReportBuilder>();
 
             services.AddTransient<IPersistenceManager, PersistenceManager>();
 

@@ -1,5 +1,5 @@
 ﻿using Ga.Core.Common;
-using Ga.Core.NetworkNs;
+using Ga.Core.Models;
 using Ga.Core.Task;
 
 namespace Ga.Core.EspNS
@@ -28,6 +28,6 @@ namespace Ga.Core.EspNS
 
         public void ResetParameters();
 
-        public INeuralNetwork GetBestNetwork();
+        public TrainResult GetTrainResult();
     }
 }

@@ -49,7 +49,7 @@ namespace Ga.Core.NeuronNs.Hidden
         public IList<ISynapse> Outputs
         {
             get => _outputs;
-            set { _outputs = value.ToList(); }
+            set => _outputs = value.ToList();
         }
 
         public int Trials => _trials;
@@ -110,7 +110,7 @@ namespace Ga.Core.NeuronNs.Hidden
 
         public (IHiddenNeuron, IHiddenNeuron) Recombine(IHiddenNeuron hiddenNeuron)
         {
-            (var childGenotype1, var childGenotype2) =
+            var (childGenotype1, childGenotype2) =
                 _genotype.Recombine(hiddenNeuron.Genotype);
 
             var childNeuron1 = new HiddenNeuron(
@@ -130,12 +130,10 @@ namespace Ga.Core.NeuronNs.Hidden
         {
             var newGenotypes = _genotype.BurstMutate(numberOfNeuronsToGrow);
 
-            var result = new List<IHiddenNeuron>();
-
-            foreach (var genotype in newGenotypes)
-                result.Add(new HiddenNeuron(_activationFunction, _inputFunction, genotype));
-
-            return result;
+            return newGenotypes
+                .Select(genotype => new HiddenNeuron(_activationFunction, _inputFunction, genotype))
+                .Cast<IHiddenNeuron>()
+                .ToList();
         }
 
         public void ResetFitness()
