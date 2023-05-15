@@ -6,7 +6,7 @@
     public static class IListExtensions
     {
         /// <summary>
-        /// Returns N random unique elements from collection, 
+        /// Returns N random unique elements from collection,
         /// which are not in input collection
         /// </summary>
         /// <typeparam name="T"></typeparam>

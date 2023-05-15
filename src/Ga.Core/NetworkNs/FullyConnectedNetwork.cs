@@ -1,7 +1,9 @@
 ﻿using Ga.Core.LossFunction;
+using Ga.Core.Models;
 using Ga.Core.NeuralLayerNs.Hidden;
 using Ga.Core.NeuralLayerNs.Input;
 using Ga.Core.NeuralLayerNs.Output;
+using Ga.Core.Task;
 using Newtonsoft.Json;
 
 namespace Ga.Core.NetworkNs
@@ -46,12 +48,6 @@ namespace Ga.Core.NetworkNs
 
         public Guid GetId() => _id;
 
-
-        public void PushExpectedValues(IList<double> expectedOutputs)
-        {
-            _expectedResult = expectedOutputs;
-        }
-
         public void PushInputValues(IList<double> inputs)
         {
             var inputNeurons = _inputLayer.InputNeurons;
@@ -69,12 +65,33 @@ namespace Ga.Core.NetworkNs
 
         public IList<double> GetOutputs() => GetOutput();
 
-        public double GetFitness() => CalculateFitness();
-
-        public double ApplyFitness()
+        public EvaluationResult EvaluateOnDataset(ITask task)
         {
-            var fitness = CalculateFitness();
+            double cumulativeFitness = 0;
+            double cumulativeAccuracy = 0;
+            foreach (var dataframe in task.GetDataset())
+            {
+                PushInputValues(dataframe.Inputs);
+                PushExpectedValues(dataframe.ExpectedOutputs);
 
+                cumulativeFitness += CalculateFitness();
+                cumulativeAccuracy += CalculateAccuracy();
+            }
+
+            var fitness =  cumulativeFitness / task.GetDataset().Count;
+            var error = 1 / fitness;
+            var accuracy = cumulativeAccuracy / task.GetDataset().Count;
+
+            return new EvaluationResult()
+            {
+                Loss = error,
+                Fitness = fitness,
+                Accuracy = accuracy
+            };
+        }
+
+        public double ApplyFitness(double fitness)
+        {
             var neurons = _hiddenLayers
                 .SelectMany(x => x.HiddenNeurons)
                 .ToList();
@@ -101,16 +118,9 @@ namespace Ga.Core.NetworkNs
 
         private IList<double> GetOutput()
         {
-            var result = new List<double>();
-
             var outputLayerNeurons = _outputLayer.OutputNeurons;
 
-            foreach (var neuron in outputLayerNeurons)
-            {
-                result.Add(neuron.CalculateOutput());
-            }
-
-            return result;
+            return outputLayerNeurons.Select(neuron => neuron.CalculateOutput()).ToList();
         }
 
         private void AddHiddenLayers(IList<IHiddenLayer> hiddenLayers)
@@ -132,6 +142,31 @@ namespace Ga.Core.NetworkNs
             var error = _lossFunction.CalculateError(output, _expectedResult);
 
             return 1 / error;
+        }
+
+        private int CalculateAccuracy()
+        {
+            var output = GetOutput();
+            var probabilities = GetProbabilities(output);
+            var formattedOutPut = GetFormattedOutput(probabilities);
+
+            return formattedOutPut.SequenceEqual(_expectedResult.Select(Convert.ToInt32)) ? 1 : 0;
+        }
+
+        private List<int> GetFormattedOutput(IList<double> predicted)
+        {
+            var probabilities = GetProbabilities(predicted);
+            var result = probabilities.Select(Convert.ToInt32).ToList();
+            return result;
+        }
+
+        private List<double> GetProbabilities(IList<double> values) => values
+            .Select(value =>
+                Math.Exp(value) / values.Select(Math.Exp).Sum()).ToList();
+
+        private void PushExpectedValues(IList<double> expectedOutputs)
+        {
+            _expectedResult = expectedOutputs;
         }
 
         #endregion

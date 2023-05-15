@@ -1,4 +1,6 @@
 ﻿using Ga.Core.Common;
+using Ga.Core.Models;
+using Ga.Core.Task;
 
 namespace Ga.Core.NetworkNs
 {
@@ -11,24 +13,12 @@ namespace Ga.Core.NetworkNs
         /// Calculates and applies fitness to neurons
         /// </summary>
         /// <returns></returns>
-        public double ApplyFitness();
-
-        /// <summary>
-        /// Calculates and returns fitness
-        /// </summary>
-        /// <returns></returns>
-        public double GetFitness();
+        public double ApplyFitness(double fitness);
 
         /// <summary>
         /// Reset connections of neurons
         /// </summary>
         public void ResetConnection();
-
-        /// <summary>
-        /// Pushes expected outpur values in Network
-        /// </summary>
-        /// <param name="expectedOutputs"></param>
-        public void PushExpectedValues(IList<double> expectedOutputs);
 
         /// <summary>
         /// Pushes input values in Network
@@ -39,5 +29,7 @@ namespace Ga.Core.NetworkNs
         public void BindLayers();
 
         public IList<double> GetOutputs();
+
+        public EvaluationResult EvaluateOnDataset(ITask task);
     }
 }

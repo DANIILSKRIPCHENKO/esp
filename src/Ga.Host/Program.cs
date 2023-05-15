@@ -1,7 +1,8 @@
 ﻿using CommandLine;
-using Ga.Core.Executor;
+using Ga.Core.GeneticAlgorithmManager;
 using Ga.Extensions.Microsoft.DependencyInjection;
 using Ga.Host.OptionsNs;
+using Ga.Host.StartUpNs;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace Ga.Host
@@ -14,9 +15,9 @@ namespace Ga.Host
             {
                 var serviceProvider = BuildServiceProvider(options);
 
-                var exucutor = serviceProvider.GetService<IExecutable>();
+                var startUp = serviceProvider.GetService<IStartUp>();
 
-                exucutor!.Execute();
+                startUp!.Run();
             });
         }
 
@@ -34,6 +35,8 @@ namespace Ga.Host
             services.AddGeneticAlgorithms(configuration);
 
             services.AddSingleton<IOptions>(options);
+
+            services.AddTransient<IStartUp, StartUp>();
 
             return services.BuildServiceProvider();
         }

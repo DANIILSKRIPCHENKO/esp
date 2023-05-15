@@ -6,7 +6,9 @@
         {
             var randomValue = new Random().NextDouble();
 
-            var result = referenceValue + Math.Tan(Math.PI * (randomValue - 0.5));
+            var gamma = 5;
+
+            var result = referenceValue + gamma * Math.Tan(Math.PI * (randomValue - 0.5));
 
             return result;
         }
