@@ -31,11 +31,15 @@ public class StartUp : IStartUp
         var trainingConfiguration = new TrainingConfiguration()
         {
             TargetFitness = 3,
-            GenerationsLimit = 2000,
+            GenerationsLimit = 100,
             TrainingTimeLimit = TimeSpan.FromMinutes(60)
         };
 
+        var startTime = DateTime.Now;
+
         var trainResult = _geneticAlgorithmManager.Train(_task, trainingConfiguration);
+
+        var trainingTime = DateTime.Now - startTime;
 
         _persistenceManager.SaveToFile("network.json", trainResult.NeuralNetwork);
 

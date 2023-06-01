@@ -22,7 +22,8 @@ namespace Ga.Core.PopulationNs
 
         public bool IsTurnedOff { get => _isTurnedOff; set => _isTurnedOff = value; }
 
-        public IHiddenNeuron GetRandomNeuron() => _neurons.FirstRandom();
+        public IHiddenNeuron GetRandomNeuron(IList<IHiddenNeuron> notIn) =>
+            _neurons.Where(x => !notIn.Contains(x)).ToList().FirstRandom();
 
         public void Recombine()
         {

@@ -7,23 +7,17 @@ namespace Ga.Core.NetworkNs
 {
     public class FullyConnectedNeuralNetworkBuilder : INeuralNetworkBuilder
     {
-        private readonly IInputLayer _inputLayer;
-        private readonly IOutputLayer _outputLayer;
         private readonly ILossFunction _lossFunction;
 
         public FullyConnectedNeuralNetworkBuilder(
-            IInputLayer inputLayer,
-            IOutputLayer outputLayer,
             ILossFunction lossFunction)
         {
-            _inputLayer = inputLayer;
-            _outputLayer = outputLayer;
             _lossFunction = lossFunction;
         }
 
-        public INeuralNetwork BuildNeuralNetwork(IList<IHiddenLayer> hiddenLayers)
+        public INeuralNetwork BuildNeuralNetwork(IInputLayer inputLayer, IList<IHiddenLayer> hiddenLayers, IOutputLayer outputLayer)
         {
-            return new FullyConnectedNetwork(_inputLayer, hiddenLayers, _outputLayer, _lossFunction);
+            return new FullyConnectedNetwork(inputLayer, hiddenLayers, outputLayer, _lossFunction);
         }
     }
 }

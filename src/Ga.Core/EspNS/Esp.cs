@@ -2,6 +2,11 @@
 using Ga.Core.Models;
 using Ga.Core.NetworkNs;
 using Ga.Core.NeuralLayerNs.Hidden;
+using Ga.Core.NeuralLayerNs.Input;
+using Ga.Core.NeuralLayerNs.Output;
+using Ga.Core.NeuronNs.Hidden;
+using Ga.Core.NeuronNs.Input;
+using Ga.Core.NeuronNs.Output;
 using Ga.Core.PopulationNs;
 using Ga.Core.Task;
 
@@ -31,17 +36,23 @@ namespace Ga.Core.EspNS
         private readonly IHiddenLayerBuilder _hiddenLayerBuilder;
         private readonly IPopulationBuilder _populationBuilder;
         private ITask _task;
+        private readonly IInputNeuronBuilder _inputNeuronBuilder;
+        private readonly IOutputNeuronBuilder _outputNeuronBuilder;
 
         public Esp(
             INeuralNetworkBuilder neuralNetworkBuilder,
             IHiddenLayerBuilder hiddenLayerBuilder,
-            IPopulationBuilder populationBuilder)
+            IPopulationBuilder populationBuilder,
+            IInputNeuronBuilder inputNeuronBuilder,
+            IOutputNeuronBuilder outputNeuronBuilder)
         {
             _neuralNetworkBuilder = neuralNetworkBuilder;
             _hiddenLayerBuilder = hiddenLayerBuilder;
             _populationBuilder = populationBuilder;
             _populations = populationBuilder.BuildInitialPopulations();
             _clonedPopulations = _populations;
+            _inputNeuronBuilder = inputNeuronBuilder;
+            _outputNeuronBuilder = outputNeuronBuilder;
         }
 
         #region IGeneticAlgorith implementation
@@ -65,16 +76,14 @@ namespace Ga.Core.EspNS
 
             // hardcode number of generations to check
             if (!ShouldBurstMutate(3)) return;
-            foreach (var population in _populations.Where(population => population.IsTurnedOff == false))
-                population.BurstMutation();
+            Parallel.ForEach(_populations, population => population.BurstMutation());
 
             _burstMutationCounter++;
         }
 
         public void Recombine()
         {
-            foreach (var population in _populations.Where(population => population.IsTurnedOff == false))
-                population.Recombine();
+            Parallel.ForEach(_populations, population => population.Recombine());
         }
 
         public void SetDataset(ITask task)
@@ -118,34 +127,53 @@ namespace Ga.Core.EspNS
 
             while (ShouldContinueTrials(_populations))
             {
-                var randomNeuronsForHidden = _populations
-                    .Select(population => population.GetRandomNeuron())
-                    .ToList();
+                var usedNeurons = new List<IHiddenNeuron>();
 
-                CheckUniqueness(randomNeuronsForHidden);
+                var randomNeuronsForHiddenGroups = new List<List<IHiddenNeuron>>();
 
-                var hiddenLayer = _hiddenLayerBuilder.BuildHiddenLayer(randomNeuronsForHidden);
+                const int numberOfParallel = 4;
 
-                var network = _neuralNetworkBuilder
-                    .BuildNeuralNetwork(new List<IHiddenLayer>() { hiddenLayer });
-
-                var evaluationResult = network.EvaluateOnDataset(_task);
-
-                network.ApplyFitness(evaluationResult.Fitness);
-
-                if (evaluationResult.Fitness > bestFitness)
+                for (var i = 0; i < numberOfParallel; i++)
                 {
-                    bestFitness = evaluationResult.Fitness;
-                    bestNetwork = network;
+                    var randomNeuronsForHidden = _populations
+                        .Select(population => population.GetRandomNeuron(usedNeurons))
+                        .ToList();
+                    usedNeurons.AddRange(randomNeuronsForHidden);
+
+                    randomNeuronsForHiddenGroups.Add(randomNeuronsForHidden);
                 }
 
-                if (evaluationResult.Accuracy > bestAccuracy)
-                    bestAccuracy = evaluationResult.Accuracy;
+                Parallel.ForEach(randomNeuronsForHiddenGroups, randomNeuronsForHidden =>
+                {
+                    var hiddenLayer = _hiddenLayerBuilder.BuildHiddenLayer(randomNeuronsForHidden);
 
-                if (evaluationResult.Loss < bestLoss)
-                    bestLoss = evaluationResult.Loss;
+                    var network = _neuralNetworkBuilder
+                        .BuildNeuralNetwork(
+                            new InputLayer(_inputNeuronBuilder),
+                            new List<IHiddenLayer>() {hiddenLayer},
+                            new OutputLayer(_outputNeuronBuilder));
 
-                network.ResetConnection();
+                    var evaluationResult = network.EvaluateOnDataset(_task);
+
+                    network.ApplyFitness(evaluationResult.Fitness);
+
+                    if (evaluationResult.Fitness > bestFitness)
+                    {
+                        bestFitness = evaluationResult.Fitness;
+                        bestNetwork = network;
+                    }
+
+                    if (evaluationResult.Accuracy > bestAccuracy)
+                        bestAccuracy = evaluationResult.Accuracy;
+
+                    if (evaluationResult.Loss < bestLoss)
+                        bestLoss = evaluationResult.Loss;
+
+                    network.ResetConnection();
+                });
+
+                usedNeurons.Clear();
+                randomNeuronsForHiddenGroups.Clear();
             }
 
             RecordParameters(bestFitness, bestAccuracy, bestLoss, bestNetwork);
@@ -162,28 +190,42 @@ namespace Ga.Core.EspNS
 
             while (ShouldContinueTrials(_clonedPopulations))
             {
-                var randomNeuronsForHidden = _clonedPopulations
-                    .Where(population => population.IsTurnedOff == false)
-                    .Select(population => population.GetRandomNeuron())
-                    .ToList();
+                var usedNeurons = new List<IHiddenNeuron>();
 
-                CheckUniqueness(randomNeuronsForHidden);
+                var randomNeuronsForHiddenGroups = new List<List<IHiddenNeuron>>();
 
-                var hiddenLayer = _hiddenLayerBuilder.BuildHiddenLayer(randomNeuronsForHidden);
+                const int numberOfParallel = 4;
 
-                var network = _neuralNetworkBuilder
-                    .BuildNeuralNetwork(new List<IHiddenLayer>() { hiddenLayer });
-
-                var evaluationResult = network.EvaluateOnDataset(_task);
-
-                network.ApplyFitness(evaluationResult.Fitness);
-
-                if (evaluationResult.Fitness > bestFitness)
+                for (var i = 0; i < numberOfParallel; i++)
                 {
-                    bestFitness = evaluationResult.Fitness;
+                    var randomNeuronsForHidden = _populations
+                        .Select(population => population.GetRandomNeuron(usedNeurons))
+                        .ToList();
+                    usedNeurons.AddRange(randomNeuronsForHidden);
+
+                    randomNeuronsForHiddenGroups.Add(randomNeuronsForHidden);
                 }
 
-                network.ResetConnection();
+                Parallel.ForEach(randomNeuronsForHiddenGroups, randomNeuronsForHidden =>
+                {
+                    var hiddenLayer = _hiddenLayerBuilder.BuildHiddenLayer(randomNeuronsForHidden);
+
+                    var network = _neuralNetworkBuilder
+                        .BuildNeuralNetwork(new InputLayer(_inputNeuronBuilder),
+                            new List<IHiddenLayer>() {hiddenLayer},
+                            outputLayer: new OutputLayer(_outputNeuronBuilder));
+
+                    var evaluationResult = network.EvaluateOnDataset(_task);
+
+                    network.ApplyFitness(evaluationResult.Fitness);
+
+                    if (evaluationResult.Fitness > bestFitness)
+                    {
+                        bestFitness = evaluationResult.Fitness;
+                    }
+
+                    network.ResetConnection();
+                });
             }
 
             return bestFitness;

@@ -12,7 +12,7 @@ namespace Ga.Core.PopulationNs
         /// Returns random neuron of population
         /// </summary>
         /// <returns></returns>
-        public IHiddenNeuron GetRandomNeuron();
+        public IHiddenNeuron GetRandomNeuron(IList<IHiddenNeuron> notIn);
 
         /// <summary>
         /// Collection of neurons
